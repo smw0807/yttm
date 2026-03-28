@@ -1,0 +1,34 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 사용자 정보: 본인만 읽기/쓰기
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // 영상: 본인만 CRUD, shareToken 있으면 누구나 읽기
+    match /videos/{videoId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow read: if resource.data.shareToken != null;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+
+      // 메모 서브컬렉션: 영상 소유자만 CRUD, 공유 시 누구나 읽기
+      match /memos/{memoId} {
+        allow read: if request.auth != null
+          && get(/databases/$(database)/documents/videos/$(videoId)).data.userId == request.auth.uid;
+        allow read: if get(/databases/$(database)/documents/videos/$(videoId)).data.shareToken != null;
+        allow create, update, delete: if request.auth != null
+          && get(/databases/$(database)/documents/videos/$(videoId)).data.userId == request.auth.uid;
+      }
+    }
+
+    // 컬렉션: 본인만 CRUD
+    match /collections/{colId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}
