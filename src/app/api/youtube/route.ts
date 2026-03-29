@@ -23,6 +23,10 @@ export async function GET(request: NextRequest) {
   const res = await fetch(apiUrl);
   const data = await res.json();
 
+  if (data.error && data.error.code === 403) {
+    return NextResponse.json({ error: "YouTube API key not configured" }, { status: 500 });
+  }
+
   if (!data.items || data.items.length === 0) {
     return NextResponse.json({ error: "Video not found" }, { status: 404 });
   }

@@ -1,10 +1,13 @@
 import { Timestamp } from "firebase/firestore";
 
+// SC → CC 경계에서 Timestamp 클래스는 직렬화 불가 → number(ms)도 허용
+export type CreatedAt = Timestamp | number;
+
 export interface User {
   uid: string;
   email: string;
   displayName: string;
-  createdAt: Timestamp;
+  createdAt: CreatedAt;
 }
 
 export interface Video {
@@ -15,14 +18,14 @@ export interface Video {
   durationSec: number;
   userId: string;
   shareToken: string | null;
-  createdAt: Timestamp;
+  createdAt: CreatedAt;
 }
 
 export interface Memo {
   id?: string;
   timestampSec: number;
   content: string;
-  createdAt: Timestamp;
+  createdAt: CreatedAt;
 }
 
 export interface Collection {
@@ -31,7 +34,7 @@ export interface Collection {
   description: string;
   videoIds: string[];
   userId: string;
-  createdAt: Timestamp;
+  createdAt: CreatedAt;
 }
 
 export interface YouTubeVideoInfo {
