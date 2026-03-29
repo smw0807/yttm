@@ -1,30 +1,32 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useYouTubePlayer } from "@/hooks/useYouTubePlayer";
-import { MemoForm } from "@/components/player/MemoForm";
-import { MemoList } from "@/components/player/MemoList";
-import { addMemo, getMemos } from "@/lib/firebase/firestore";
-import { formatTimestamp } from "@/lib/youtube";
-import type { Video, Memo } from "@/types";
+import {useState} from 'react';
+import {useYouTubePlayer} from '@/hooks/useYouTubePlayer';
+import {MemoForm} from '@/components/player/MemoForm';
+import {MemoList} from '@/components/player/MemoList';
+import {addMemo, getMemos} from '@/lib/firebase/firestore';
+import {formatTimestamp} from '@/lib/youtube';
+import type {Video, Memo} from '@/types';
 
 interface Props {
-  video: Video & { id: string };
+  video: Video & {id: string};
   videoId: string;
-  initialMemos: (Memo & { id: string })[];
+  initialMemos: (Memo & {id: string})[];
 }
 
-export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
+export function VideoViewerClient({video, videoId, initialMemos}: Props) {
   const [memos, setMemos] = useState(initialMemos);
-  const { containerRef, getCurrentTime, seekTo } = useYouTubePlayer(video.youtubeId);
+  const {containerRef, getCurrentTime, seekTo} = useYouTubePlayer(
+    video.youtubeId,
+  );
 
   async function refreshMemos() {
     const updated = await getMemos(videoId);
-    setMemos(updated as (Memo & { id: string })[]);
+    setMemos(updated as (Memo & {id: string})[]);
   }
 
   async function handleSaveMemo(timestampSec: number, content: string) {
-    await addMemo(videoId, { timestampSec, content });
+    await addMemo(videoId, {timestampSec, content});
     await refreshMemos();
   }
 
@@ -39,8 +41,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
         <h1 className="text-base font-semibold leading-snug">{video.title}</h1>
         <div
           className="relative w-full overflow-hidden rounded-xl bg-black"
-          style={{ paddingBottom: "56.25%" }}
-        >
+          style={{paddingBottom: '56.25%'}}>
           <div ref={containerRef} className="absolute inset-0" />
         </div>
         <p className="text-xs text-muted-foreground">
