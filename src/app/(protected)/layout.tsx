@@ -1,31 +1,18 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
+import { redirect } from "next/navigation";
+import { getSessionUser } from "@/lib/firebase/admin";
 import { Header } from "@/components/Header";
 
-export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!loading && !user) router.replace("/login");
-  }, [user, loading, router]);
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    );
-  }
-
-  if (!user) return null;
+export default async function ProtectedLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await getSessionUser();
+  if (!user) redirect("/login");
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
+      <Header displayName={user.name ?? user.email ?? ""} />
       <main className="flex-1">{children}</main>
     </div>
   );

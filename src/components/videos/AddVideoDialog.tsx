@@ -10,23 +10,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { addVideo } from "@/lib/firebase/firestore";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onAdded: () => void;
+  userId: string;
 }
 
-export function AddVideoDialog({ open, onClose, onAdded }: Props) {
-  const { user } = useAuth();
+export function AddVideoDialog({ open, onClose, onAdded, userId }: Props) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!user || !url.trim()) return;
+    if (!url.trim()) return;
 
     setLoading(true);
     setError("");
@@ -36,7 +35,7 @@ export function AddVideoDialog({ open, onClose, onAdded }: Props) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "영상 정보를 가져오지 못했습니다");
 
-      await addVideo({ ...data, userId: user.uid, shareToken: null });
+      await addVideo({ ...data, userId, shareToken: null });
       setUrl("");
       onAdded();
       onClose();

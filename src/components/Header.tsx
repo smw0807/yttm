@@ -1,21 +1,14 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { logout } from "@/lib/firebase/auth";
-import { Button } from "@/components/ui/button";
+import { UserMenu } from "@/components/UserMenu";
 
 const navLink =
   "inline-flex h-8 items-center rounded-lg px-3 text-sm font-medium transition-colors hover:bg-muted";
 
-export function Header() {
-  const router = useRouter();
+interface Props {
+  displayName: string;
+}
 
-  async function handleLogout() {
-    await logout();
-    router.replace("/");
-  }
-
+export function Header({ displayName }: Props) {
   return (
     <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
@@ -28,9 +21,7 @@ export function Header() {
         <nav className="flex items-center gap-1">
           <Link href="/dashboard" className={navLink}>대시보드</Link>
           <Link href="/collections" className={navLink}>컬렉션</Link>
-          <Button variant="outline" size="sm" onClick={handleLogout}>
-            로그아웃
-          </Button>
+          <UserMenu displayName={displayName} />
         </nav>
       </div>
     </header>
