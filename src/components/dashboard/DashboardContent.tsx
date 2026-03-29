@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AddVideoDialog } from "@/components/videos/AddVideoDialog";
-import { VideoCard } from "@/components/videos/VideoCard";
-import { Button } from "@/components/ui/button";
-import type { Video } from "@/types";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { AddVideoDialog } from '@/components/videos/AddVideoDialog';
+import { VideoCard } from '@/components/videos/VideoCard';
+import { Button } from '@/components/ui/button';
+import type { Video } from '@/types';
 
 interface Props {
   initialVideos: (Video & { id: string })[];
@@ -28,7 +28,7 @@ export function DashboardContent({ initialVideos, userId }: Props) {
       </div>
 
       {initialVideos.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 py-20 text-muted-foreground">
+        <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-20">
           <p className="text-lg">등록된 영상이 없습니다.</p>
           <Button variant="outline" onClick={() => setAddOpen(true)}>
             YouTube 영상 추가하기

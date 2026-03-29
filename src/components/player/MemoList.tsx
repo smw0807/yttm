@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { formatTimestamp } from "@/lib/youtube";
-import { deleteMemo } from "@/lib/firebase/firestore";
-import type { Memo } from "@/types";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { formatTimestamp } from '@/lib/youtube';
+import { deleteMemo } from '@/lib/firebase/firestore';
+import type { Memo } from '@/types';
 
 interface Props {
   videoId: string;
@@ -25,7 +25,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted }: Props) {
 
   if (memos.length === 0) {
     return (
-      <p className="py-10 text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground py-10 text-center text-sm">
         아직 메모가 없습니다.
         <br />
         영상을 재생하고 시각을 찍어 메모를 저장해보세요.
@@ -38,7 +38,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted }: Props) {
       {memos.map((memo) => (
         <li
           key={memo.id}
-          className="group flex items-start gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/40"
+          className="group hover:bg-muted/40 flex items-start gap-3 rounded-lg border p-3 transition-colors"
         >
           <button
             onClick={() => onSeek(memo.timestampSec)}

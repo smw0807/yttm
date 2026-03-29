@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { logout } from "@/lib/firebase/auth";
-import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation';
+import { logout } from '@/lib/firebase/auth';
+import { Button } from '@/components/ui/button';
 
 interface Props {
   displayName: string;
@@ -13,12 +13,12 @@ export function UserMenu({ displayName }: Props) {
 
   async function handleLogout() {
     await logout();
-    router.replace("/");
+    router.replace('/');
   }
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm text-muted-foreground hidden sm:block">{displayName}</span>
+      <span className="text-muted-foreground hidden text-sm sm:block">{displayName}</span>
       <Button variant="outline" size="sm" onClick={handleLogout}>
         로그아웃
       </Button>

@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp } from 'firebase/firestore';
 
 // SC → CC 경계에서 Timestamp 클래스는 직렬화 불가 → number(ms)도 허용
 export type CreatedAt = Timestamp | number;

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 // ── YouTube IFrame API 타입 ──────────────────────────────────────────────────
 interface YTPlayer {
@@ -21,7 +21,7 @@ declare global {
           events?: {
             onReady?: (e: { target: YTPlayer }) => void;
           };
-        }
+        },
       ) => YTPlayer;
     };
     onYouTubeIframeAPIReady: () => void;
@@ -43,8 +43,8 @@ function loadYouTubeAPI(): Promise<void> {
         pendingResolvers.forEach((fn) => fn());
         pendingResolvers.length = 0;
       };
-      const script = document.createElement("script");
-      script.src = "https://www.youtube.com/iframe_api";
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
       document.head.appendChild(script);
     }
   });
@@ -66,7 +66,9 @@ export function useYouTubePlayer(youtubeId: string) {
         videoId: youtubeId,
         playerVars: { rel: 0, modestbranding: 1 },
         events: {
-          onReady: () => { if (!destroyed) setReady(true); },
+          onReady: () => {
+            if (!destroyed) setReady(true);
+          },
         },
       });
     });
@@ -79,8 +81,10 @@ export function useYouTubePlayer(youtubeId: string) {
     };
   }, [youtubeId]);
 
-  const getCurrentTime = useCallback(() =>
-    Math.floor(playerRef.current?.getCurrentTime() ?? 0), []);
+  const getCurrentTime = useCallback(
+    () => Math.floor(playerRef.current?.getCurrentTime() ?? 0),
+    [],
+  );
 
   const seekTo = useCallback((seconds: number) => {
     playerRef.current?.seekTo(seconds, true);

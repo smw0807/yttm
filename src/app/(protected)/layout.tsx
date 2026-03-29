@@ -1,18 +1,14 @@
-import { redirect } from "next/navigation";
-import { getSessionUser } from "@/lib/firebase/admin";
-import { Header } from "@/components/Header";
+import { redirect } from 'next/navigation';
+import { getSessionUser } from '@/lib/firebase/admin';
+import { Header } from '@/components/Header';
 
-export default async function ProtectedLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
-  if (!user) redirect("/login");
+  if (!user) redirect('/login');
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header displayName={user.name ?? user.email ?? ""} />
+      <Header displayName={user.name ?? user.email ?? ''} />
       <main className="flex-1">{children}</main>
     </div>
   );

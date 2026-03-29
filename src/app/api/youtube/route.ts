@@ -1,22 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
-import { extractYouTubeId, parseDuration } from "@/lib/youtube";
+import { NextRequest, NextResponse } from 'next/server';
+import { extractYouTubeId, parseDuration } from '@/lib/youtube';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const url = searchParams.get("url");
+  const url = searchParams.get('url');
 
   if (!url) {
-    return NextResponse.json({ error: "url is required" }, { status: 400 });
+    return NextResponse.json({ error: 'url is required' }, { status: 400 });
   }
 
   const youtubeId = extractYouTubeId(url);
   if (!youtubeId) {
-    return NextResponse.json({ error: "Invalid YouTube URL" }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid YouTube URL' }, { status: 400 });
   }
 
   const apiKey = process.env.YOUTUBE_API_KEY;
   if (!apiKey) {
-    return NextResponse.json({ error: "YouTube API key not configured" }, { status: 500 });
+    return NextResponse.json({ error: 'YouTube API key not configured' }, { status: 500 });
   }
 
   const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${youtubeId}&part=snippet,contentDetails&key=${apiKey}`;
@@ -24,11 +24,11 @@ export async function GET(request: NextRequest) {
   const data = await res.json();
 
   if (data.error && data.error.code === 403) {
-    return NextResponse.json({ error: "YouTube API key not configured" }, { status: 500 });
+    return NextResponse.json({ error: 'YouTube API key not configured' }, { status: 500 });
   }
 
   if (!data.items || data.items.length === 0) {
-    return NextResponse.json({ error: "Video not found" }, { status: 404 });
+    return NextResponse.json({ error: 'Video not found' }, { status: 404 });
   }
 
   const item = data.items[0];

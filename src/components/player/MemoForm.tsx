@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { formatTimestamp } from "@/lib/youtube";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { formatTimestamp } from '@/lib/youtube';
 
 interface Props {
   onSave: (timestampSec: number, content: string) => Promise<void>;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function MemoForm({ onSave, getCurrentTime }: Props) {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const [timestamp, setTimestamp] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -24,7 +24,7 @@ export function MemoForm({ onSave, getCurrentTime }: Props) {
     setSaving(true);
     try {
       await onSave(timestamp, content.trim());
-      setContent("");
+      setContent('');
       setTimestamp(null);
     } finally {
       setSaving(false);
@@ -36,9 +36,7 @@ export function MemoForm({ onSave, getCurrentTime }: Props) {
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold">메모 추가</span>
         <Button size="sm" variant="outline" onClick={captureTime}>
-          {timestamp !== null
-            ? `⏱ ${formatTimestamp(timestamp)} 찍힘`
-            : "현재 시각 찍기"}
+          {timestamp !== null ? `⏱ ${formatTimestamp(timestamp)} 찍힘` : '현재 시각 찍기'}
         </Button>
       </div>
       <Textarea
@@ -53,7 +51,7 @@ export function MemoForm({ onSave, getCurrentTime }: Props) {
         onClick={handleSave}
         disabled={timestamp === null || !content.trim() || saving}
       >
-        {saving ? "저장 중..." : "저장"}
+        {saving ? '저장 중...' : '저장'}
       </Button>
     </div>
   );
