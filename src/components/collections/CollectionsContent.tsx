@@ -7,6 +7,7 @@ import { CollectionCard } from './CollectionCard';
 import { AddCollectionDialog } from './AddCollectionDialog';
 import { CollectionDetailDialog } from './CollectionDetailDialog';
 import { deleteCollection } from '@/lib/firebase/firestore';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import type { Collection, Video } from '@/types';
 
 interface Props {
@@ -19,6 +20,7 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
   const router = useRouter();
   const [addOpen, setAddOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState<(Collection & { id: string }) | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   function handleAdded() {
     router.refresh();
@@ -29,9 +31,10 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
     router.refresh();
   }
 
-  async function handleDelete(colId: string) {
-    if (!confirm('컬렉션을 삭제하시겠습니까?')) return;
-    await deleteCollection(colId);
+  async function handleDeleteConfirm() {
+    if (!deleteTargetId) return;
+    await deleteCollection(deleteTargetId);
+    setDeleteTargetId(null);
     router.refresh();
   }
 
@@ -57,7 +60,7 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
               collection={col}
               videos={videos}
               onClick={() => setSelectedCollection(col)}
-              onDelete={() => handleDelete(col.id)}
+              onDelete={() => setDeleteTargetId(col.id)}
             />
           ))}
         </div>
@@ -78,6 +81,15 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
           allVideos={videos}
         />
       )}
+
+      <ConfirmDialog
+        open={!!deleteTargetId}
+        title="컬렉션 삭제"
+        description="컬렉션을 삭제하시겠습니까? 컬렉션에 포함된 영상은 삭제되지 않습니다."
+        confirmLabel="삭제"
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTargetId(null)}
+      />
     </div>
   );
 }

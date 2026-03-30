@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { formatTimestamp } from '@/lib/youtube';
 import { deleteVideo } from '@/lib/firebase/firestore';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import type { Video } from '@/types';
 
 interface Props {
@@ -13,11 +14,16 @@ interface Props {
 }
 
 export function VideoCard({ video, onDeleted }: Props) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  async function handleDelete(e: React.MouseEvent) {
+  function handleDeleteClick(e: React.MouseEvent) {
     e.preventDefault();
-    if (!confirm(`"${video.title}" 영상을 삭제하시겠습니까?`)) return;
+    setConfirmOpen(true);
+  }
+
+  async function handleConfirm() {
+    setConfirmOpen(false);
     setDeleting(true);
     await deleteVideo(video.id);
     onDeleted();
@@ -46,7 +52,7 @@ export function VideoCard({ video, onDeleted }: Props) {
           <p className="line-clamp-2 text-sm font-medium leading-snug">{video.title}</p>
         </Link>
         <button
-          onClick={handleDelete}
+          onClick={handleDeleteClick}
           disabled={deleting}
           className="text-muted-foreground hover:text-destructive mt-0.5 shrink-0 rounded p-0.5 opacity-0 transition-opacity group-hover:opacity-100 disabled:opacity-50"
           title="삭제"
@@ -54,6 +60,15 @@ export function VideoCard({ video, onDeleted }: Props) {
           ✕
         </button>
       </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="영상 삭제"
+        description={`"${video.title}" 영상을 삭제하시겠습니까?`}
+        confirmLabel="삭제"
+        onConfirm={handleConfirm}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </div>
   );
 }
