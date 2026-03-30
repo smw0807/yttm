@@ -1,11 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- 빨간 배경 (둥근 모서리) -->
   <rect width="32" height="32" rx="6" fill="#dc2626"/>
-  <!-- 재생 버튼 (▶) -->
+  <!-- 재생 버튼 삼각형 -->
   <path d="M11 8 L11 21 L23 14.5 Z" fill="white"/>
-  <!-- 타임라인 바 -->
-  <rect x="5" y="26" width="22" height="2" rx="1" fill="rgba(255,255,255,0.45)"/>
-  <!-- 메모 마커 (타임라인 위 핀) -->
-  <rect x="15" y="22" width="2" height="5" rx="1" fill="white"/>
-  <circle cx="16" cy="21" r="2.5" fill="white"/>
+  <!-- 핀 마커: 반원(위) + 뾰족한 끝(아래) — 삼각형 내부에 컷아웃 -->
+  <path d="M12.5 13 A2.5 2.5 0 1 0 17.5 13 L15 18 Z" fill="#dc2626"/>
 </svg>
