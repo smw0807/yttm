@@ -19,18 +19,36 @@ export default function LandingPage() {
         </p>
 
         {/* Features */}
-        <ul className="text-muted-foreground flex flex-col gap-3 text-left">
+        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
           {[
-            '영상 재생 중 현재 시각 기준으로 메모 저장',
-            '저장된 메모 클릭 → 해당 시점으로 즉시 이동',
-            '공유 링크로 타임라인 메모를 누구와도 공유',
-          ].map((text) => (
-            <li key={text} className="flex items-start gap-2">
-              <span className="mt-1 text-green-500">✓</span>
-              <span>{text}</span>
-            </li>
+            {
+              icon: '▶',
+              title: '타임라인 메모',
+              desc: '영상 재생 중 현재 시각 기준으로 메모를 저장하고, 클릭 한 번으로 해당 시점으로 즉시 이동',
+            },
+            {
+              icon: '🔗',
+              title: '공유 링크',
+              desc: '공유 링크를 생성해 로그인 없이도 누구와든 타임라인 메모를 공유',
+            },
+            {
+              icon: '📁',
+              title: '컬렉션',
+              desc: '관련 영상들을 컬렉션으로 묶어 주제별·시리즈별로 체계적으로 관리',
+            },
+            {
+              icon: '🔒',
+              title: '내 영상만',
+              desc: 'Google 로그인으로 내 메모와 컬렉션을 안전하게 보관',
+            },
+          ].map(({ icon, title, desc }) => (
+            <div key={title} className="bg-muted/50 rounded-xl p-4 text-left">
+              <div className="mb-2 text-2xl">{icon}</div>
+              <h3 className="mb-1 font-semibold">{title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+            </div>
           ))}
-        </ul>
+        </div>
 
         {/* CTA */}
         <Link
