@@ -39,12 +39,6 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
 
   return (
     <>
-      {/* 광고 배너 */}
-      <AdBanner
-        slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_DASHBOARD ?? ''}
-        format="horizontal"
-        className="mb-6 h-24 w-full"
-      />
       <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden">
         {/* ── 왼쪽 60%: 플레이어 ─────────────────────────── */}
         <div className="flex w-[60%] flex-col gap-3 overflow-y-auto border-r p-4">
