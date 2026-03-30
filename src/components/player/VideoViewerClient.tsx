@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import { MemoForm } from '@/components/player/MemoForm';
 import { MemoList } from '@/components/player/MemoList';
+import { ShareDialog } from '@/components/player/ShareDialog';
 import { addMemo, getMemos } from '@/lib/firebase/firestore';
 import { formatTimestamp } from '@/lib/youtube';
+import { Button } from '@/components/ui/button';
 import type { Video, Memo } from '@/types';
 
 interface Props {
@@ -16,6 +18,8 @@ interface Props {
 
 export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
   const [memos, setMemos] = useState(initialMemos);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareToken, setShareToken] = useState(video.shareToken);
   const { containerRef, getCurrentTime, seekTo } = useYouTubePlayer(video.youtubeId);
 
   async function refreshMemos() {
@@ -33,10 +37,16 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
   }
 
   return (
+    <>
     <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden">
       {/* ── 왼쪽 60%: 플레이어 ─────────────────────────── */}
       <div className="flex w-[60%] flex-col gap-3 overflow-y-auto border-r p-4">
-        <h1 className="text-base leading-snug font-semibold">{video.title}</h1>
+        <div className="flex items-start justify-between gap-2">
+          <h1 className="text-base leading-snug font-semibold">{video.title}</h1>
+          <Button variant="outline" size="sm" onClick={() => setShareOpen(true)} className="shrink-0">
+            공유
+          </Button>
+        </div>
         <div
           className="relative w-full overflow-hidden rounded-xl bg-black"
           style={{ paddingBottom: '56.25%' }}
@@ -59,5 +69,13 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
         </div>
       </div>
     </div>
+    <ShareDialog
+      open={shareOpen}
+      onClose={() => setShareOpen(false)}
+      videoId={videoId}
+      token={shareToken}
+      onTokenChange={setShareToken}
+    />
+    </>
   );
 }
