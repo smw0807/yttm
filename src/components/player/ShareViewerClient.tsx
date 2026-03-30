@@ -2,6 +2,7 @@
 
 import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import { formatTimestamp } from '@/lib/youtube';
+import { AdBanner } from '@/components/ads/AdBanner';
 import type { Video, Memo } from '@/types';
 
 interface Props {
@@ -17,6 +18,13 @@ export function ShareViewerClient({ video, memos }: Props) {
       <header className="text-muted-foreground flex h-12 items-center border-b px-4 text-sm">
         공유된 타임라인 — <span className="text-foreground ml-1 font-medium">{video.title}</span>
       </header>
+
+      {/* 광고 배너 */}
+      <AdBanner
+        slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SHARE ?? ''}
+        format="horizontal"
+        className="h-20 w-full border-b"
+      />
 
       <div className="flex flex-1 overflow-hidden">
         {/* 플레이어 */}
