@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import icon16 from './assets/icons8-pin-16.png';
+import icon32 from './assets/icons8-pin-32.png';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -16,8 +18,10 @@ export const metadata: Metadata = {
   title: 'YouTube Timeline Memo',
   description: '유튜브 영상 타임스탬프 메모 서비스',
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
+    icon: [
+      { url: icon16.src, sizes: '16x16', type: 'image/png' },
+      { url: icon32.src, sizes: '32x32', type: 'image/png' },
+    ],
   },
 };
 
