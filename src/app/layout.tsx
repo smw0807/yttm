@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import yttmIcon from './assets/yttm.png';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -16,9 +15,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'YouTube Timeline Memo',
   description: '유튜브 영상 타임스탬프 메모 서비스',
-  icons: {
-    icon: { url: yttmIcon.src, type: 'image/png' },
-  },
 };
 
 export default function RootLayout({
