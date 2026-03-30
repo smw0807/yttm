@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { AddVideoDialog } from '@/components/videos/AddVideoDialog';
 import { VideoCard } from '@/components/videos/VideoCard';
 import { Button } from '@/components/ui/button';
+import { AdBanner } from '@/components/ads/AdBanner';
 import type { Video } from '@/types';
 
 interface Props {
@@ -26,6 +27,13 @@ export function DashboardContent({ initialVideos, userId }: Props) {
         <h1 className="text-2xl font-bold">내 영상</h1>
         <Button onClick={() => setAddOpen(true)}>+ 영상 추가</Button>
       </div>
+
+      {/* 광고 배너 */}
+      <AdBanner
+        slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_DASHBOARD ?? ''}
+        format="horizontal"
+        className="mb-6 h-24 w-full"
+      />
 
       {initialVideos.length === 0 ? (
         <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-20">

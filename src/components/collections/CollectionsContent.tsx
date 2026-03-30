@@ -8,6 +8,7 @@ import { AddCollectionDialog } from './AddCollectionDialog';
 import { CollectionDetailDialog } from './CollectionDetailDialog';
 import { deleteCollection } from '@/lib/firebase/firestore';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { AdBanner } from '@/components/ads/AdBanner';
 import type { Collection, Video } from '@/types';
 
 interface Props {
@@ -44,6 +45,13 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
         <h1 className="text-2xl font-bold">컬렉션</h1>
         <Button onClick={() => setAddOpen(true)}>+ 컬렉션 추가</Button>
       </div>
+
+      {/* 광고 배너 */}
+      <AdBanner
+        slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_COLLECTIONS ?? ''}
+        format="horizontal"
+        className="mb-6 h-24 w-full"
+      />
 
       {initialCollections.length === 0 ? (
         <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-20">
