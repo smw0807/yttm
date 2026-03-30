@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import { updateVideoShareToken } from '@/lib/firebase/firestore';
 import { getSessionUser } from '@/lib/firebase/admin';
-import { getVideoAdmin } from '@/lib/firebase/admin-firestore';
+import { getVideoAdmin, updateVideoShareTokenAdmin } from '@/lib/firebase/admin-firestore';
 
 export async function POST(request: NextRequest) {
   const user = await getSessionUser();
@@ -17,7 +16,7 @@ export async function POST(request: NextRequest) {
   }
 
   const token = uuidv4();
-  await updateVideoShareToken(videoId, token);
+  await updateVideoShareTokenAdmin(videoId, token);
   return NextResponse.json({ token });
 }
 
@@ -33,6 +32,6 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
-  await updateVideoShareToken(videoId, null);
+  await updateVideoShareTokenAdmin(videoId, null);
   return NextResponse.json({ success: true });
 }
