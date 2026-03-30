@@ -38,20 +38,22 @@ export function VideoCard({ video, onDeleted }: Props) {
             {formatTimestamp(video.durationSec)}
           </span>
         </div>
-        <div className="p-3">
-          <p className="line-clamp-2 text-sm font-medium leading-snug">{video.title}</p>
-        </div>
       </Link>
 
-      {/* 삭제 버튼 */}
-      <button
-        onClick={handleDelete}
-        disabled={deleting}
-        className="text-muted-foreground hover:text-destructive absolute right-2 top-2 rounded p-1 opacity-0 transition-opacity group-hover:opacity-100 disabled:opacity-50"
-        title="삭제"
-      >
-        ✕
-      </button>
+      {/* 제목 + 삭제 버튼 */}
+      <div className="flex items-start gap-1 p-3">
+        <Link href={`/videos/${video.id}`} className="min-w-0 flex-1">
+          <p className="line-clamp-2 text-sm font-medium leading-snug">{video.title}</p>
+        </Link>
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="text-muted-foreground hover:text-destructive mt-0.5 shrink-0 rounded p-0.5 opacity-0 transition-opacity group-hover:opacity-100 disabled:opacity-50"
+          title="삭제"
+        >
+          ✕
+        </button>
+      </div>
     </div>
   );
 }
