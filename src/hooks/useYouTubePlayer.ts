@@ -17,6 +17,8 @@ declare global {
         container: HTMLElement,
         options: {
           videoId: string;
+          width?: string | number;
+          height?: string | number;
           playerVars?: Record<string, number | string>;
           events?: {
             onReady?: (e: { target: YTPlayer }) => void;
@@ -64,6 +66,8 @@ export function useYouTubePlayer(youtubeId: string) {
       if (destroyed || !containerRef.current) return;
       playerRef.current = new window.YT.Player(containerRef.current, {
         videoId: youtubeId,
+        width: '100%',
+        height: '100%',
         playerVars: { rel: 0, modestbranding: 1 },
         events: {
           onReady: () => {

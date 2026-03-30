@@ -128,3 +128,11 @@
     @apply font-sans;
   }
 }
+
+/* YouTube IFrame API가 생성하는 iframe을 컨테이너에 꽉 채움 */
+.yt-player-container iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

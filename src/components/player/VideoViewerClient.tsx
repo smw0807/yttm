@@ -48,7 +48,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
           </Button>
         </div>
         <div
-          className="relative w-full overflow-hidden rounded-xl bg-black"
+          className="yt-player-container relative w-full overflow-hidden rounded-xl bg-black"
           style={{ paddingBottom: '56.25%' }}
         >
           <div ref={containerRef} className="absolute inset-0" />

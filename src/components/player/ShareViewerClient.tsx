@@ -22,7 +22,7 @@ export function ShareViewerClient({ video, memos }: Props) {
         {/* 플레이어 */}
         <div className="flex w-[60%] flex-col gap-3 overflow-y-auto border-r p-4">
           <div
-            className="relative w-full overflow-hidden rounded-xl bg-black"
+            className="yt-player-container relative w-full overflow-hidden rounded-xl bg-black"
             style={{ paddingBottom: '56.25%' }}
           >
             <div ref={containerRef} className="absolute inset-0" />
