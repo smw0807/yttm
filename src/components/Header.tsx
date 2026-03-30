@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { UserMenu } from '@/components/UserMenu';
+import yttmIcon from '@/app/assets/yttm.png';
 
 const navLink =
   'inline-flex h-8 items-center rounded-lg px-3 text-sm font-medium transition-colors hover:bg-muted';
@@ -13,9 +15,7 @@ export function Header({ displayName }: Props) {
     <header className="bg-background/95 sticky top-0 z-10 border-b backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-600 text-xs text-white">
-            ▶
-          </span>
+          <Image src={yttmIcon} alt="YTTM" width={28} height={28} className="rounded-lg" />
           YT Timeline Memo
         </Link>
         <nav className="flex items-center gap-1">
