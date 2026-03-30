@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'YouTube Timeline Memo',
   description: '유튜브 영상 타임스탬프 메모 서비스',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
