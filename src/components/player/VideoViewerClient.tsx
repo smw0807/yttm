@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import { MemoForm } from '@/components/player/MemoForm';
 import { MemoList } from '@/components/player/MemoList';
@@ -43,7 +44,15 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
         {/* ── 왼쪽 60%: 플레이어 ─────────────────────────── */}
         <div className="flex w-[60%] flex-col gap-3 overflow-y-auto border-r p-4">
           <div className="flex items-start justify-between gap-2">
-            <h1 className="text-base leading-snug font-semibold">{video.title}</h1>
+            <div className="flex min-w-0 items-center gap-2">
+              <Link
+                href="/videos"
+                className="text-muted-foreground hover:text-foreground shrink-0 text-sm transition-colors"
+              >
+                ← 목록
+              </Link>
+              <h1 className="truncate text-base font-semibold leading-snug">{video.title}</h1>
+            </div>
             <Button
               variant="outline"
               size="sm"
@@ -71,7 +80,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
             <h2 className="text-muted-foreground mb-3 text-sm font-semibold">
               타임라인 ({memos.length}개)
             </h2>
-            <MemoList videoId={videoId} memos={memos} onSeek={seekTo} onDeleted={handleDeleted} />
+            <MemoList videoId={videoId} memos={memos} onSeek={seekTo} onDeleted={handleDeleted} onUpdated={refreshMemos} />
           </div>
         </div>
       </div>

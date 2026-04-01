@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatTimestamp } from '@/lib/youtube';
-import { deleteMemo } from '@/lib/firebase/firestore';
+import { deleteMemo, updateMemo } from '@/lib/firebase/firestore';
 import type { Memo } from '@/types';
 
 interface Props {
@@ -12,10 +12,14 @@ interface Props {
   memos: Memo[];
   onSeek: (seconds: number) => void;
   onDeleted: () => void;
+  onUpdated: () => void;
 }
 
-export function MemoList({ videoId, memos, onSeek, onDeleted }: Props) {
+export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+  const [savingId, setSavingId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
 
   async function handleDelete(memoId: string) {
@@ -23,6 +27,26 @@ export function MemoList({ videoId, memos, onSeek, onDeleted }: Props) {
     await deleteMemo(videoId, memoId);
     onDeleted();
     setDeletingId(null);
+  }
+
+  function startEdit(memo: Memo & { id?: string }) {
+    setEditingId(memo.id!);
+    setEditValue(memo.content);
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setEditValue('');
+  }
+
+  async function handleSaveEdit(memoId: string) {
+    if (!editValue.trim()) return;
+    setSavingId(memoId);
+    await updateMemo(videoId, memoId, editValue.trim());
+    onUpdated();
+    setEditingId(null);
+    setEditValue('');
+    setSavingId(null);
   }
 
   const filtered = useMemo(() => {
@@ -65,16 +89,59 @@ export function MemoList({ videoId, memos, onSeek, onDeleted }: Props) {
               >
                 {formatTimestamp(memo.timestampSec)}
               </button>
-              <p className="flex-1 text-sm leading-relaxed">{memo.content}</p>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className="shrink-0 opacity-0 group-hover:opacity-100"
-                onClick={() => handleDelete(memo.id!)}
-                disabled={deletingId === memo.id}
-              >
-                ✕
-              </Button>
+
+              {editingId === memo.id ? (
+                <div className="flex flex-1 flex-col gap-2">
+                  <Input
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSaveEdit(memo.id!);
+                      if (e.key === 'Escape') cancelEdit();
+                    }}
+                    autoFocus
+                    className="h-7 text-sm"
+                  />
+                  <div className="flex gap-1">
+                    <Button
+                      size="sm"
+                      className="h-6 px-2 text-xs"
+                      onClick={() => handleSaveEdit(memo.id!)}
+                      disabled={savingId === memo.id || !editValue.trim()}
+                    >
+                      저장
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-6 px-2 text-xs"
+                      onClick={cancelEdit}
+                    >
+                      취소
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <p
+                  className="flex-1 cursor-pointer text-sm leading-relaxed"
+                  onDoubleClick={() => startEdit(memo)}
+                  title="더블클릭으로 수정"
+                >
+                  {memo.content}
+                </p>
+              )}
+
+              {editingId !== memo.id && (
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="shrink-0 opacity-0 group-hover:opacity-100"
+                  onClick={() => handleDelete(memo.id!)}
+                  disabled={deletingId === memo.id}
+                >
+                  ✕
+                </Button>
+              )}
             </li>
           ))}
         </ul>
