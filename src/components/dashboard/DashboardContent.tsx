@@ -34,6 +34,12 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
+      {/* 페이지 상단: 제목 + 영상 추가 버튼 */}
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">대시보드</h1>
+        <Button onClick={() => setAddOpen(true)}>+ 영상 추가</Button>
+      </div>
+
       {/* 광고 배너 */}
       <AdBanner
         slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_DASHBOARD ?? ''}
@@ -45,12 +51,9 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
       <div className="mb-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold">내 영상</h2>
-          <div className="flex items-center gap-3">
-            <Link href="/videos" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-              모두 보기 →
-            </Link>
-            <Button onClick={() => setAddOpen(true)}>+ 영상 추가</Button>
-          </div>
+          <Link href="/videos" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+            모두 보기 →
+          </Link>
         </div>
 
         {initialVideos.length === 0 ? (
