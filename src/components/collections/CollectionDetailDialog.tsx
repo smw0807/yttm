@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { updateCollection } from '@/lib/firebase/firestore';
@@ -53,6 +54,7 @@ export function CollectionDetailDialog({ open, onClose, collection, allVideos }:
                   <VideoRow
                     key={video.id}
                     video={video}
+                    href={`/videos/${video.id}`}
                     action="제거"
                     actionVariant="outline"
                     disabled={loading}
@@ -90,19 +92,21 @@ export function CollectionDetailDialog({ open, onClose, collection, allVideos }:
 
 function VideoRow({
   video,
+  href,
   action,
   actionVariant,
   disabled,
   onAction,
 }: {
   video: Video & { id: string };
+  href?: string;
   action: string;
   actionVariant: 'default' | 'outline';
   disabled: boolean;
   onAction: () => void;
 }) {
-  return (
-    <li className="flex items-center gap-3 rounded-lg border p-2">
+  const info = (
+    <>
       <div className="relative aspect-video w-24 shrink-0 overflow-hidden rounded">
         <Image src={video.thumbnail} alt={video.title} fill className="object-cover" sizes="96px" />
       </div>
@@ -110,6 +114,18 @@ function VideoRow({
         <p className="line-clamp-2 text-sm font-medium">{video.title}</p>
         <p className="text-muted-foreground text-xs">{formatTimestamp(video.durationSec)}</p>
       </div>
+    </>
+  );
+
+  return (
+    <li className="flex items-center gap-3 rounded-lg border p-2">
+      {href ? (
+        <Link href={href} className="flex min-w-0 flex-1 items-center gap-3 hover:opacity-80">
+          {info}
+        </Link>
+      ) : (
+        <div className="flex min-w-0 flex-1 items-center gap-3">{info}</div>
+      )}
       <Button
         size="sm"
         variant={actionVariant}
