@@ -26,16 +26,7 @@ export function AdBanner({ slot, format = 'auto', className }: Props) {
     }
   }, [client]);
 
-  // Publisher ID 미설정 시 개발용 플레이스홀더 표시
-  if (!client) {
-    return (
-      <div
-        className={`bg-muted/50 border-muted flex items-center justify-center rounded-lg border border-dashed ${className}`}
-      >
-        <p className="text-muted-foreground text-xs">광고 영역 (AdSense 미설정)</p>
-      </div>
-    );
-  }
+  if (!client) return null;
 
   return (
     <div className={className}>
