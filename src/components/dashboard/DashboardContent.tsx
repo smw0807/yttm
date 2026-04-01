@@ -45,7 +45,12 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
       <div className="mb-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold">내 영상</h2>
-          <Button onClick={() => setAddOpen(true)}>+ 영상 추가</Button>
+          <div className="flex items-center gap-3">
+            <Link href="/videos" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
+              모두 보기 →
+            </Link>
+            <Button onClick={() => setAddOpen(true)}>+ 영상 추가</Button>
+          </div>
         </div>
 
         {initialVideos.length === 0 ? (
@@ -57,7 +62,7 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {initialVideos.map((video) => (
+            {initialVideos.slice(0, 4).map((video) => (
               <VideoCard key={video.id} video={video} onDeleted={() => router.refresh()} />
             ))}
           </div>
