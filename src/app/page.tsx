@@ -1,8 +1,42 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'YouTube Timeline Memo — 유튜브 타임스탬프 메모 서비스',
+  description:
+    '유튜브 영상을 시청하며 타임스탬프 메모를 남기고, 클릭 한 번으로 해당 장면으로 바로 돌아가세요. 컬렉션으로 관련 영상을 묶고 공유 링크로 타임라인을 공유할 수 있습니다.',
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'YouTube Timeline Memo',
+  description:
+    '유튜브 영상을 시청하며 타임스탬프 메모를 남기고, 클릭 한 번으로 해당 장면으로 바로 돌아가는 서비스',
+  applicationCategory: 'ProductivityApplication',
+  operatingSystem: 'Web',
+  inLanguage: 'ko',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'KRW',
+  },
+  featureList: [
+    '타임스탬프 메모 저장',
+    '메모 클릭으로 영상 시점 이동',
+    '컬렉션으로 영상 묶어 관리',
+    '공유 링크 생성',
+    'Google 로그인',
+  ],
+};
 
 export default function LandingPage() {
   return (
     <main className="bg-background flex min-h-screen flex-col items-center justify-center px-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="flex max-w-2xl flex-col items-center gap-8 text-center">
         {/* Logo / Title */}
         <div className="flex flex-col items-center gap-3">
