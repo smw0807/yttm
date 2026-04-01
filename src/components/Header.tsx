@@ -22,6 +22,9 @@ export function Header({ displayName }: Props) {
           <Link href="/dashboard" className={navLink}>
             대시보드
           </Link>
+          <Link href="/videos" className={navLink}>
+            내 영상
+          </Link>
           <Link href="/collections" className={navLink}>
             컬렉션
           </Link>
