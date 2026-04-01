@@ -9,16 +9,11 @@
 - **영상 등록** — YouTube URL 입력 시 제목, 썸네일, 길이 자동 파싱
 - **타임스탬프 메모** — 영상 재생 중 현재 시각을 자동으로 찍고 메모 저장
 - **타임라인 점프** — 저장된 메모 클릭 시 해당 시점으로 즉시 이동
+- **메모 수정** — 메모 더블클릭으로 인라인 편집 (Enter 저장 / Esc 취소)
 - **메모 검색** — 메모 내용 키워드로 실시간 필터링
 - **컬렉션** — 영상을 주제별 폴더로 묶어서 관리
 - **공유 링크** — 타임라인이 담긴 페이지를 링크 하나로 공유 (로그인 불필요)
 - **Google 로그인** — Firebase Auth를 통한 Google OAuth 인증
-
-## 스크린샷
-
-| 영상 뷰어 | 대시보드 |
-|-----------|----------|
-| 좌우 분할: 플레이어(60%) + 타임라인 메모(40%) | 최근 영상 목록 + 컬렉션 목록 |
 
 ## 기술 스택
 
@@ -60,10 +55,10 @@
 |------|------|
 | `/` | 랜딩 페이지 |
 | `/login` | Google 로그인 |
-| `/dashboard` | 내 영상 목록 + 컬렉션 목록 |
-| `/videos` | 영상 목록 (제목 검색 필터) |
+| `/dashboard` | 내 영상 (최대 4개) + 컬렉션 (최대 4개) 요약 |
+| `/videos` | 영상 목록 전체 (제목 검색 필터) |
 | `/videos/:id` | 영상 뷰어 + 타임라인 메모 (핵심 페이지) |
-| `/videos/:id/edit` | 메모 수정/삭제 |
+| `/videos/:id/edit` | 메모 전체 목록 수정/삭제 |
 | `/collections` | 컬렉션 관리 |
 | `/share/:token` | 공유 읽기 전용 (로그인 불필요) |
 
@@ -98,6 +93,9 @@ FIREBASE_ADMIN_SDK=
 # YouTube Data API v3 (서버에서만 사용)
 YOUTUBE_API_KEY=
 
+# 서비스 배포 URL (SEO, sitemap, OG 태그에 사용)
+NEXT_PUBLIC_BASE_URL=https://your-domain.vercel.app
+
 # Google AdSense (선택 - 승인 후 입력)
 NEXT_PUBLIC_ADSENSE_CLIENT=
 NEXT_PUBLIC_ADSENSE_SLOT_DASHBOARD=
@@ -122,24 +120,32 @@ yarn dev
 ```
 src/
 ├── app/
-│   ├── (protected)/          ← 인증 필요 페이지 (layout에서 세션 검증)
+│   ├── (protected)/          ← 인증 필요 페이지 (layout에서 세션 검증, noindex)
 │   │   ├── dashboard/
+│   │   │   └── loading.tsx   ← 스켈레톤 로딩 UI
 │   │   ├── videos/
+│   │   │   └── loading.tsx
 │   │   ├── videos/[id]/
 │   │   ├── videos/[id]/edit/
 │   │   └── collections/
+│   │       └── loading.tsx
 │   ├── api/
 │   │   ├── auth/session/     ← 세션 쿠키 발급/삭제
 │   │   ├── youtube/          ← YouTube 영상 정보 파싱
 │   │   └── share/            ← shareToken 생성/폐기
 │   ├── login/
 │   ├── share/[token]/        ← 공유 읽기 전용 (OG 태그 포함)
-│   └── page.tsx              ← 랜딩 페이지
+│   ├── not-found.tsx         ← 커스텀 404 페이지
+│   ├── opengraph-image.tsx   ← OG 이미지 자동 생성 (1200×630)
+│   ├── sitemap.ts            ← sitemap.xml 자동 생성
+│   ├── robots.ts             ← robots.txt 자동 생성
+│   └── page.tsx              ← 랜딩 페이지 (JSON-LD 포함)
 ├── components/
 │   ├── ads/                  ← AdBanner (Google AdSense)
 │   ├── collections/          ← CollectionCard, AddCollectionDialog 등
 │   ├── dashboard/            ← DashboardContent
-│   ├── player/               ← VideoViewerClient, MemoList, ShareViewerClient, ShareDialog
+│   ├── player/               ← VideoViewerClient, MemoList, MemoEditContent
+│   │                            ShareViewerClient, ShareDialog
 │   ├── ui/                   ← shadcn/ui 공통 컴포넌트
 │   └── videos/               ← VideoCard, AddVideoDialog, VideosContent
 ├── lib/
@@ -171,6 +177,19 @@ collections/{colId}
   - name, description, videoIds[], userId, createdAt
 ```
 
+## SEO
+
+| 항목 | 내용 |
+|------|------|
+| 메타데이터 | title template, description, keywords, OG/Twitter 카드 |
+| sitemap.xml | `/`, `/login` 자동 생성 |
+| robots.txt | 보호 페이지(`/dashboard`, `/videos`, `/collections`, `/api/`) 크롤 차단 |
+| OG 이미지 | `/opengraph-image` — SNS 링크 공유 시 미리보기 이미지 자동 생성 |
+| JSON-LD | 랜딩 페이지 `SoftwareApplication` 구조화 데이터 |
+| noindex | 로그인 필요 페이지 전체 검색엔진 색인 제외 |
+
+배포 후 [Google Search Console](https://search.google.com/search-console)에 `sitemap.xml`을 등록하세요.
+
 ## 빌드
 
 ```bash
@@ -186,17 +205,17 @@ yarn start
 ![랜딩 페이지](img/1.png)
 
 ### 대시보드 (`/dashboard`)
-로그인 후 첫 화면으로, 등록한 영상 목록과 컬렉션 목록을 한 번에 확인할 수 있습니다.
+로그인 후 첫 화면입니다. 최근 영상(최대 4개)과 컬렉션(최대 4개)을 한눈에 확인하고, 각 섹션에서 모두 보기로 전체 목록 페이지로 이동할 수 있습니다.
 
 ![대시보드](img/2.png)
 
 ### 영상 뷰어 (`/videos/:id`)
-서비스의 핵심 페이지입니다. 좌측 YouTube 플레이어와 우측 타임라인 메모 목록이 좌우 분할 구조로 배치됩니다. 메모 클릭 시 해당 시점으로 즉시 이동합니다.
+서비스의 핵심 페이지입니다. 좌측 YouTube 플레이어와 우측 타임라인 메모 목록이 좌우 분할 구조로 배치됩니다. 메모 클릭 시 해당 시점으로 즉시 이동하며, 메모 더블클릭으로 인라인 수정이 가능합니다.
 
 ![영상 뷰어](img/3.png)
 
 ### 컬렉션 관리 (`/collections`)
-컬렉션 카드를 클릭하면 포함된 영상 목록과 추가 가능한 영상을 관리할 수 있는 다이얼로그가 열립니다.
+컬렉션 카드를 클릭하면 포함된 영상 목록과 추가 가능한 영상을 관리할 수 있는 다이얼로그가 열립니다. 포함된 영상 클릭 시 영상 뷰어로 이동합니다.
 
 ![컬렉션 다이얼로그](img/4.png)
 
