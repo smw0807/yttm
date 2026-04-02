@@ -22,6 +22,7 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
   const [editValue, setEditValue] = useState('');
   const [savingId, setSavingId] = useState<string | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   function startEdit(memo: Memo & { id: string }) {
     setEditingId(memo.id);
@@ -47,9 +48,11 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
 
   async function handleDeleteConfirm() {
     if (!deleteTargetId) return;
+    setDeletingId(deleteTargetId);
+    setDeleteTargetId(null);
     await deleteMemo(video.id, deleteTargetId);
     setMemos((prev) => prev.filter((m) => m.id !== deleteTargetId));
-    setDeleteTargetId(null);
+    setDeletingId(null);
   }
 
   return (
@@ -73,7 +76,7 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
       ) : (
         <ul className="flex flex-col gap-2">
           {memos.map((memo) => (
-            <li key={memo.id} className="flex items-start gap-3 rounded-lg border p-3">
+            <li key={memo.id} className={`flex items-start gap-3 rounded-lg border p-3 transition-opacity ${deletingId === memo.id ? 'opacity-50' : ''}`}>
               <span className="mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700">
                 {formatTimestamp(memo.timestampSec)}
               </span>
@@ -96,7 +99,7 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
                       onClick={() => handleSave(memo.id)}
                       disabled={savingId === memo.id || !editValue.trim()}
                     >
-                      저장
+                      {savingId === memo.id ? '저장 중...' : '저장'}
                     </Button>
                     <Button size="sm" variant="ghost" onClick={cancelEdit}>
                       취소
@@ -109,7 +112,7 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
 
               {editingId !== memo.id && (
                 <div className="flex shrink-0 gap-1">
-                  <Button size="sm" variant="ghost" onClick={() => startEdit(memo)}>
+                  <Button size="sm" variant="ghost" onClick={() => startEdit(memo)} disabled={deletingId === memo.id}>
                     수정
                   </Button>
                   <Button
@@ -117,8 +120,9 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
                     variant="ghost"
                     className="text-destructive hover:text-destructive"
                     onClick={() => setDeleteTargetId(memo.id)}
+                    disabled={deletingId === memo.id}
                   >
-                    삭제
+                    {deletingId === memo.id ? '삭제 중...' : '삭제'}
                   </Button>
                 </div>
               )}
