@@ -33,7 +33,12 @@ export function UserMenu({ displayName, isAnonymous }: Props) {
           <span className="bg-muted text-muted-foreground rounded px-2 py-0.5 text-xs font-medium">
             게스트
           </span>
-          <Button variant="outline" size="sm" onClick={handleUpgrade}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-blue-500 text-white hover:bg-blue-600"
+            onClick={handleUpgrade}
+          >
             Google로 계정 연결
           </Button>
         </>
