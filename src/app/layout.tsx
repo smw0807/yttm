@@ -22,14 +22,18 @@ export const metadata: Metadata = {
     template: '%s | YT Timeline Memo',
   },
   description:
-    '유튜브 영상을 시청하며 타임스탬프 메모를 남기고, 클릭 한 번으로 해당 장면으로 바로 돌아가는 서비스. 컬렉션으로 관련 영상을 묶고 공유 링크로 타임라인을 공유하세요.',
+    '유튜브 강의·게임 공략 영상의 중요한 장면에 타임스탬프 메모를 남기고, 클릭 한 번으로 해당 시점으로 즉시 이동하는 서비스. 컬렉션으로 관련 영상을 묶어 관리하고, 공유 링크로 타임라인을 공유하세요.',
   keywords: [
     '유튜브 타임스탬프',
     '유튜브 메모',
+    '유튜브 강의 메모',
     '유튜브 공부',
-    '타임라인 메모',
+    '게임 공략 메모',
     '유튜브 북마크',
+    '타임라인 메모',
+    '유튜브 컬렉션',
     'YouTube timestamp memo',
+    'YouTube study memo',
     'YouTube bookmark',
   ],
   authors: [{ name: '송민우' }],
@@ -40,13 +44,13 @@ export const metadata: Metadata = {
     siteName: 'YouTube Timeline Memo',
     title: 'YouTube Timeline Memo',
     description:
-      '유튜브 보다가 중요한 부분, 링크 하나로 바로 돌아가기. 타임스탬프 메모 + 컬렉션 + 공유 링크.',
+      '유튜브 강의·게임 공략 영상의 중요한 장면에 메모를 남기고, 클릭 한 번으로 즉시 이동. 컬렉션으로 영상 묶기 + 공유 링크 제공.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'YouTube Timeline Memo',
     description:
-      '유튜브 보다가 중요한 부분, 링크 하나로 바로 돌아가기. 타임스탬프 메모 + 컬렉션 + 공유 링크.',
+      '유튜브 강의·게임 공략 영상의 중요한 장면에 메모를 남기고, 클릭 한 번으로 즉시 이동. 컬렉션으로 영상 묶기 + 공유 링크 제공.',
   },
   robots: {
     index: true,
