@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import { formatTimestamp } from '@/lib/youtube';
 import { AdBanner } from '@/components/ads/AdBanner';
@@ -15,8 +16,14 @@ export function ShareViewerClient({ video, memos }: Props) {
 
   return (
     <div className="flex h-screen flex-col">
-      <header className="text-muted-foreground flex h-12 items-center border-b px-4 text-sm">
-        공유된 타임라인 — <span className="text-foreground ml-1 font-medium">{video.title}</span>
+      <header className="flex h-12 items-center justify-between border-b px-4">
+        <a href="/" className="flex items-center gap-1.5 font-semibold hover:text-red-700">
+          <Image src="/yttm.png" alt="YT Timeline Memo" width={24} height={24} />
+          YT Timeline Memo
+        </a>
+        <span className="text-muted-foreground min-w-0 truncate text-sm">
+          공유된 타임라인 — <span className="text-foreground font-medium">{video.title}</span>
+        </span>
       </header>
 
       {/* 광고 배너 */}
