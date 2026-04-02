@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { signInWithGoogle } from '@/lib/firebase/auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { KakaoInAppBrowserGuard } from '@/components/KakaoInAppBrowserGuard';
 
 export function LoginClient() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export function LoginClient() {
 
   return (
     <main className="bg-background flex min-h-screen items-center justify-center px-4">
+      <KakaoInAppBrowserGuard />
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-red-600 text-2xl font-bold text-white">
