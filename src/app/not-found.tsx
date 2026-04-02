@@ -1,11 +1,11 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import yttmIcon from '@/app/public/yttm.png';
 
 export default function NotFound() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-600 text-3xl font-bold text-white shadow-lg">
-        ▶
-      </div>
+      <Image src={yttmIcon} alt="YT Timeline Memo" width={64} height={64} className="rounded-2xl shadow-lg" />
       <h1 className="mt-6 text-6xl font-bold tracking-tight">404</h1>
       <p className="text-muted-foreground mt-3 text-lg">페이지를 찾을 수 없습니다.</p>
       <p className="text-muted-foreground mt-1 text-sm">
