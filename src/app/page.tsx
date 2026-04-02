@@ -4,9 +4,9 @@ import type { Metadata } from 'next';
 import yttmIcon from '@/app/public/yttm.png';
 
 export const metadata: Metadata = {
-  title: 'YouTube Timeline Memo — 유튜브 타임스탬프 메모 서비스',
+  title: 'YouTube Timeline Memo — 유튜브 강의·게임 공략 타임스탬프 메모',
   description:
-    '유튜브 영상을 시청하며 타임스탬프 메모를 남기고, 클릭 한 번으로 해당 장면으로 바로 돌아가세요. 컬렉션으로 관련 영상을 묶고 공유 링크로 타임라인을 공유할 수 있습니다.',
+    '유튜브 강의나 게임 공략 영상의 중요한 장면에 타임스탬프 메모를 남기세요. 클릭 한 번으로 해당 시점으로 즉시 이동하고, 컬렉션으로 주제별 영상을 묶어 관리할 수 있습니다. 로그인 없이 게스트로 바로 체험 가능.',
 };
 
 const jsonLd = {
@@ -14,7 +14,7 @@ const jsonLd = {
   '@type': 'SoftwareApplication',
   name: 'YouTube Timeline Memo',
   description:
-    '유튜브 영상을 시청하며 타임스탬프 메모를 남기고, 클릭 한 번으로 해당 장면으로 바로 돌아가는 서비스',
+    '유튜브 강의·게임 공략 영상의 중요한 장면에 타임스탬프 메모를 남기고, 클릭 한 번으로 해당 시점으로 즉시 이동하는 서비스. 컬렉션으로 주제별 영상을 묶고 공유 링크로 타임라인을 공유할 수 있습니다.',
   applicationCategory: 'ProductivityApplication',
   operatingSystem: 'Web',
   inLanguage: 'ko',
@@ -24,11 +24,12 @@ const jsonLd = {
     priceCurrency: 'KRW',
   },
   featureList: [
-    '타임스탬프 메모 저장',
-    '메모 클릭으로 영상 시점 이동',
-    '컬렉션으로 영상 묶어 관리',
-    '공유 링크 생성',
-    'Google 로그인',
+    '유튜브 강의·게임 공략 영상 타임스탬프 메모',
+    '메모 클릭으로 영상 시점 즉시 이동',
+    '컬렉션으로 주제별·시리즈별 영상 관리',
+    '공유 링크 생성 (로그인 불필요)',
+    '게스트 모드 — 회원가입 없이 바로 체험',
+    'Google 계정 연동',
   ],
 };
 
@@ -48,8 +49,8 @@ export default function LandingPage() {
 
         {/* Description */}
         <p className="text-muted-foreground text-xl leading-relaxed">
-          유튜브 강의 보다가 중요한 부분,{' '}
-          <span className="text-foreground font-semibold">링크 하나로 바로 돌아가기</span>
+          유튜브 강의·게임 공략, 중요한 장면에 메모 남기고{' '}
+          <span className="text-foreground font-semibold">클릭 한 번으로 바로 돌아가기</span>
         </p>
 
         {/* Features */}
@@ -58,7 +59,12 @@ export default function LandingPage() {
             {
               icon: '▶',
               title: '타임라인 메모',
-              desc: '영상 재생 중 현재 시각 기준으로 메모를 저장하고, 클릭 한 번으로 해당 시점으로 즉시 이동',
+              desc: '강의·공략 영상 재생 중 현재 시각으로 메모를 저장하고, 클릭 한 번으로 해당 시점으로 즉시 이동',
+            },
+            {
+              icon: '📁',
+              title: '컬렉션',
+              desc: '"React 강의 모음", "게임 공략" 처럼 영상을 주제별·시리즈별로 묶어 체계적으로 관리',
             },
             {
               icon: '🔗',
@@ -66,14 +72,9 @@ export default function LandingPage() {
               desc: '공유 링크를 생성해 로그인 없이도 누구와든 타임라인 메모를 공유',
             },
             {
-              icon: '📁',
-              title: '컬렉션',
-              desc: '관련 영상들을 컬렉션으로 묶어 주제별·시리즈별로 체계적으로 관리',
-            },
-            {
-              icon: '🔒',
-              title: '내 영상만',
-              desc: 'Google 로그인으로 내 메모와 컬렉션을 안전하게 보관',
+              icon: '👤',
+              title: '게스트 모드',
+              desc: '회원가입 없이 바로 체험. 나중에 Google 계정으로 연결하면 작성한 메모가 그대로 유지',
             },
           ].map(({ icon, title, desc }) => (
             <div key={title} className="bg-muted/50 rounded-xl p-4 text-left">

@@ -14,13 +14,14 @@
 - **컬렉션** — 영상을 주제별 폴더로 묶어서 관리
 - **공유 링크** — 타임라인이 담긴 페이지를 링크 하나로 공유 (로그인 불필요)
 - **Google 로그인** — Firebase Auth를 통한 Google OAuth 인증
+- **게스트 모드** — 로그인 없이 익명으로 서비스 체험, 이후 Google 계정으로 업그레이드 시 데이터 유지
 
 ## 기술 스택
 
 | 영역 | 기술 |
 |------|------|
 | Framework | Next.js 16 (App Router) + TypeScript |
-| Auth | Firebase Auth (Google OAuth) |
+| Auth | Firebase Auth (Google OAuth + Anonymous) |
 | Database | Firestore (Firebase) |
 | Styling | Tailwind CSS v4 + shadcn/ui (Base UI) |
 | 배포 | Vercel |
@@ -36,25 +37,28 @@
      ▼
 [ Next.js (Vercel) ]
 ├── App Router (Server Components + Client Components)
-├── /api/youtube   ← YouTube Data API 호출 (API Key 서버에서만 사용)
-├── /api/share     ← shareToken 생성/폐기
-└── /api/auth      ← Firebase Admin SDK 세션 쿠키 발급
+├── /api/youtube        ← YouTube Data API 호출 (API Key 서버에서만 사용)
+├── /api/share          ← shareToken 생성/폐기
+├── /api/auth/session   ← Firebase Admin SDK 세션 쿠키 발급/삭제
+└── /api/auth/migrate   ← 게스트→Google 계정 전환 시 데이터 이관
      │
      ▼
 [ Firebase ]              [ YouTube Data API ]
-├── Auth (Google OAuth)
+├── Auth (Google OAuth + Anonymous)
 └── Firestore
 ```
 
 **인증 방식:** Firebase Admin SDK 세션 쿠키 (`__session`, httpOnly)
-- 로그인 → `getIdToken` → `POST /api/auth/session` → 서버 컴포넌트에서 쿠키 검증
+- Google 로그인 → `getIdToken` → `POST /api/auth/session` → 서버 컴포넌트에서 쿠키 검증
+- 게스트 로그인 → `signInAnonymously` → 동일 흐름으로 세션 쿠키 발급 (Firestore 보안 규칙 그대로 적용)
+- 게스트 → Google 계정 업그레이드: `linkWithPopup`으로 UID 유지, 이미 존재하는 계정이면 `/api/auth/migrate`로 데이터 이관
 
 ## 페이지 구성
 
 | 경로 | 설명 |
 |------|------|
 | `/` | 랜딩 페이지 |
-| `/login` | Google 로그인 |
+| `/login` | Google 로그인 / 게스트로 시작하기 |
 | `/dashboard` | 내 영상 (최대 4개) + 컬렉션 (최대 4개) 요약 |
 | `/videos` | 영상 목록 전체 (제목 검색 필터) |
 | `/videos/:id` | 영상 뷰어 + 타임라인 메모 (핵심 페이지) |
@@ -131,6 +135,7 @@ src/
 │   │       └── loading.tsx
 │   ├── api/
 │   │   ├── auth/session/     ← 세션 쿠키 발급/삭제
+│   │   ├── auth/migrate/     ← 게스트→Google 계정 데이터 이관
 │   │   ├── youtube/          ← YouTube 영상 정보 파싱
 │   │   └── share/            ← shareToken 생성/폐기
 │   ├── login/
@@ -151,7 +156,7 @@ src/
 ├── lib/
 │   ├── firebase/
 │   │   ├── config.ts         ← Firebase app + Firestore 초기화 (SSR 안전)
-│   │   ├── auth.ts           ← Google 로그인/로그아웃 (클라이언트 전용)
+│   │   ├── auth.ts           ← Google·게스트 로그인/로그아웃, 계정 업그레이드 (클라이언트 전용)
 │   │   ├── firestore.ts      ← 클라이언트 CRUD 헬퍼
 │   │   ├── admin.ts          ← Firebase Admin SDK + 세션 검증
 │   │   └── admin-firestore.ts← 서버 전용 Firestore 쿼리
@@ -203,6 +208,11 @@ yarn start
 서비스 소개와 주요 기능 카드, 시작하기 버튼으로 구성된 메인 진입 화면입니다.
 
 ![랜딩 페이지](img/1.png)
+
+### 로그인 (`/login`)
+Google 계정으로 로그인하거나, 로그인 없이 게스트로 바로 서비스를 체험할 수 있습니다. 게스트로 시작한 경우 상단 헤더에 "게스트" 배지가 표시되며, "Google로 계정 연결" 버튼으로 언제든지 계정을 업그레이드할 수 있습니다. 업그레이드 시 기존에 작성한 영상·메모·컬렉션 데이터가 그대로 유지됩니다.
+
+![로그인](img/1-1.png)
 
 ### 대시보드 (`/dashboard`)
 로그인 후 첫 화면입니다. 최근 영상(최대 4개)과 컬렉션(최대 4개)을 한눈에 확인하고, 각 섹션에서 모두 보기로 전체 목록 페이지로 이동할 수 있습니다.
