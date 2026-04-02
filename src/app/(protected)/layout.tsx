@@ -13,7 +13,7 @@ export default async function ProtectedLayout({ children }: { children: React.Re
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header displayName={user.name ?? user.email ?? ''} />
+      <Header displayName={user.name ?? user.email ?? ''} isAnonymous={user.isAnonymous} />
       <main className="flex-1">{children}</main>
     </div>
   );

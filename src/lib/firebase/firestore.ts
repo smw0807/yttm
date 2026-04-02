@@ -6,6 +6,7 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
+  writeBatch,
   query,
   where,
   orderBy,
@@ -40,6 +41,13 @@ export async function addVideo(video: Omit<Video, 'id' | 'createdAt'>) {
 }
 
 export async function deleteVideo(videoId: string) {
+  // 메모 서브컬렉션 먼저 일괄 삭제
+  const memosSnap = await getDocs(collection(db, 'videos', videoId, 'memos'));
+  if (!memosSnap.empty) {
+    const batch = writeBatch(db);
+    memosSnap.docs.forEach((d) => batch.delete(d.ref));
+    await batch.commit();
+  }
   await deleteDoc(doc(db, 'videos', videoId));
 }
 

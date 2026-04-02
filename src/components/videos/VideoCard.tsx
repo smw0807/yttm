@@ -46,6 +46,13 @@ export function VideoCard({ video, onDeleted }: Props) {
         </div>
       </Link>
 
+      {/* 삭제 중 오버레이 */}
+      {deleting && (
+        <div className="bg-background/70 absolute inset-0 flex items-center justify-center rounded-xl">
+          <div className="border-primary h-5 w-5 animate-spin rounded-full border-2 border-t-transparent" />
+        </div>
+      )}
+
       {/* 제목 + 삭제 버튼 */}
       <div className="flex items-start gap-1 p-3">
         <Link href={`/videos/${video.id}`} className="min-w-0 flex-1">

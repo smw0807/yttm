@@ -109,7 +109,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
                       onClick={() => handleSaveEdit(memo.id!)}
                       disabled={savingId === memo.id || !editValue.trim()}
                     >
-                      저장
+                      {savingId === memo.id ? '저장 중...' : '저장'}
                     </Button>
                     <Button
                       size="sm"
@@ -139,7 +139,9 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
                   onClick={() => handleDelete(memo.id!)}
                   disabled={deletingId === memo.id}
                 >
-                  ✕
+                  {deletingId === memo.id ? (
+                    <span className="border-muted-foreground h-3 w-3 animate-spin rounded-full border-2 border-t-transparent" />
+                  ) : '✕'}
                 </Button>
               )}
             </li>

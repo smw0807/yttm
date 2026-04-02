@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { signInWithGoogle } from '@/lib/firebase/auth';
+import { signInWithGoogle, signInAsGuest } from '@/lib/firebase/auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { KakaoInAppBrowserGuard } from '@/components/KakaoInAppBrowserGuard';
@@ -15,6 +15,15 @@ export function LoginClient() {
       router.replace('/dashboard');
     } catch (error) {
       console.error('로그인 실패:', error);
+    }
+  }
+
+  async function handleGuestLogin() {
+    try {
+      await signInAsGuest();
+      router.replace('/dashboard');
+    } catch (error) {
+      console.error('게스트 로그인 실패:', error);
     }
   }
 
@@ -33,10 +42,17 @@ export function LoginClient() {
             타임라인 메모를 시작하세요
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-3">
           <Button variant="outline" className="w-full gap-3 text-base" onClick={handleGoogleLogin}>
             <GoogleIcon />
             Google로 계속하기
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full bg-gray-100 text-base hover:bg-gray-200"
+            onClick={handleGuestLogin}
+          >
+            게스트로 시작하기
           </Button>
         </CardContent>
       </Card>

@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import yttmIcon from '@/app/public/yttm.png';
 
 export const metadata: Metadata = {
   title: 'YouTube Timeline Memo — 유튜브 타임스탬프 메모 서비스',
@@ -40,9 +42,7 @@ export default function LandingPage() {
       <div className="flex max-w-2xl flex-col items-center gap-8 text-center">
         {/* Logo / Title */}
         <div className="flex flex-col items-center gap-3">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-600 text-3xl font-bold text-white shadow-lg">
-            ▶
-          </div>
+          <Image src={yttmIcon} alt="YT Timeline Memo" width={64} height={64} className="rounded-2xl shadow-lg" />
           <h1 className="text-4xl font-bold tracking-tight">YouTube Timeline Memo</h1>
         </div>
 
