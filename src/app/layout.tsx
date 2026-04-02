@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     siteName: 'YouTube Timeline Memo',
     title: 'YouTube Timeline Memo',
     description:
-      '유튜브 강의 보다가 중요한 부분, 링크 하나로 바로 돌아가기. 타임스탬프 메모 + 컬렉션 + 공유 링크.',
+      '유튜브 보다가 중요한 부분, 링크 하나로 바로 돌아가기. 타임스탬프 메모 + 컬렉션 + 공유 링크.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'YouTube Timeline Memo',
     description:
-      '유튜브 강의 보다가 중요한 부분, 링크 하나로 바로 돌아가기. 타임스탬프 메모 + 컬렉션 + 공유 링크.',
+      '유튜브 보다가 중요한 부분, 링크 하나로 바로 돌아가기. 타임스탬프 메모 + 컬렉션 + 공유 링크.',
   },
   robots: {
     index: true,
