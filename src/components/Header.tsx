@@ -7,9 +7,10 @@ import { UserMenu } from '@/components/UserMenu';
 
 interface Props {
   displayName: string;
+  isAnonymous: boolean;
 }
 
-export function Header({ displayName }: Props) {
+export function Header({ displayName, isAnonymous }: Props) {
   const pathname = usePathname();
 
   function navClass(href: string) {
@@ -39,7 +40,7 @@ export function Header({ displayName }: Props) {
           <Link href="/collections" className={navClass('/collections')}>
             컬렉션
           </Link>
-          <UserMenu displayName={displayName} />
+          <UserMenu displayName={displayName} isAnonymous={isAnonymous} />
         </nav>
       </div>
     </header>

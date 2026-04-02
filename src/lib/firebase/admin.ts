@@ -27,7 +27,9 @@ export const getSessionUser = cache(async () => {
   if (!sessionCookie) return null;
 
   try {
-    return await adminAuth.verifySessionCookie(sessionCookie, true);
+    const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
+    const isAnonymous = decoded.firebase?.sign_in_provider === 'anonymous';
+    return { uid: decoded.uid, email: decoded.email ?? null, name: decoded.name ?? null, isAnonymous };
   } catch {
     return null;
   }

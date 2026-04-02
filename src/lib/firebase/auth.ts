@@ -1,6 +1,13 @@
 'use client';
 
-import { GoogleAuthProvider, signInWithPopup, signOut, getAuth } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  linkWithPopup,
+  signInAnonymously,
+  signOut,
+  getAuth,
+} from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { app, db } from './config';
 
@@ -39,4 +46,47 @@ export async function signInWithGoogle() {
 export async function logout() {
   await fetch('/api/auth/session', { method: 'DELETE' });
   await signOut(auth);
+}
+
+export async function signInAsGuest() {
+  const cred = await signInAnonymously(auth);
+  const idToken = await cred.user.getIdToken();
+  await fetch('/api/auth/session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idToken }),
+  });
+}
+
+export async function upgradeGuestToGoogle(): Promise<'linked' | 'migrated'> {
+  const currentUser = auth.currentUser!;
+  const guestUid = currentUser.uid;
+
+  try {
+    await linkWithPopup(currentUser, provider);
+    const idToken = await auth.currentUser!.getIdToken(true);
+    await fetch('/api/auth/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken }),
+    });
+    return 'linked';
+  } catch (err: unknown) {
+    if ((err as { code?: string }).code === 'auth/credential-already-in-use') {
+      await signInWithPopup(auth, provider);
+      const idToken = await auth.currentUser!.getIdToken();
+      await fetch('/api/auth/migrate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guestUid, idToken }),
+      });
+      await fetch('/api/auth/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken }),
+      });
+      return 'migrated';
+    }
+    throw err;
+  }
 }
