@@ -9,5 +9,7 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "i18n-ally.localesPaths": ["messages", "src/i18n"],
+  "i18n-ally.sourceLanguage": "ko"
 }
