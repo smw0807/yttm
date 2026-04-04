@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export function KakaoInAppBrowserGuard() {
+  const t = useTranslations('kakaoGuard');
   const [showIosGuide, setShowIosGuide] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -46,19 +48,15 @@ export function KakaoInAppBrowserGuard() {
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-end bg-black/40 pb-6 px-4">
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
         <div className="mb-1 text-center text-2xl">🌐</div>
-        <h2 className="mb-1 text-center text-base font-bold">Safari에서 열어주세요</h2>
-        <p className="text-muted-foreground mb-5 text-center text-sm leading-relaxed">
-          카카오 인앱 브라우저에서는
-          <br />
-          Google 로그인이 지원되지 않습니다.
-          <br />
-          URL을 복사해 Safari에서 접속해주세요.
+        <h2 className="mb-1 text-center text-base font-bold">{t('title')}</h2>
+        <p className="text-muted-foreground mb-5 text-center text-sm leading-relaxed whitespace-pre-line">
+          {t('description')}
         </p>
         <button
           onClick={handleCopyUrl}
           className="w-full rounded-lg bg-yellow-400 py-3 text-sm font-semibold text-black transition-colors hover:bg-yellow-300 active:bg-yellow-500"
         >
-          {copied ? '✓ 복사됨' : 'URL 복사하기'}
+          {copied ? t('copied') : t('copyUrl')}
         </button>
       </div>
     </div>

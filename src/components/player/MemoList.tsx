@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatTimestamp } from '@/lib/youtube';
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props) {
+  const t = useTranslations('memoList');
+  const tc = useTranslations('common');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
@@ -57,10 +60,8 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
 
   if (memos.length === 0) {
     return (
-      <p className="text-muted-foreground py-10 text-center text-sm">
-        아직 메모가 없습니다.
-        <br />
-        영상을 재생하고 시각을 찍어 메모를 저장해보세요.
+      <p className="text-muted-foreground py-10 text-center text-sm whitespace-pre-line">
+        {t('noMemos')}
       </p>
     );
   }
@@ -68,14 +69,14 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
   return (
     <div className="flex flex-col gap-3">
       <Input
-        placeholder="메모 내용 검색..."
+        placeholder={t('searchPlaceholder')}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="h-8 text-sm"
       />
 
       {filtered.length === 0 ? (
-        <p className="text-muted-foreground py-6 text-center text-sm">검색 결과가 없습니다.</p>
+        <p className="text-muted-foreground py-6 text-center text-sm">{t('noSearchResults')}</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {filtered.map((memo) => (
@@ -109,7 +110,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
                       onClick={() => handleSaveEdit(memo.id!)}
                       disabled={savingId === memo.id || !editValue.trim()}
                     >
-                      {savingId === memo.id ? '저장 중...' : '저장'}
+                      {savingId === memo.id ? tc('saving') : tc('save')}
                     </Button>
                     <Button
                       size="sm"
@@ -117,7 +118,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
                       className="h-6 px-2 text-xs"
                       onClick={cancelEdit}
                     >
-                      취소
+                      {tc('cancel')}
                     </Button>
                   </div>
                 </div>

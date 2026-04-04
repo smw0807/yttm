@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export function AddCollectionDialog({ open, onClose, userId, onAdded }: Props) {
+  const t = useTranslations('addCollectionDialog');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,34 +37,34 @@ export function AddCollectionDialog({ open, onClose, userId, onAdded }: Props) {
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>새 컬렉션</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">이름 *</label>
+            <label className="text-sm font-medium">{t('nameLabel')}</label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="컬렉션 이름"
+              placeholder={t('namePlaceholder')}
               maxLength={50}
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">설명</label>
+            <label className="text-sm font-medium">{t('descLabel')}</label>
             <Textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="컬렉션 설명 (선택)"
+              placeholder={t('descPlaceholder')}
               rows={3}
               maxLength={200}
             />
           </div>
           <div className="flex justify-end gap-2">
             <Button type="button" variant="ghost" onClick={onClose}>
-              취소
+              {t('cancelButton')}
             </Button>
             <Button type="submit" disabled={!name.trim() || loading}>
-              만들기
+              {t('createButton')}
             </Button>
           </div>
         </form>

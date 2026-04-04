@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import type { Collection, Video } from '@/types';
 
 interface Props {
@@ -9,6 +12,7 @@ interface Props {
 }
 
 export function CollectionCard({ collection, videos, onClick, onDelete }: Props) {
+  const t = useTranslations('collections');
   const collectionVideos = videos.filter((v) => collection.videoIds.includes(v.id));
   const previewVideos = collectionVideos.slice(0, 4);
 
@@ -42,7 +46,7 @@ export function CollectionCard({ collection, videos, onClick, onDelete }: Props)
         </div>
       ) : (
         <div className="bg-muted flex aspect-video items-center justify-center rounded-t-xl">
-          <span className="text-muted-foreground text-sm">영상 없음</span>
+          <span className="text-muted-foreground text-sm">{t('noVideos')}</span>
         </div>
       )}
 
@@ -51,14 +55,16 @@ export function CollectionCard({ collection, videos, onClick, onDelete }: Props)
         {collection.description && (
           <p className="text-muted-foreground mt-1 line-clamp-2 text-xs">{collection.description}</p>
         )}
-        <p className="text-muted-foreground mt-1 text-xs">영상 {collectionVideos.length}개</p>
+        <p className="text-muted-foreground mt-1 text-xs">
+          {t('videoCount', { count: collectionVideos.length })}
+        </p>
       </div>
 
       {/* 삭제 버튼 */}
       <button
         onClick={handleDelete}
         className="text-muted-foreground hover:text-destructive absolute right-2 top-2 rounded p-1 opacity-0 transition-opacity group-hover:opacity-100"
-        title="삭제"
+        title={t('confirmDeleteTitle')}
       >
         ✕
       </button>

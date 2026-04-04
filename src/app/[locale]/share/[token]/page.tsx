@@ -1,24 +1,28 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { getVideoByShareTokenAdmin, getMemosAdmin } from '@/lib/firebase/admin-firestore';
 import { ShareViewerClient } from '@/components/player/ShareViewerClient';
 
 interface Props {
-  params: Promise<{ token: string }>;
+  params: Promise<{ token: string; locale: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { token } = await params;
+  const { token, locale } = await params;
   const video = await getVideoByShareTokenAdmin(token);
   if (!video) return {};
+
+  const t = await getTranslations({ locale, namespace: 'shareViewer' });
 
   return {
     title: `${video.title} — YT Timeline Memo`,
     openGraph: {
       title: video.title,
-      description: `타임라인 메모가 ${video.title} 영상에 첨부되어 있습니다.`,
+      description: `${t('sharedTimeline')} ${video.title}`,
       images: [{ url: video.thumbnail, width: 1280, height: 720 }],
       type: 'video.other',
+      locale: locale === 'ko' ? 'ko_KR' : 'en_US',
     },
     twitter: {
       card: 'summary_large_image',

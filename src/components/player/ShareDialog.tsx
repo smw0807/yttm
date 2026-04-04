@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function ShareDialog({ open, onClose, videoId, token, onTokenChange }: Props) {
+  const t = useTranslations('shareDialog');
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -54,30 +56,26 @@ export function ShareDialog({ open, onClose, videoId, token, onTokenChange }: Pr
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>공유 링크</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         {shareUrl ? (
           <div className="flex flex-col gap-3">
             <div className="flex gap-2">
               <Input value={shareUrl} readOnly className="flex-1 font-mono text-xs" />
               <Button onClick={handleCopy} variant="outline" className="shrink-0">
-                {copied ? '복사됨' : '복사'}
+                {copied ? t('copied') : t('copy')}
               </Button>
             </div>
-            <p className="text-muted-foreground text-xs">
-              링크를 가진 누구나 이 영상의 타임라인 메모를 볼 수 있습니다.
-            </p>
+            <p className="text-muted-foreground text-xs">{t('shareInfo')}</p>
             <Button variant="destructive" onClick={handleRevoke} disabled={loading}>
-              링크 비활성화
+              {t('revokeLink')}
             </Button>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            <p className="text-muted-foreground text-sm">
-              공유 링크를 생성하면 누구나 이 영상의 타임라인 메모를 볼 수 있습니다.
-            </p>
+            <p className="text-muted-foreground text-sm">{t('createInfo')}</p>
             <Button onClick={handleCreate} disabled={loading}>
-              링크 생성
+              {t('createLink')}
             </Button>
           </div>
         )}

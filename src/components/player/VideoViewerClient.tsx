@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import { MemoForm } from '@/components/player/MemoForm';
 import { MemoList } from '@/components/player/MemoList';
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
+  const t = useTranslations('viewer');
   const [memos, setMemos] = useState(initialMemos);
   const [shareOpen, setShareOpen] = useState(false);
   const [shareToken, setShareToken] = useState(video.shareToken);
@@ -49,7 +51,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
                 href="/videos"
                 className="text-muted-foreground hover:text-foreground shrink-0 text-sm transition-colors"
               >
-                ← 목록
+                {t('backToList')}
               </Link>
               <h1 className="truncate text-base font-semibold leading-snug">{video.title}</h1>
             </div>
@@ -59,7 +61,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
               onClick={() => setShareOpen(true)}
               className="shrink-0"
             >
-              공유
+              {t('share')}
             </Button>
           </div>
           <div
@@ -69,7 +71,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
             <div ref={containerRef} className="absolute inset-0" />
           </div>
           <p className="text-muted-foreground text-xs">
-            총 길이: {formatTimestamp(video.durationSec)}
+            {t('totalDuration', { duration: formatTimestamp(video.durationSec) })}
           </p>
         </div>
 
@@ -78,7 +80,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
           <MemoForm onSave={handleSaveMemo} getCurrentTime={getCurrentTime} />
           <div>
             <h2 className="text-muted-foreground mb-3 text-sm font-semibold">
-              타임라인 ({memos.length}개)
+              {t('timeline', { count: memos.length })}
             </h2>
             <MemoList videoId={videoId} memos={memos} onSeek={seekTo} onDeleted={handleDeleted} onUpdated={refreshMemos} />
           </div>

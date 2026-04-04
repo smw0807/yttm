@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function AddVideoDialog({ open, onClose, onAdded, userId }: Props) {
+  const t = useTranslations('addVideoDialog');
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,14 +30,14 @@ export function AddVideoDialog({ open, onClose, onAdded, userId }: Props) {
     try {
       const res = await fetch(`/api/youtube?url=${encodeURIComponent(url.trim())}`);
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || '영상 정보를 가져오지 못했습니다');
+      if (!res.ok) throw new Error(data.error || t('defaultError'));
 
       await addVideo({ ...data, userId, shareToken: null });
       setUrl('');
       onAdded();
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : '오류가 발생했습니다');
+      setError(err instanceof Error ? err.message : t('defaultError'));
     } finally {
       setLoading(false);
     }
@@ -52,18 +54,18 @@ export function AddVideoDialog({ open, onClose, onAdded, userId }: Props) {
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>YouTube 영상 추가</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <Input
-            placeholder="https://youtu.be/... 또는 https://www.youtube.com/watch?v=..."
+            placeholder={t('urlPlaceholder')}
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             autoFocus
           />
           {error && <p className="text-destructive text-xs">{error}</p>}
           <Button type="submit" disabled={loading || !url.trim()}>
-            {loading ? '불러오는 중...' : '추가'}
+            {loading ? t('loadingButton') : t('addButton')}
           </Button>
         </form>
       </DialogContent>

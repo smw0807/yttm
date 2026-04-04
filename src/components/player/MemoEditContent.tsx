@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Link, useRouter } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
@@ -17,6 +17,8 @@ interface Props {
 
 export function MemoEditContent({ video, memos: initialMemos }: Props) {
   const router = useRouter();
+  const t = useTranslations('memoEdit');
+  const tc = useTranslations('common');
   const [memos, setMemos] = useState(initialMemos);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
@@ -63,16 +65,16 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
           href={`/videos/${video.id}`}
           className="text-muted-foreground hover:text-foreground text-sm transition-colors"
         >
-          ← 뒤로
+          {tc('back')}
         </Link>
         <div className="min-w-0">
           <h1 className="truncate text-lg font-bold">{video.title}</h1>
-          <p className="text-muted-foreground text-xs">메모 편집 — {memos.length}개</p>
+          <p className="text-muted-foreground text-xs">{t('subtitle', { count: memos.length })}</p>
         </div>
       </div>
 
       {memos.length === 0 ? (
-        <p className="text-muted-foreground py-20 text-center">저장된 메모가 없습니다.</p>
+        <p className="text-muted-foreground py-20 text-center">{t('noMemos')}</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {memos.map((memo) => (
@@ -99,10 +101,10 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
                       onClick={() => handleSave(memo.id)}
                       disabled={savingId === memo.id || !editValue.trim()}
                     >
-                      {savingId === memo.id ? '저장 중...' : '저장'}
+                      {savingId === memo.id ? t('saving') : t('saveButton')}
                     </Button>
                     <Button size="sm" variant="ghost" onClick={cancelEdit}>
-                      취소
+                      {t('cancelButton')}
                     </Button>
                   </div>
                 </div>
@@ -113,7 +115,7 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
               {editingId !== memo.id && (
                 <div className="flex shrink-0 gap-1">
                   <Button size="sm" variant="ghost" onClick={() => startEdit(memo)} disabled={deletingId === memo.id}>
-                    수정
+                    {t('editButton')}
                   </Button>
                   <Button
                     size="sm"
@@ -122,7 +124,7 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
                     onClick={() => setDeleteTargetId(memo.id)}
                     disabled={deletingId === memo.id}
                   >
-                    {deletingId === memo.id ? '삭제 중...' : '삭제'}
+                    {deletingId === memo.id ? t('deleting') : t('deleteButton')}
                   </Button>
                 </div>
               )}
@@ -132,14 +134,14 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
       )}
 
       <div className="mt-6 flex justify-end">
-        <Button onClick={() => router.push(`/videos/${video.id}`)}>영상으로 돌아가기</Button>
+        <Button onClick={() => router.push(`/videos/${video.id}`)}>{t('backToVideo')}</Button>
       </div>
 
       <ConfirmDialog
         open={!!deleteTargetId}
-        title="메모 삭제"
-        description="이 메모를 삭제하시겠습니까?"
-        confirmLabel="삭제"
+        title={t('confirmDeleteTitle')}
+        description={t('confirmDeleteDesc')}
+        confirmLabel={t('deleteButton')}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteTargetId(null)}
       />
