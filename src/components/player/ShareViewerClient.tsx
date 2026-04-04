@@ -59,13 +59,14 @@ export function ShareViewerClient({ video, memos }: Props) {
           ) : (
             <ul className="flex flex-col gap-2">
               {memos.map((memo) => (
-                <li key={memo.id} className="flex items-start gap-3 rounded-lg border p-3">
-                  <button
-                    onClick={() => seekTo(memo.timestampSec)}
-                    className="mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700 hover:bg-red-200"
-                  >
+                <li
+                  key={memo.id}
+                  onClick={() => seekTo(memo.timestampSec)}
+                  className="hover:bg-muted/40 flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors"
+                >
+                  <span className="mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700">
                     {formatTimestamp(memo.timestampSec)}
-                  </button>
+                  </span>
                   <p className="text-sm leading-relaxed">{memo.content}</p>
                 </li>
               ))}

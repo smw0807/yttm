@@ -60,7 +60,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
 
   if (memos.length === 0) {
     return (
-      <p className="text-muted-foreground py-10 text-center text-sm whitespace-pre-line">
+      <p className="text-muted-foreground whitespace-pre-line py-10 text-center text-sm">
         {t('noMemos')}
       </p>
     );
@@ -123,27 +123,35 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
                   </div>
                 </div>
               ) : (
-                <p
-                  className="flex-1 cursor-pointer text-sm leading-relaxed"
-                  onDoubleClick={() => startEdit(memo)}
-                  title="더블클릭으로 수정"
+                <button
+                  className="flex-1 cursor-pointer text-left text-sm leading-relaxed"
+                  onClick={() => onSeek(memo.timestampSec)}
                 >
                   {memo.content}
-                </p>
+                </button>
               )}
 
               {editingId !== memo.id && (
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  className="shrink-0 opacity-0 group-hover:opacity-100"
-                  onClick={() => handleDelete(memo.id!)}
-                  disabled={deletingId === memo.id}
-                >
-                  {deletingId === memo.id ? (
-                    <span className="border-muted-foreground h-3 w-3 animate-spin rounded-full border-2 border-t-transparent" />
-                  ) : '✕'}
-                </Button>
+                <div className="flex shrink-0 gap-0.5 opacity-0 group-hover:opacity-100">
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => startEdit(memo)}
+                    disabled={deletingId === memo.id}
+                  >
+                    ✎
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => handleDelete(memo.id!)}
+                    disabled={deletingId === memo.id}
+                  >
+                    {deletingId === memo.id ? (
+                      <span className="border-muted-foreground h-3 w-3 animate-spin rounded-full border-2 border-t-transparent" />
+                    ) : '✕'}
+                  </Button>
+                </div>
               )}
             </li>
           ))}
