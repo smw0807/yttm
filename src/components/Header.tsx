@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Link, usePathname } from '@/i18n/navigation';
 import { UserMenu } from '@/components/UserMenu';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
 interface Props {
   displayName: string;
@@ -12,6 +13,7 @@ interface Props {
 
 export function Header({ displayName, isAnonymous }: Props) {
   const pathname = usePathname();
+  const t = useTranslations('nav');
 
   function navClass(href: string) {
     const active = pathname === href || pathname.startsWith(href + '/');
@@ -32,14 +34,15 @@ export function Header({ displayName, isAnonymous }: Props) {
         </Link>
         <nav className="flex items-center gap-1">
           <Link href="/dashboard" className={navClass('/dashboard')}>
-            대시보드
+            {t('dashboard')}
           </Link>
           <Link href="/videos" className={navClass('/videos')}>
-            내 영상
+            {t('videos')}
           </Link>
           <Link href="/collections" className={navClass('/collections')}>
-            컬렉션
+            {t('collections')}
           </Link>
+          <LocaleSwitcher />
           <UserMenu displayName={displayName} isAnonymous={isAnonymous} />
         </nav>
       </div>

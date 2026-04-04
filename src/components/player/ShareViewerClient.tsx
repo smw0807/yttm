@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import { formatTimestamp } from '@/lib/youtube';
 import { AdBanner } from '@/components/ads/AdBanner';
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export function ShareViewerClient({ video, memos }: Props) {
+  const t = useTranslations('shareViewer');
   const { containerRef, seekTo } = useYouTubePlayer(video.youtubeId);
 
   return (
@@ -19,10 +21,10 @@ export function ShareViewerClient({ video, memos }: Props) {
       <header className="flex h-12 items-center justify-between border-b px-4">
         <a href="/" className="flex items-center gap-1.5 font-semibold hover:text-red-700">
           <Image src="/yttm.png" alt="YT Timeline Memo" width={24} height={24} />
-          YT Timeline Memo
+          {t('siteTitle')}
         </a>
         <span className="text-muted-foreground min-w-0 truncate text-sm">
-          공유된 타임라인 — <span className="text-foreground font-medium">{video.title}</span>
+          {t('sharedTimeline')} <span className="text-foreground font-medium">{video.title}</span>
         </span>
       </header>
 
@@ -43,17 +45,17 @@ export function ShareViewerClient({ video, memos }: Props) {
             <div ref={containerRef} className="absolute inset-0" />
           </div>
           <p className="text-muted-foreground text-xs">
-            총 길이: {formatTimestamp(video.durationSec)}
+            {t('totalDuration', { duration: formatTimestamp(video.durationSec) })}
           </p>
         </div>
 
         {/* 읽기 전용 메모 목록 */}
         <div className="flex w-[40%] flex-col gap-2 overflow-y-auto p-4">
           <h2 className="text-muted-foreground text-sm font-semibold">
-            타임라인 ({memos.length}개)
+            {t('timeline', { count: memos.length })}
           </h2>
           {memos.length === 0 ? (
-            <p className="text-muted-foreground py-10 text-center text-sm">메모가 없습니다.</p>
+            <p className="text-muted-foreground py-10 text-center text-sm">{t('noMemos')}</p>
           ) : (
             <ul className="flex flex-col gap-2">
               {memos.map((memo) => (

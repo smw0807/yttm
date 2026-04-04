@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 import { signInWithGoogle, signInAsGuest } from '@/lib/firebase/auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,7 @@ import { KakaoInAppBrowserGuard } from '@/components/KakaoInAppBrowserGuard';
 
 export function LoginClient() {
   const router = useRouter();
+  const t = useTranslations('auth');
   const [loading, setLoading] = useState<'google' | 'guest' | null>(null);
 
   async function handleGoogleLogin() {
@@ -43,11 +45,16 @@ export function LoginClient() {
           <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-red-600 text-2xl font-bold text-white">
             ▶
           </div>
-          <CardTitle className="text-2xl">로그인</CardTitle>
+          <CardTitle className="text-2xl">{t('login')}</CardTitle>
           <CardDescription>
-            Google 계정으로 로그인하고
-            <br />
-            타임라인 메모를 시작하세요
+            {t('loginDescription')
+              .split('\n')
+              .map((line, i) => (
+                <span key={i}>
+                  {line}
+                  {i === 0 && <br />}
+                </span>
+              ))}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
@@ -58,7 +65,7 @@ export function LoginClient() {
             disabled={!!loading}
           >
             {loading === 'google' ? <Spinner /> : <GoogleIcon />}
-            Google로 계속하기
+            {t('googleLogin')}
           </Button>
           <Button
             variant="ghost"
@@ -67,7 +74,7 @@ export function LoginClient() {
             disabled={!!loading}
           >
             {loading === 'guest' && <Spinner />}
-            {loading === 'guest' ? '로그인 중...' : '게스트로 시작하기'}
+            {loading === 'guest' ? t('loggingIn') : t('guestLogin')}
           </Button>
         </CardContent>
       </Card>

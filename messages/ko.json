@@ -1,0 +1,174 @@
+{
+  "common": {
+    "save": "저장",
+    "saving": "저장 중...",
+    "cancel": "취소",
+    "delete": "삭제",
+    "deleting": "삭제 중...",
+    "edit": "수정",
+    "add": "추가",
+    "loading": "불러오는 중...",
+    "error": "오류가 발생했습니다",
+    "back": "← 뒤로",
+    "confirm": "확인"
+  },
+  "nav": {
+    "dashboard": "대시보드",
+    "videos": "내 영상",
+    "collections": "컬렉션"
+  },
+  "auth": {
+    "login": "로그인",
+    "logout": "로그아웃",
+    "loginDescription": "Google 계정으로 로그인하고\n타임라인 메모를 시작하세요",
+    "googleLogin": "Google로 계속하기",
+    "guestLogin": "게스트로 시작하기",
+    "loggingIn": "로그인 중...",
+    "guest": "게스트",
+    "connectGoogle": "Google로 계정 연결"
+  },
+  "landing": {
+    "title": "YouTube Timeline Memo",
+    "description": "유튜브 강의·게임 공략, 중요한 장면에 메모 남기고 <highlight>클릭 한 번으로 바로 돌아가기</highlight>",
+    "startButton": "시작하기",
+    "features": {
+      "timeline": {
+        "title": "타임라인 메모",
+        "desc": "강의·공략 영상 재생 중 현재 시각으로 메모를 저장하고, 클릭 한 번으로 해당 시점으로 즉시 이동"
+      },
+      "collection": {
+        "title": "컬렉션",
+        "desc": "\"React 강의 모음\", \"게임 공략\" 처럼 영상을 주제별·시리즈별로 묶어 체계적으로 관리"
+      },
+      "share": {
+        "title": "공유 링크",
+        "desc": "공유 링크를 생성해 로그인 없이도 누구와든 타임라인 메모를 공유"
+      },
+      "guest": {
+        "title": "게스트 모드",
+        "desc": "회원가입 없이 바로 체험. 나중에 Google 계정으로 연결하면 작성한 메모가 그대로 유지"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "대시보드",
+    "addVideo": "+ 영상 추가",
+    "myVideos": "내 영상",
+    "viewAll": "모두 보기 →",
+    "noVideos": "등록된 영상이 없습니다.",
+    "addYouTubeVideo": "YouTube 영상 추가하기",
+    "collections": "컬렉션",
+    "noCollections": "컬렉션이 없습니다.",
+    "createCollection": "컬렉션 만들기"
+  },
+  "videos": {
+    "title": "영상 목록",
+    "addVideo": "+ 영상 추가",
+    "searchPlaceholder": "영상 제목으로 검색...",
+    "noVideos": "등록된 영상이 없습니다.",
+    "addYouTubeVideo": "YouTube 영상 추가하기",
+    "noSearchResults": "검색 결과가 없습니다."
+  },
+  "addVideoDialog": {
+    "title": "YouTube 영상 추가",
+    "urlPlaceholder": "https://youtu.be/... 또는 https://www.youtube.com/watch?v=...",
+    "addButton": "추가",
+    "loadingButton": "불러오는 중...",
+    "defaultError": "영상 정보를 가져오지 못했습니다"
+  },
+  "viewer": {
+    "backToList": "← 목록",
+    "totalDuration": "총 길이: {duration}",
+    "share": "공유",
+    "timeline": "타임라인 ({count}개)"
+  },
+  "memoForm": {
+    "title": "메모 추가",
+    "captureTime": "현재 시각 찍기",
+    "captured": "⏱ {time} 찍힘",
+    "placeholder": "메모 내용을 입력하세요",
+    "saveButton": "저장",
+    "saving": "저장 중..."
+  },
+  "memoList": {
+    "searchPlaceholder": "메모 내용 검색...",
+    "noMemos": "아직 메모가 없습니다.\n영상을 재생하고 시각을 찍어 메모를 저장해보세요.",
+    "noSearchResults": "검색 결과가 없습니다."
+  },
+  "memoEdit": {
+    "subtitle": "메모 편집 — {count}개",
+    "noMemos": "저장된 메모가 없습니다.",
+    "saveButton": "저장",
+    "saving": "저장 중...",
+    "deleteButton": "삭제",
+    "deleting": "삭제 중...",
+    "editButton": "수정",
+    "cancelButton": "취소",
+    "backToVideo": "영상으로 돌아가기",
+    "confirmDeleteTitle": "메모 삭제",
+    "confirmDeleteDesc": "이 메모를 삭제하시겠습니까?"
+  },
+  "shareDialog": {
+    "title": "공유 링크",
+    "copied": "복사됨",
+    "copy": "복사",
+    "shareInfo": "링크를 가진 누구나 이 영상의 타임라인 메모를 볼 수 있습니다.",
+    "revokeLink": "링크 비활성화",
+    "createInfo": "공유 링크를 생성하면 누구나 이 영상의 타임라인 메모를 볼 수 있습니다.",
+    "createLink": "링크 생성"
+  },
+  "shareViewer": {
+    "siteTitle": "YT Timeline Memo",
+    "sharedTimeline": "공유된 타임라인 —",
+    "timeline": "타임라인 ({count}개)",
+    "noMemos": "메모가 없습니다.",
+    "totalDuration": "총 길이: {duration}"
+  },
+  "collections": {
+    "title": "컬렉션",
+    "addCollection": "+ 컬렉션 추가",
+    "noCollections": "컬렉션이 없습니다.",
+    "createFirst": "첫 컬렉션 만들기",
+    "videoCount": "영상 {count}개",
+    "noVideos": "영상 없음",
+    "confirmDeleteTitle": "컬렉션 삭제",
+    "confirmDeleteDesc": "컬렉션을 삭제하시겠습니까? 컬렉션에 포함된 영상은 삭제되지 않습니다."
+  },
+  "addCollectionDialog": {
+    "title": "새 컬렉션",
+    "nameLabel": "이름 *",
+    "namePlaceholder": "컬렉션 이름",
+    "descLabel": "설명",
+    "descPlaceholder": "컬렉션 설명 (선택)",
+    "cancelButton": "취소",
+    "createButton": "만들기"
+  },
+  "collectionDetail": {
+    "includedVideos": "포함된 영상 ({count}개)",
+    "noVideosInCollection": "아직 영상이 없습니다. 아래에서 추가하세요.",
+    "availableVideos": "추가 가능한 영상 ({count}개)",
+    "removeAction": "제거",
+    "addAction": "추가"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "페이지를 찾을 수 없습니다.",
+    "detail": "주소가 잘못되었거나 삭제된 페이지입니다.",
+    "backToDashboard": "대시보드로 돌아가기"
+  },
+  "kakaoGuard": {
+    "title": "Safari에서 열어주세요",
+    "description": "카카오 인앱 브라우저에서는\nGoogle 로그인이 지원되지 않습니다.\nURL을 복사해 Safari에서 접속해주세요.",
+    "copyUrl": "URL 복사하기",
+    "copied": "✓ 복사됨"
+  },
+  "localeSwitcher": {
+    "ko": "한국어",
+    "en": "English"
+  },
+  "videoCard": {
+    "deleteTitle": "영상 삭제",
+    "deleteDesc": "\"{title}\" 영상을 삭제하시겠습니까?",
+    "deleteConfirm": "삭제"
+  }
+}

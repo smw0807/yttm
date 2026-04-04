@@ -1,6 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 import { logout, upgradeGuestToGoogle } from '@/lib/firebase/auth';
 import { Button } from '@/components/ui/button';
 
@@ -11,6 +12,7 @@ interface Props {
 
 export function UserMenu({ displayName, isAnonymous }: Props) {
   const router = useRouter();
+  const t = useTranslations('auth');
 
   async function handleLogout() {
     await logout();
@@ -31,7 +33,7 @@ export function UserMenu({ displayName, isAnonymous }: Props) {
       {isAnonymous ? (
         <>
           <span className="bg-muted text-muted-foreground rounded px-2 py-0.5 text-xs font-medium">
-            게스트
+            {t('guest')}
           </span>
           <Button
             variant="outline"
@@ -39,14 +41,14 @@ export function UserMenu({ displayName, isAnonymous }: Props) {
             className="bg-blue-500 text-white hover:bg-blue-600"
             onClick={handleUpgrade}
           >
-            Google로 계정 연결
+            {t('connectGoogle')}
           </Button>
         </>
       ) : (
         <span className="text-muted-foreground hidden text-sm sm:block">{displayName}</span>
       )}
       <Button variant="outline" size="sm" onClick={handleLogout}>
-        로그아웃
+        {t('logout')}
       </Button>
     </div>
   );

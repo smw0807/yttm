@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 import { AddVideoDialog } from '@/components/videos/AddVideoDialog';
 import { VideoCard } from '@/components/videos/VideoCard';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ interface Props {
 
 export function VideosContent({ initialVideos, userId }: Props) {
   const router = useRouter();
+  const t = useTranslations('videos');
   const [addOpen, setAddOpen] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -27,13 +29,13 @@ export function VideosContent({ initialVideos, userId }: Props) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">영상 목록</h1>
-        <Button onClick={() => setAddOpen(true)}>+ 영상 추가</Button>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <Button onClick={() => setAddOpen(true)}>{t('addVideo')}</Button>
       </div>
 
       {/* 검색 입력 */}
       <Input
-        placeholder="영상 제목으로 검색..."
+        placeholder={t('searchPlaceholder')}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="mb-6 max-w-sm"
@@ -41,13 +43,13 @@ export function VideosContent({ initialVideos, userId }: Props) {
 
       {initialVideos.length === 0 ? (
         <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-20">
-          <p className="text-lg">등록된 영상이 없습니다.</p>
+          <p className="text-lg">{t('noVideos')}</p>
           <Button variant="outline" onClick={() => setAddOpen(true)}>
-            YouTube 영상 추가하기
+            {t('addYouTubeVideo')}
           </Button>
         </div>
       ) : filtered.length === 0 ? (
-        <p className="text-muted-foreground py-10 text-center">검색 결과가 없습니다.</p>
+        <p className="text-muted-foreground py-10 text-center">{t('noSearchResults')}</p>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((video) => (

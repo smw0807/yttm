@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { formatTimestamp } from '@/lib/youtube';
 import { deleteVideo } from '@/lib/firebase/firestore';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function VideoCard({ video, onDeleted }: Props) {
+  const t = useTranslations('videoCard');
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -62,7 +64,7 @@ export function VideoCard({ video, onDeleted }: Props) {
           onClick={handleDeleteClick}
           disabled={deleting}
           className="text-muted-foreground hover:text-destructive mt-0.5 shrink-0 rounded p-0.5 opacity-0 transition-opacity group-hover:opacity-100 disabled:opacity-50"
-          title="삭제"
+          title={t('deleteTitle')}
         >
           ✕
         </button>
@@ -70,9 +72,9 @@ export function VideoCard({ video, onDeleted }: Props) {
 
       <ConfirmDialog
         open={confirmOpen}
-        title="영상 삭제"
-        description={`"${video.title}" 영상을 삭제하시겠습니까?`}
-        confirmLabel="삭제"
+        title={t('deleteTitle')}
+        description={t('deleteDesc', { title: video.title })}
+        confirmLabel={t('deleteConfirm')}
         onConfirm={handleConfirm}
         onCancel={() => setConfirmOpen(false)}
       />

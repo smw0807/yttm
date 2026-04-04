@@ -1,0 +1,174 @@
+{
+  "common": {
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "edit": "Edit",
+    "add": "Add",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "back": "← Back",
+    "confirm": "Confirm"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "videos": "My Videos",
+    "collections": "Collections"
+  },
+  "auth": {
+    "login": "Sign In",
+    "logout": "Sign Out",
+    "loginDescription": "Sign in with your Google account\nand start taking timeline memos",
+    "googleLogin": "Continue with Google",
+    "guestLogin": "Continue as Guest",
+    "loggingIn": "Signing in...",
+    "guest": "Guest",
+    "connectGoogle": "Connect Google Account"
+  },
+  "landing": {
+    "title": "YouTube Timeline Memo",
+    "description": "Take notes on key moments in YouTube lectures & game walkthroughs and <highlight>jump back with one click</highlight>",
+    "startButton": "Get Started",
+    "features": {
+      "timeline": {
+        "title": "Timeline Memos",
+        "desc": "Save memos at the current playback time and instantly jump to that moment with a single click"
+      },
+      "collection": {
+        "title": "Collections",
+        "desc": "Organize videos by topic or series like \"React Course\" or \"Game Guides\" for easy management"
+      },
+      "share": {
+        "title": "Share Links",
+        "desc": "Generate a share link so anyone can view your timeline memos without signing in"
+      },
+      "guest": {
+        "title": "Guest Mode",
+        "desc": "Try it instantly without signing up. Connect your Google account later to keep all your memos"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "addVideo": "+ Add Video",
+    "myVideos": "My Videos",
+    "viewAll": "View All →",
+    "noVideos": "No videos added yet.",
+    "addYouTubeVideo": "Add a YouTube Video",
+    "collections": "Collections",
+    "noCollections": "No collections yet.",
+    "createCollection": "Create Collection"
+  },
+  "videos": {
+    "title": "Videos",
+    "addVideo": "+ Add Video",
+    "searchPlaceholder": "Search by video title...",
+    "noVideos": "No videos added yet.",
+    "addYouTubeVideo": "Add a YouTube Video",
+    "noSearchResults": "No results found."
+  },
+  "addVideoDialog": {
+    "title": "Add YouTube Video",
+    "urlPlaceholder": "https://youtu.be/... or https://www.youtube.com/watch?v=...",
+    "addButton": "Add",
+    "loadingButton": "Loading...",
+    "defaultError": "Failed to fetch video info"
+  },
+  "viewer": {
+    "backToList": "← List",
+    "totalDuration": "Duration: {duration}",
+    "share": "Share",
+    "timeline": "Timeline ({count})"
+  },
+  "memoForm": {
+    "title": "Add Memo",
+    "captureTime": "Capture Current Time",
+    "captured": "⏱ {time} captured",
+    "placeholder": "Enter memo content",
+    "saveButton": "Save",
+    "saving": "Saving..."
+  },
+  "memoList": {
+    "searchPlaceholder": "Search memos...",
+    "noMemos": "No memos yet.\nPlay the video and capture a timestamp to add a memo.",
+    "noSearchResults": "No results found."
+  },
+  "memoEdit": {
+    "subtitle": "Editing Memos — {count}",
+    "noMemos": "No memos saved.",
+    "saveButton": "Save",
+    "saving": "Saving...",
+    "deleteButton": "Delete",
+    "deleting": "Deleting...",
+    "editButton": "Edit",
+    "cancelButton": "Cancel",
+    "backToVideo": "Back to Video",
+    "confirmDeleteTitle": "Delete Memo",
+    "confirmDeleteDesc": "Are you sure you want to delete this memo?"
+  },
+  "shareDialog": {
+    "title": "Share Link",
+    "copied": "Copied!",
+    "copy": "Copy",
+    "shareInfo": "Anyone with this link can view the timeline memos for this video.",
+    "revokeLink": "Disable Link",
+    "createInfo": "Generate a share link so anyone can view the timeline memos for this video.",
+    "createLink": "Create Link"
+  },
+  "shareViewer": {
+    "siteTitle": "YT Timeline Memo",
+    "sharedTimeline": "Shared Timeline —",
+    "timeline": "Timeline ({count})",
+    "noMemos": "No memos.",
+    "totalDuration": "Duration: {duration}"
+  },
+  "collections": {
+    "title": "Collections",
+    "addCollection": "+ Add Collection",
+    "noCollections": "No collections yet.",
+    "createFirst": "Create Your First Collection",
+    "videoCount": "{count} videos",
+    "noVideos": "No videos",
+    "confirmDeleteTitle": "Delete Collection",
+    "confirmDeleteDesc": "Delete this collection? Videos inside will not be deleted."
+  },
+  "addCollectionDialog": {
+    "title": "New Collection",
+    "nameLabel": "Name *",
+    "namePlaceholder": "Collection name",
+    "descLabel": "Description",
+    "descPlaceholder": "Collection description (optional)",
+    "cancelButton": "Cancel",
+    "createButton": "Create"
+  },
+  "collectionDetail": {
+    "includedVideos": "Included Videos ({count})",
+    "noVideosInCollection": "No videos yet. Add some from below.",
+    "availableVideos": "Available Videos ({count})",
+    "removeAction": "Remove",
+    "addAction": "Add"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Page not found.",
+    "detail": "The address is invalid or the page has been deleted.",
+    "backToDashboard": "Back to Dashboard"
+  },
+  "kakaoGuard": {
+    "title": "Please open in Safari",
+    "description": "Google login is not supported\nin the KakaoTalk in-app browser.\nCopy the URL and open it in Safari.",
+    "copyUrl": "Copy URL",
+    "copied": "✓ Copied"
+  },
+  "localeSwitcher": {
+    "ko": "한국어",
+    "en": "English"
+  },
+  "videoCard": {
+    "deleteTitle": "Delete Video",
+    "deleteDesc": "Delete \"{title}\"?",
+    "deleteConfirm": "Delete"
+  }
+}

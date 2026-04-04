@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { updateCollection } from '@/lib/firebase/firestore';
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export function CollectionDetailDialog({ open, onClose, collection, allVideos }: Props) {
+  const t = useTranslations('collectionDetail');
   const [videoIds, setVideoIds] = useState(collection.videoIds);
   const [loading, setLoading] = useState(false);
 
@@ -43,11 +45,9 @@ export function CollectionDetailDialog({ open, onClose, collection, allVideos }:
 
         <div className="flex flex-col gap-6">
           <section>
-            <h3 className="mb-3 text-sm font-semibold">포함된 영상 ({inCollection.length}개)</h3>
+            <h3 className="mb-3 text-sm font-semibold">{t('includedVideos', { count: inCollection.length })}</h3>
             {inCollection.length === 0 ? (
-              <p className="text-muted-foreground text-sm">
-                아직 영상이 없습니다. 아래에서 추가하세요.
-              </p>
+              <p className="text-muted-foreground text-sm">{t('noVideosInCollection')}</p>
             ) : (
               <ul className="flex flex-col gap-2">
                 {inCollection.map((video) => (
@@ -55,7 +55,7 @@ export function CollectionDetailDialog({ open, onClose, collection, allVideos }:
                     key={video.id}
                     video={video}
                     href={`/videos/${video.id}`}
-                    action="제거"
+                    action={t('removeAction')}
                     actionVariant="outline"
                     disabled={loading}
                     onAction={() => toggle(video.id, false)}
@@ -68,14 +68,14 @@ export function CollectionDetailDialog({ open, onClose, collection, allVideos }:
           {notInCollection.length > 0 && (
             <section>
               <h3 className="mb-3 text-sm font-semibold">
-                추가 가능한 영상 ({notInCollection.length}개)
+                {t('availableVideos', { count: notInCollection.length })}
               </h3>
               <ul className="flex flex-col gap-2">
                 {notInCollection.map((video) => (
                   <VideoRow
                     key={video.id}
                     video={video}
-                    action="추가"
+                    action={t('addAction')}
                     actionVariant="default"
                     disabled={loading}
                     onAction={() => toggle(video.id, true)}

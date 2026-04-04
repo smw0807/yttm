@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Link, useRouter } from '@/i18n/navigation';
 import { AddVideoDialog } from '@/components/videos/AddVideoDialog';
 import { VideoCard } from '@/components/videos/VideoCard';
 import { CollectionCard } from '@/components/collections/CollectionCard';
@@ -21,6 +21,8 @@ interface Props {
 
 export function DashboardContent({ initialVideos, initialCollections, userId }: Props) {
   const router = useRouter();
+  const t = useTranslations('dashboard');
+  const tc = useTranslations('collections');
   const [addOpen, setAddOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState<(Collection & { id: string }) | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
@@ -36,8 +38,8 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
     <div className="mx-auto max-w-7xl px-4 py-6">
       {/* 페이지 상단: 제목 + 영상 추가 버튼 */}
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">대시보드</h1>
-        <Button onClick={() => setAddOpen(true)}>+ 영상 추가</Button>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <Button onClick={() => setAddOpen(true)}>{t('addVideo')}</Button>
       </div>
 
       {/* 광고 배너 */}
@@ -50,17 +52,17 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
       {/* 영상 섹션 */}
       <div className="mb-8">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold">내 영상</h2>
+          <h2 className="text-xl font-bold">{t('myVideos')}</h2>
           <Link href="/videos" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-            모두 보기 →
+            {t('viewAll')}
           </Link>
         </div>
 
         {initialVideos.length === 0 ? (
           <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-12">
-            <p className="text-base">등록된 영상이 없습니다.</p>
+            <p className="text-base">{t('noVideos')}</p>
             <Button variant="outline" onClick={() => setAddOpen(true)}>
-              YouTube 영상 추가하기
+              {t('addYouTubeVideo')}
             </Button>
           </div>
         ) : (
@@ -75,17 +77,17 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
       {/* 컬렉션 섹션 */}
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold">컬렉션</h2>
+          <h2 className="text-xl font-bold">{t('collections')}</h2>
           <Link href="/collections" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-            모두 보기 →
+            {t('viewAll')}
           </Link>
         </div>
 
         {initialCollections.length === 0 ? (
           <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-12">
-            <p className="text-base">컬렉션이 없습니다.</p>
+            <p className="text-base">{t('noCollections')}</p>
             <Link href="/collections">
-              <Button variant="outline">컬렉션 만들기</Button>
+              <Button variant="outline">{t('createCollection')}</Button>
             </Link>
           </div>
         ) : (
@@ -124,9 +126,9 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
 
       <ConfirmDialog
         open={!!deleteTargetId}
-        title="컬렉션 삭제"
-        description="컬렉션을 삭제하시겠습니까? 컬렉션에 포함된 영상은 삭제되지 않습니다."
-        confirmLabel="삭제"
+        title={tc('confirmDeleteTitle')}
+        description={tc('confirmDeleteDesc')}
+        confirmLabel={tc('confirmDeleteTitle')}
         onConfirm={handleDeleteCollectionConfirm}
         onCancel={() => setDeleteTargetId(null)}
       />

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { formatTimestamp } from '@/lib/youtube';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export function MemoForm({ onSave, getCurrentTime }: Props) {
+  const t = useTranslations('memoForm');
   const [content, setContent] = useState('');
   const [timestamp, setTimestamp] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
@@ -34,13 +36,13 @@ export function MemoForm({ onSave, getCurrentTime }: Props) {
   return (
     <div className="flex flex-col gap-3 rounded-xl border p-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold">메모 추가</span>
+        <span className="text-sm font-semibold">{t('title')}</span>
         <Button size="sm" variant="outline" onClick={captureTime}>
-          {timestamp !== null ? `⏱ ${formatTimestamp(timestamp)} 찍힘` : '현재 시각 찍기'}
+          {timestamp !== null ? t('captured', { time: formatTimestamp(timestamp) }) : t('captureTime')}
         </Button>
       </div>
       <Textarea
-        placeholder="메모 내용을 입력하세요"
+        placeholder={t('placeholder')}
         value={content}
         onChange={(e) => setContent(e.target.value)}
         rows={3}
@@ -51,7 +53,7 @@ export function MemoForm({ onSave, getCurrentTime }: Props) {
         onClick={handleSave}
         disabled={timestamp === null || !content.trim() || saving}
       >
-        {saving ? '저장 중...' : '저장'}
+        {saving ? t('saving') : t('saveButton')}
       </Button>
     </div>
   );

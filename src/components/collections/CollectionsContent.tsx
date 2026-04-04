@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { CollectionCard } from './CollectionCard';
 import { AddCollectionDialog } from './AddCollectionDialog';
@@ -19,6 +20,7 @@ interface Props {
 
 export function CollectionsContent({ initialCollections, videos, userId }: Props) {
   const router = useRouter();
+  const t = useTranslations('collections');
   const [addOpen, setAddOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState<(Collection & { id: string }) | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
@@ -42,8 +44,8 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">컬렉션</h1>
-        <Button onClick={() => setAddOpen(true)}>+ 컬렉션 추가</Button>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <Button onClick={() => setAddOpen(true)}>{t('addCollection')}</Button>
       </div>
 
       {/* 광고 배너 */}
@@ -55,9 +57,9 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
 
       {initialCollections.length === 0 ? (
         <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-20">
-          <p className="text-lg">컬렉션이 없습니다.</p>
+          <p className="text-lg">{t('noCollections')}</p>
           <Button variant="outline" onClick={() => setAddOpen(true)}>
-            첫 컬렉션 만들기
+            {t('createFirst')}
           </Button>
         </div>
       ) : (
@@ -92,9 +94,9 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
 
       <ConfirmDialog
         open={!!deleteTargetId}
-        title="컬렉션 삭제"
-        description="컬렉션을 삭제하시겠습니까? 컬렉션에 포함된 영상은 삭제되지 않습니다."
-        confirmLabel="삭제"
+        title={t('confirmDeleteTitle')}
+        description={t('confirmDeleteDesc')}
+        confirmLabel={t('confirmDeleteTitle')}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteTargetId(null)}
       />
