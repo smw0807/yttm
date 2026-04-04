@@ -93,7 +93,10 @@
   "memoList": {
     "searchPlaceholder": "Search memos...",
     "noMemos": "No memos yet.\nPlay the video and capture a timestamp to add a memo.",
-    "noSearchResults": "No results found."
+    "noSearchResults": "No results found.",
+    "seekToTime": "Seek to {time}",
+    "editMemo": "Edit memo",
+    "deleteMemo": "Delete memo"
   },
   "memoEdit": {
     "subtitle": "Editing Memos — {count}",

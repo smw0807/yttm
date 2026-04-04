@@ -27,6 +27,7 @@ export async function getVideosAdmin(userId: string) {
     .collection('videos')
     .where('userId', '==', userId)
     .orderBy('createdAt', 'desc')
+    .limit(500)
     .get();
 
   return snap.docs.map((d) => serialize({ id: d.id, ...d.data() }) as Video & { id: string });
@@ -54,6 +55,7 @@ export async function getMemosAdmin(videoId: string) {
     .doc(videoId)
     .collection('memos')
     .orderBy('timestampSec', 'asc')
+    .limit(1000)
     .get();
 
   return snap.docs.map((d) => serialize({ id: d.id, ...d.data() }) as Memo & { id: string });
@@ -72,6 +74,7 @@ export async function getCollectionsAdmin(userId: string) {
     .collection('collections')
     .where('userId', '==', userId)
     .orderBy('createdAt', 'desc')
+    .limit(200)
     .get();
 
   return snap.docs.map((d) => serialize({ id: d.id, ...d.data() }) as Collection & { id: string });

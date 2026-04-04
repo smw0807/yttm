@@ -16,6 +16,15 @@ const provider = new GoogleAuthProvider();
 
 export { auth };
 
+async function createSession(idToken: string): Promise<void> {
+  const res = await fetch('/api/auth/session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idToken }),
+  });
+  if (!res.ok) throw new Error('Session creation failed');
+}
+
 export async function signInWithGoogle() {
   const result = await signInWithPopup(auth, provider);
   const user = result.user;
@@ -32,13 +41,8 @@ export async function signInWithGoogle() {
     });
   }
 
-  // 서버에 세션 쿠키 발급 요청
   const idToken = await user.getIdToken();
-  await fetch('/api/auth/session', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ idToken }),
-  });
+  await createSession(idToken);
 
   return user;
 }
@@ -51,40 +55,34 @@ export async function logout() {
 export async function signInAsGuest() {
   const cred = await signInAnonymously(auth);
   const idToken = await cred.user.getIdToken();
-  await fetch('/api/auth/session', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ idToken }),
-  });
+  await createSession(idToken);
 }
 
 export async function upgradeGuestToGoogle(): Promise<'linked' | 'migrated'> {
-  const currentUser = auth.currentUser!;
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error('No current user');
   const guestUid = currentUser.uid;
 
   try {
     await linkWithPopup(currentUser, provider);
     const idToken = await auth.currentUser!.getIdToken(true);
-    await fetch('/api/auth/session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idToken }),
-    });
+    await createSession(idToken);
     return 'linked';
   } catch (err: unknown) {
-    if ((err as { code?: string }).code === 'auth/credential-already-in-use') {
+    if (
+      err instanceof Error &&
+      'code' in err &&
+      (err as { code: string }).code === 'auth/credential-already-in-use'
+    ) {
       await signInWithPopup(auth, provider);
       const idToken = await auth.currentUser!.getIdToken();
-      await fetch('/api/auth/migrate', {
+      const migrateRes = await fetch('/api/auth/migrate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ guestUid, idToken }),
       });
-      await fetch('/api/auth/session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-      });
+      if (!migrateRes.ok) throw new Error('Migration failed');
+      await createSession(idToken);
       return 'migrated';
     }
     throw err;

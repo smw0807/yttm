@@ -10,10 +10,11 @@ interface Props {
 export default async function VideoViewerPage({ params }: Props) {
   const { id } = await params;
   const user = await getSessionUser();
+  if (!user) notFound();
 
   const [video, memos] = await Promise.all([getVideoAdmin(id), getMemosAdmin(id)]);
 
-  if (!video || video.userId !== user!.uid) notFound();
+  if (!video || video.userId !== user.uid) notFound();
 
   return <VideoViewerClient video={video} videoId={id} initialMemos={memos} />;
 }
