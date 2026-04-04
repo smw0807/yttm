@@ -12,29 +12,25 @@ export function LocaleSwitcher() {
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
-  function handleChange(nextLocale: string) {
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const nextLocale = e.target.value as (typeof routing.locales)[number];
     startTransition(() => {
-      router.replace(pathname, { locale: nextLocale as (typeof routing.locales)[number] });
+      router.replace(pathname, { locale: nextLocale });
     });
   }
 
   return (
-    <div className="flex items-center gap-1 px-1">
+    <select
+      value={locale}
+      onChange={handleChange}
+      disabled={isPending}
+      className="text-muted-foreground hover:text-foreground bg-transparent text-xs font-medium outline-none cursor-pointer disabled:opacity-50"
+    >
       {routing.locales.map((loc) => (
-        <button
-          key={loc}
-          onClick={() => handleChange(loc)}
-          disabled={isPending || loc === locale}
-          className={[
-            'rounded px-2 py-0.5 text-xs font-medium transition-colors',
-            loc === locale
-              ? 'bg-muted text-foreground'
-              : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-          ].join(' ')}
-        >
+        <option key={loc} value={loc}>
           {t(loc)}
-        </button>
+        </option>
       ))}
-    </div>
+    </select>
   );
 }
