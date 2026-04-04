@@ -93,7 +93,10 @@
   "memoList": {
     "searchPlaceholder": "메모 내용 검색...",
     "noMemos": "아직 메모가 없습니다.\n영상을 재생하고 시각을 찍어 메모를 저장해보세요.",
-    "noSearchResults": "검색 결과가 없습니다."
+    "noSearchResults": "검색 결과가 없습니다.",
+    "seekToTime": "{time} 시점으로 이동",
+    "editMemo": "메모 수정",
+    "deleteMemo": "메모 삭제"
   },
   "memoEdit": {
     "subtitle": "메모 편집 — {count}개",

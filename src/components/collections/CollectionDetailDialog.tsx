@@ -26,11 +26,18 @@ export function CollectionDetailDialog({ open, onClose, collection, allVideos }:
   const notInCollection = allVideos.filter((v) => !videoIds.includes(v.id));
 
   async function toggle(videoId: string, add: boolean) {
+    if (loading) return;
+    const previousIds = videoIds;
     const newIds = add ? [...videoIds, videoId] : videoIds.filter((id) => id !== videoId);
-    setVideoIds(newIds);
+    setVideoIds(newIds); // optimistic update
     setLoading(true);
-    await updateCollection(collection.id, { videoIds: newIds });
-    setLoading(false);
+    try {
+      await updateCollection(collection.id, { videoIds: newIds });
+    } catch {
+      setVideoIds(previousIds); // rollback on error
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

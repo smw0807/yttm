@@ -43,3 +43,8 @@ export interface YouTubeVideoInfo {
   thumbnail: string;
   durationSec: number;
 }
+
+// Convenience types for Firestore documents that always have an id
+export type VideoWithId = Video & { id: string };
+export type MemoWithId = Memo & { id: string };
+export type CollectionWithId = Collection & { id: string };
