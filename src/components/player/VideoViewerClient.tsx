@@ -42,9 +42,9 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
 
   return (
     <>
-      <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden">
-        {/* ── 왼쪽 60%: 플레이어 ─────────────────────────── */}
-        <div className="flex w-[60%] flex-col gap-3 overflow-y-auto border-r p-4">
+      <div className="flex flex-col md:h-[calc(100vh-3.5rem)] md:flex-row md:overflow-hidden">
+        {/* ── 플레이어 (모바일: 상단 / 데스크탑: 좌측 60%) ── */}
+        <div className="flex w-full flex-col gap-3 border-b p-4 md:w-[60%] md:overflow-y-auto md:border-b-0 md:border-r">
           <div className="flex items-start justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2">
               <Link
@@ -75,8 +75,8 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
           </p>
         </div>
 
-        {/* ── 오른쪽 40%: 메모 ───────────────────────────── */}
-        <div className="flex w-[40%] flex-col gap-4 overflow-y-auto p-4">
+        {/* ── 메모 (모바일: 하단 / 데스크탑: 우측 40%) ────── */}
+        <div className="flex w-full flex-col gap-4 p-4 md:w-[40%] md:overflow-y-auto">
           <MemoForm onSave={handleSaveMemo} getCurrentTime={getCurrentTime} />
           <div>
             <h2 className="text-muted-foreground mb-3 text-sm font-semibold">
