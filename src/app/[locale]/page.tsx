@@ -4,6 +4,8 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import yttmIcon from '@/app/public/yttm.png';
 
+import appScreenshot from '@/app/public/screenshot.png';
+
 interface Props {
   params: Promise<{ locale: string }>;
 }
@@ -51,54 +53,93 @@ export default async function LandingPage({ params }: Props) {
   ];
 
   return (
-    <main className="bg-background flex min-h-screen flex-col items-center justify-center px-4">
+    <main className="bg-background min-h-screen overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="flex max-w-2xl flex-col items-center gap-8 text-center">
-        {/* Logo / Title */}
-        <div className="flex flex-col items-center gap-3">
-          <Image
-            src={yttmIcon}
-            alt="YT Timeline Memo"
-            width={64}
-            height={64}
-            className="rounded-2xl shadow-lg"
-          />
-          <h1 className="text-4xl font-bold tracking-tight">{t('title')}</h1>
+
+      {/* Hero Section */}
+      <section className="relative flex flex-col items-center px-4 pt-20 pb-10 text-center">
+        {/* Background gradient */}
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_40%_at_50%_0%,rgba(220,38,38,0.07),transparent)]" />
+
+        <div className="flex w-full max-w-3xl flex-col items-center gap-6">
+          {/* Logo + badge */}
+          <div className="flex items-center gap-3">
+            <Image
+              src={yttmIcon}
+              alt="YT Timeline Memo"
+              width={48}
+              height={48}
+              className="rounded-xl shadow-md"
+            />
+          </div>
+
+          {/* Headline */}
+          <h1 className="text-5xl font-extrabold tracking-tight lg:text-6xl">{t('title')}</h1>
+
+          {/* Description */}
+          <p className="text-muted-foreground max-w-xl text-xl leading-relaxed">
+            {t.rich('description', {
+              highlight: (chunks) => (
+                <span className="text-foreground font-semibold">{chunks}</span>
+              ),
+            })}
+          </p>
+
+          {/* CTA */}
+          <Link
+            href="/login"
+            className="bg-primary text-primary-foreground hover:bg-primary/80 inline-flex h-11 items-center justify-center rounded-lg px-10 text-base font-semibold transition-colors"
+          >
+            {t('startButton')} →
+          </Link>
         </div>
 
-        {/* Description */}
-        <p className="text-muted-foreground text-xl leading-relaxed">
-          {t.rich('description', {
-            highlight: (chunks) => (
-              <span className="text-foreground font-semibold">{chunks}</span>
-            ),
-          })}
-        </p>
-
-        {/* Features */}
-        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-          {features.map(({ icon, key }) => (
-            <div key={key} className="bg-muted/50 rounded-xl p-4 text-left">
-              <div className="mb-2 text-2xl">{icon}</div>
-              <h3 className="mb-1 font-semibold">{t(`features.${key}.title`)}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {t(`features.${key}.desc`)}
-              </p>
+        {/* Browser mockup with screenshot */}
+        <div className="mt-14 w-full max-w-4xl">
+          <div className="bg-card overflow-hidden rounded-2xl border shadow-2xl ring-1 ring-black/5">
+            {/* Browser chrome */}
+            <div className="bg-muted/60 flex items-center gap-2 border-b px-4 py-3">
+              <div className="flex gap-1.5">
+                <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
+                <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
+                <div className="h-3 w-3 rounded-full bg-[#28C840]" />
+              </div>
+              <div className="bg-background/70 text-muted-foreground ml-2 flex-1 rounded-md px-3 py-1 text-center text-xs">
+                yttm.kr
+              </div>
             </div>
-          ))}
-        </div>
 
-        {/* CTA */}
-        <Link
-          href="/login"
-          className="bg-primary text-primary-foreground hover:bg-primary/80 inline-flex h-10 items-center justify-center rounded-lg px-8 text-base font-medium transition-colors"
-        >
-          {t('startButton')}
-        </Link>
-      </div>
+            {/* Screenshot area */}
+            {/* TODO: 스크린샷 준비되면 아래 placeholder를 Image 컴포넌트로 교체 */}
+            <Image src={appScreenshot} alt="앱 미리보기" className="w-full" />
+          </div>
+          {/* Reflection/shadow effect */}
+          <div className="mx-8 h-4 rounded-b-2xl bg-gradient-to-b from-black/5 to-transparent" />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="bg-muted/30 px-4 py-10">
+        <div className="mx-auto max-w-4xl">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {features.map(({ icon, key }) => (
+              <div
+                key={key}
+                className="bg-background hover:border-border/80 rounded-2xl border p-6 text-left transition-shadow hover:shadow-md"
+              >
+                <div className="mb-3 text-3xl">{icon}</div>
+                <h3 className="mb-2 text-base font-semibold">{t(`features.${key}.title`)}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {t(`features.${key}.desc`)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
