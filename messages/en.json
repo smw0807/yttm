@@ -173,5 +173,22 @@
     "deleteTitle": "Delete Video",
     "deleteDesc": "Delete \"{title}\"?",
     "deleteConfirm": "Delete"
+  },
+  "admin": {
+    "title": "Admin",
+    "totalUsers": "Total Users",
+    "totalVideos": "Total Videos",
+    "totalCollections": "Total Collections",
+    "email": "Email",
+    "name": "Name",
+    "videos": "Videos",
+    "collections": "Collections",
+    "joined": "Joined",
+    "registeredVideos": "Registered Videos",
+    "registeredCollections": "Registered Collections",
+    "noVideos": "No videos registered",
+    "noCollections": "No collections registered",
+    "loading": "Loading...",
+    "videoCountTemplate": "{count} videos"
   }
 }
