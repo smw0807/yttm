@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useFetcher } from '@/hooks/useFetcher';
 
 interface Props {
   open: boolean;
@@ -16,33 +17,33 @@ interface Props {
 
 export function ShareDialog({ open, onClose, videoId, token, onTokenChange }: Props) {
   const t = useTranslations('shareDialog');
-  const [loading, setLoading] = useState(false);
+  const { loading, execute } = useFetcher();
   const [copied, setCopied] = useState(false);
 
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const shareUrl = token ? `${origin}/share/${token}` : null;
 
   async function handleCreate() {
-    setLoading(true);
-    const res = await fetch('/api/share', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ videoId }),
+    await execute(async () => {
+      const res = await fetch('/api/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videoId }),
+      });
+      const { token: newToken } = await res.json();
+      onTokenChange(newToken);
     });
-    const { token: newToken } = await res.json();
-    onTokenChange(newToken);
-    setLoading(false);
   }
 
   async function handleRevoke() {
-    setLoading(true);
-    await fetch('/api/share', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ videoId }),
+    await execute(async () => {
+      await fetch('/api/share', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videoId }),
+      });
+      onTokenChange(null);
     });
-    onTokenChange(null);
-    setLoading(false);
   }
 
   async function handleCopy() {
