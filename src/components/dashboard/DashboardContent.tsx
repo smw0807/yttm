@@ -10,7 +10,10 @@ import { CollectionDetailDialog } from '@/components/collections/CollectionDetai
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { Button } from '@/components/ui/button';
 import { AdBanner } from '@/components/ads/AdBanner';
+import { EmptyState } from '@/components/ui/empty-state';
+import { SectionHeader } from '@/components/ui/section-header';
 import { deleteCollection } from '@/lib/firebase/firestore';
+import { CARD_GRID } from '@/lib/constants';
 import type { Video, Collection } from '@/types';
 
 interface Props {
@@ -36,13 +39,11 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
-      {/* 페이지 상단: 제목 + 영상 추가 버튼 */}
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t('title')}</h1>
         <Button onClick={() => setAddOpen(true)}>{t('addVideo')}</Button>
       </div>
 
-      {/* 광고 배너 */}
       <AdBanner
         slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_DASHBOARD ?? ''}
         format="horizontal"
@@ -51,22 +52,15 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
 
       {/* 영상 섹션 */}
       <div className="mb-8">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold">{t('myVideos')}</h2>
-          <Link href="/videos" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-            {t('viewAll')}
-          </Link>
-        </div>
-
+        <SectionHeader title={t('myVideos')} viewAllHref="/videos" viewAllLabel={t('viewAll')} />
         {initialVideos.length === 0 ? (
-          <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-12">
-            <p className="text-base">{t('noVideos')}</p>
+          <EmptyState message={t('noVideos')} className="py-12">
             <Button variant="outline" onClick={() => setAddOpen(true)}>
               {t('addYouTubeVideo')}
             </Button>
-          </div>
+          </EmptyState>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className={CARD_GRID}>
             {initialVideos.slice(0, 4).map((video) => (
               <VideoCard key={video.id} video={video} onDeleted={() => router.refresh()} />
             ))}
@@ -76,22 +70,15 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
 
       {/* 컬렉션 섹션 */}
       <div>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold">{t('collections')}</h2>
-          <Link href="/collections" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-            {t('viewAll')}
-          </Link>
-        </div>
-
+        <SectionHeader title={t('collections')} viewAllHref="/collections" viewAllLabel={t('viewAll')} />
         {initialCollections.length === 0 ? (
-          <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-12">
-            <p className="text-base">{t('noCollections')}</p>
+          <EmptyState message={t('noCollections')} className="py-12">
             <Link href="/collections">
               <Button variant="outline">{t('createCollection')}</Button>
             </Link>
-          </div>
+          </EmptyState>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className={CARD_GRID}>
             {initialCollections.slice(0, 4).map((col) => (
               <CollectionCard
                 key={col.id}

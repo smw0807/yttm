@@ -1,19 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth } from '@/lib/firebase/admin';
+import { isValidOrigin } from '@/lib/api/validation';
 
 const SESSION_DURATION_MS = 60 * 60 * 24 * 5 * 1000; // 5 days
-
-function isValidOrigin(request: NextRequest): boolean {
-  const origin = request.headers.get('origin');
-  if (!origin) return true; // Allow requests without Origin (non-browser / server-to-server)
-  const host = request.headers.get('host');
-  if (!host) return false;
-  try {
-    return new URL(origin).host === host;
-  } catch {
-    return false;
-  }
-}
 
 export async function POST(request: NextRequest) {
   if (!isValidOrigin(request)) {

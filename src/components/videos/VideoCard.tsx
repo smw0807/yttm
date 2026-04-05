@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation';
 import { formatTimestamp } from '@/lib/youtube';
 import { deleteVideo } from '@/lib/firebase/firestore';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import type { Video } from '@/types';
 
 interface Props {
@@ -48,14 +49,8 @@ export function VideoCard({ video, onDeleted }: Props) {
         </div>
       </Link>
 
-      {/* 삭제 중 오버레이 */}
-      {deleting && (
-        <div className="bg-background/70 absolute inset-0 flex items-center justify-center rounded-xl">
-          <div className="border-primary h-5 w-5 animate-spin rounded-full border-2 border-t-transparent" />
-        </div>
-      )}
+      {deleting && <LoadingSpinner overlay />}
 
-      {/* 제목 + 삭제 버튼 */}
       <div className="flex items-start gap-1 p-3">
         <Link href={`/videos/${video.id}`} className="min-w-0 flex-1">
           <p className="line-clamp-2 text-sm font-medium leading-snug">{video.title}</p>

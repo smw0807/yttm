@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { addVideo } from '@/lib/firebase/firestore';
+import { useFetcher } from '@/hooks/useFetcher';
 
 interface Props {
   open: boolean;
@@ -17,38 +18,28 @@ interface Props {
 export function AddVideoDialog({ open, onClose, onAdded, userId }: Props) {
   const t = useTranslations('addVideoDialog');
   const [url, setUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const { loading, error, setError, execute } = useFetcher(t('defaultError'));
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!url.trim()) return;
-
-    setLoading(true);
-    setError('');
-
-    try {
+    await execute(async () => {
       const res = await fetch(`/api/youtube?url=${encodeURIComponent(url.trim())}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || t('defaultError'));
-
       await addVideo({ ...data, userId, shareToken: null });
       setUrl('');
       onAdded();
       onClose();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('defaultError'));
-    } finally {
-      setLoading(false);
-    }
+    });
   }
 
   useEffect(() => {
     if (open) {
       setUrl('');
-      setError('');
+      setError(null);
     }
-  }, [open]);
+  }, [open]); // setError is a stable setState reference
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>

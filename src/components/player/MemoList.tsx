@@ -4,6 +4,8 @@ import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { MemoItem } from '@/components/player/MemoItem';
 import { formatTimestamp } from '@/lib/youtube';
 import { deleteMemo, updateMemo } from '@/lib/firebase/firestore';
 import type { Memo } from '@/types';
@@ -96,18 +98,36 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
       ) : (
         <ul className="flex flex-col gap-2">
           {filtered.map((memo) => (
-            <li
+            <MemoItem
               key={memo.id}
-              className="group hover:bg-muted/40 flex items-start gap-3 rounded-lg border p-3 transition-colors"
+              timestampSec={memo.timestampSec}
+              onSeek={onSeek}
+              seekAriaLabel={t('seekToTime', { time: formatTimestamp(memo.timestampSec) })}
+              actions={
+                editingId !== memo.id ? (
+                  <div className="flex shrink-0 gap-0.5 opacity-0 group-hover:opacity-100">
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => startEdit(memo)}
+                      disabled={deletingId === memo.id}
+                      aria-label={t('editMemo')}
+                    >
+                      ✎
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => handleDelete(memo.id!)}
+                      disabled={deletingId === memo.id}
+                      aria-label={t('deleteMemo')}
+                    >
+                      {deletingId === memo.id ? <LoadingSpinner size="sm" /> : '✕'}
+                    </Button>
+                  </div>
+                ) : undefined
+              }
             >
-              <button
-                onClick={() => onSeek(memo.timestampSec)}
-                aria-label={t('seekToTime', { time: formatTimestamp(memo.timestampSec) })}
-                className="mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700 hover:bg-red-200"
-              >
-                {formatTimestamp(memo.timestampSec)}
-              </button>
-
               {editingId === memo.id ? (
                 <div className="flex flex-1 flex-col gap-2">
                   <Input
@@ -147,34 +167,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
                   {memo.content}
                 </button>
               )}
-
-              {editingId !== memo.id && (
-                <div className="flex shrink-0 gap-0.5 opacity-0 group-hover:opacity-100">
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={() => startEdit(memo)}
-                    disabled={deletingId === memo.id}
-                    aria-label={t('editMemo')}
-                  >
-                    ✎
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={() => handleDelete(memo.id!)}
-                    disabled={deletingId === memo.id}
-                    aria-label={t('deleteMemo')}
-                  >
-                    {deletingId === memo.id ? (
-                      <span className="border-muted-foreground h-3 w-3 animate-spin rounded-full border-2 border-t-transparent" />
-                    ) : (
-                      '✕'
-                    )}
-                  </Button>
-                </div>
-              )}
-            </li>
+            </MemoItem>
           ))}
         </ul>
       )}

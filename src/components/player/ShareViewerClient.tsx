@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import { formatTimestamp } from '@/lib/youtube';
 import { AdBanner } from '@/components/ads/AdBanner';
+import { MemoItem } from '@/components/player/MemoItem';
 import type { Video, Memo } from '@/types';
 
 interface Props {
@@ -28,7 +29,6 @@ export function ShareViewerClient({ video, memos }: Props) {
         </span>
       </header>
 
-      {/* 광고 배너 */}
       <AdBanner
         slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SHARE ?? ''}
         format="horizontal"
@@ -59,16 +59,14 @@ export function ShareViewerClient({ video, memos }: Props) {
           ) : (
             <ul className="flex flex-col gap-2">
               {memos.map((memo) => (
-                <li
+                <MemoItem
                   key={memo.id}
-                  onClick={() => seekTo(memo.timestampSec)}
-                  className="hover:bg-muted/40 flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors"
+                  timestampSec={memo.timestampSec}
+                  onSeek={seekTo}
+                  seekOnItemClick
                 >
-                  <span className="mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700">
-                    {formatTimestamp(memo.timestampSec)}
-                  </span>
                   <p className="text-sm leading-relaxed">{memo.content}</p>
-                </li>
+                </MemoItem>
               ))}
             </ul>
           )}

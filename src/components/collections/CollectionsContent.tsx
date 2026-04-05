@@ -10,6 +10,8 @@ import { CollectionDetailDialog } from './CollectionDetailDialog';
 import { deleteCollection } from '@/lib/firebase/firestore';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { AdBanner } from '@/components/ads/AdBanner';
+import { EmptyState } from '@/components/ui/empty-state';
+import { CARD_GRID } from '@/lib/constants';
 import type { Collection, Video } from '@/types';
 
 interface Props {
@@ -48,7 +50,6 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
         <Button onClick={() => setAddOpen(true)}>{t('addCollection')}</Button>
       </div>
 
-      {/* 광고 배너 */}
       <AdBanner
         slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_COLLECTIONS ?? ''}
         format="horizontal"
@@ -56,14 +57,13 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
       />
 
       {initialCollections.length === 0 ? (
-        <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-20">
-          <p className="text-lg">{t('noCollections')}</p>
+        <EmptyState message={t('noCollections')}>
           <Button variant="outline" onClick={() => setAddOpen(true)}>
             {t('createFirst')}
           </Button>
-        </div>
+        </EmptyState>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className={CARD_GRID}>
           {initialCollections.map((col) => (
             <CollectionCard
               key={col.id}

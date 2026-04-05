@@ -7,6 +7,8 @@ import { AddVideoDialog } from '@/components/videos/AddVideoDialog';
 import { VideoCard } from '@/components/videos/VideoCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { EmptyState } from '@/components/ui/empty-state';
+import { CARD_GRID } from '@/lib/constants';
 import type { Video } from '@/types';
 
 interface Props {
@@ -33,7 +35,6 @@ export function VideosContent({ initialVideos, userId }: Props) {
         <Button onClick={() => setAddOpen(true)}>{t('addVideo')}</Button>
       </div>
 
-      {/* 검색 입력 */}
       <Input
         placeholder={t('searchPlaceholder')}
         value={query}
@@ -42,16 +43,15 @@ export function VideosContent({ initialVideos, userId }: Props) {
       />
 
       {initialVideos.length === 0 ? (
-        <div className="text-muted-foreground flex flex-col items-center justify-center gap-4 py-20">
-          <p className="text-lg">{t('noVideos')}</p>
+        <EmptyState message={t('noVideos')}>
           <Button variant="outline" onClick={() => setAddOpen(true)}>
             {t('addYouTubeVideo')}
           </Button>
-        </div>
+        </EmptyState>
       ) : filtered.length === 0 ? (
         <p className="text-muted-foreground py-10 text-center">{t('noSearchResults')}</p>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className={CARD_GRID}>
           {filtered.map((video) => (
             <VideoCard key={video.id} video={video} onDeleted={() => router.refresh()} />
           ))}
