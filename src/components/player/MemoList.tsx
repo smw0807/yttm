@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { MemoItem } from '@/components/player/MemoItem';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { formatTimestamp } from '@/lib/youtube';
 import { deleteMemo, updateMemo } from '@/lib/firebase/firestore';
 import type { Memo } from '@/types';
@@ -21,7 +22,9 @@ interface Props {
 export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props) {
   const t = useTranslations('memoList');
   const tc = useTranslations('common');
+  const tEdit = useTranslations('memoEdit');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -118,7 +121,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      onClick={() => handleDelete(memo.id!)}
+                      onClick={() => setConfirmDeleteId(memo.id!)}
                       disabled={deletingId === memo.id}
                       aria-label={t('deleteMemo')}
                     >
@@ -171,6 +174,17 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
           ))}
         </ul>
       )}
+      <ConfirmDialog
+        open={!!confirmDeleteId}
+        title={tEdit('confirmDeleteTitle')}
+        description={tEdit('confirmDeleteDesc')}
+        confirmLabel={tc('delete')}
+        onConfirm={() => {
+          if (confirmDeleteId) handleDelete(confirmDeleteId);
+          setConfirmDeleteId(null);
+        }}
+        onCancel={() => setConfirmDeleteId(null)}
+      />
     </div>
   );
 }
