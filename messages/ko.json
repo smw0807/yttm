@@ -173,5 +173,22 @@
     "deleteTitle": "영상 삭제",
     "deleteDesc": "\"{title}\" 영상을 삭제하시겠습니까?",
     "deleteConfirm": "삭제"
+  },
+  "admin": {
+    "title": "관리자",
+    "totalUsers": "전체 사용자",
+    "totalVideos": "전체 동영상",
+    "totalCollections": "전체 컬렉션",
+    "email": "이메일",
+    "name": "이름",
+    "videos": "동영상",
+    "collections": "컬렉션",
+    "joined": "가입일",
+    "registeredVideos": "등록된 동영상",
+    "registeredCollections": "등록된 컬렉션",
+    "noVideos": "등록된 동영상 없음",
+    "noCollections": "등록된 컬렉션 없음",
+    "loading": "불러오는 중...",
+    "videoCountTemplate": "영상 {count}개"
   }
 }
