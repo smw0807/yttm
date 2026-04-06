@@ -71,7 +71,12 @@
   },
   "addVideoDialog": {
     "title": "YouTube 영상 추가",
+    "tabUrl": "URL 입력",
+    "tabSearch": "검색",
     "urlPlaceholder": "https://youtu.be/... 또는 https://www.youtube.com/watch?v=...",
+    "searchPlaceholder": "YouTube 영상 검색...",
+    "searchButton": "검색",
+    "searching": "검색 중...",
     "addButton": "추가",
     "loadingButton": "불러오는 중...",
     "defaultError": "영상 정보를 가져오지 못했습니다"

@@ -62,7 +62,6 @@ export function VideosContent({ initialVideos, userId }: Props) {
         open={addOpen}
         onClose={() => setAddOpen(false)}
         onAdded={() => router.refresh()}
-        userId={userId}
       />
     </div>
   );
