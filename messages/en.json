@@ -71,7 +71,12 @@
   },
   "addVideoDialog": {
     "title": "Add YouTube Video",
+    "tabUrl": "Enter URL",
+    "tabSearch": "Search",
     "urlPlaceholder": "https://youtu.be/... or https://www.youtube.com/watch?v=...",
+    "searchPlaceholder": "Search YouTube videos...",
+    "searchButton": "Search",
+    "searching": "Searching...",
     "addButton": "Add",
     "loadingButton": "Loading...",
     "defaultError": "Failed to fetch video info"
