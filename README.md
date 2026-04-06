@@ -76,10 +76,10 @@ yarn install
 
 ### 2. 환경 변수 설정
 
-`.env.local.example`을 복사해 `.env.local`을 생성하고 값을 입력합니다.
+`.env.example`을 복사해 `.env.local`을 생성하고 값을 입력합니다.
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 ```env
