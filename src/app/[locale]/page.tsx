@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import yttmIcon from '@/app/public/yttm.png';
-
 import appScreenshot from '@/app/public/screenshot.png';
+import ScreenshotLightbox from '@/components/landing/ScreenshotLightbox';
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -112,9 +112,8 @@ export default async function LandingPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Screenshot area */}
-            {/* TODO: 스크린샷 준비되면 아래 placeholder를 Image 컴포넌트로 교체 */}
-            <Image src={appScreenshot} alt="앱 미리보기" className="w-full" />
+            {/* Screenshot — click to expand */}
+            <ScreenshotLightbox src={appScreenshot} alt="앱 미리보기" />
           </div>
           {/* Reflection/shadow effect */}
           <div className="mx-8 h-4 rounded-b-2xl bg-gradient-to-b from-black/5 to-transparent" />
