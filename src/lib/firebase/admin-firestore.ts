@@ -61,6 +61,21 @@ export async function getMemosAdmin(videoId: string) {
   return snap.docs.map((d) => serialize({ id: d.id, ...d.data() }) as Memo & { id: string });
 }
 
+export async function addVideoAdmin(video: {
+  youtubeId: string;
+  title: string;
+  thumbnail: string;
+  durationSec: number;
+  userId: string;
+}) {
+  const ref = await adminDb.collection('videos').add({
+    ...video,
+    shareToken: null,
+    createdAt: new Date(),
+  });
+  return ref.id;
+}
+
 // ── Share Token ───────────────────────────────────────────────────────────────
 
 export async function updateVideoShareTokenAdmin(videoId: string, token: string | null) {

@@ -96,7 +96,6 @@ export function DashboardContent({ initialVideos, initialCollections, userId }: 
         open={addOpen}
         onClose={() => setAddOpen(false)}
         onAdded={() => router.refresh()}
-        userId={userId}
       />
 
       {selectedCollection && (
