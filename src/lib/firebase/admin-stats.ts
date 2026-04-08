@@ -38,7 +38,7 @@ export async function getAdminStats() {
     createdAt: u.metadata.creationTime ?? null,
   }));
 
-  users.sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''));
+  users.sort((a, b) => b.videoCount - a.videoCount);
 
   return {
     users,

@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { getAdminStats } from '@/lib/firebase/admin-stats';
-import { UserDetailRow } from '@/components/admin/UserDetailRow';
+import { UsersTable } from '@/components/admin/UsersTable';
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
@@ -15,13 +15,18 @@ export default async function AdminPage() {
   const t = await getTranslations('admin');
   const { users, totalUsers, totalVideos, totalCollections } = await getAdminStats();
 
-  const rowLabels = {
+  const tableLabels = {
+    email: t('email'),
+    name: t('name'),
+    videos: t('videos'),
+    collections: t('collections'),
+    joined: t('joined'),
     registeredVideos: t('registeredVideos'),
     registeredCollections: t('registeredCollections'),
     noVideos: t('noVideos'),
     noCollections: t('noCollections'),
     loading: t('loading'),
-    videoCountTemplate: t('videoCountTemplate'),
+    videoCountTemplate: t.raw('videoCountTemplate') as string,
   };
 
   return (
@@ -34,25 +39,7 @@ export default async function AdminPage() {
         <StatCard label={t('totalCollections')} value={totalCollections} />
       </div>
 
-      <div className="overflow-x-auto rounded-lg border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/50">
-            <tr>
-              <th className="px-4 py-3 text-left font-medium">{t('email')}</th>
-              <th className="px-4 py-3 text-left font-medium">{t('name')}</th>
-              <th className="px-4 py-3 text-right font-medium">{t('videos')}</th>
-              <th className="px-4 py-3 text-right font-medium">{t('collections')}</th>
-              <th className="px-4 py-3 text-left font-medium">{t('joined')}</th>
-              <th className="w-10 px-4 py-3" />
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {users.map((u) => (
-              <UserDetailRow key={u.uid} user={u} labels={rowLabels} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <UsersTable users={users} labels={tableLabels} />
     </div>
   );
 }
