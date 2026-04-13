@@ -25,7 +25,14 @@
     "guestLogin": "Continue as Guest",
     "loggingIn": "Signing in...",
     "guest": "Guest",
-    "connectGoogle": "Connect Google Account"
+    "connectGoogle": "Connect Google Account",
+    "loginPageSubtitle": "About YouTube Timeline Memo",
+    "loginPageFeature1Title": "Timestamp Memos",
+    "loginPageFeature1Desc": "Leave timestamp memos on key moments while watching YouTube lectures or game walkthroughs. Click any timestamp to jump to that exact moment instantly.",
+    "loginPageFeature2Title": "Organize with Collections",
+    "loginPageFeature2Desc": "Group related videos into collections by topic for structured management. Create separate collections for React courses, game guides, language learning, and more.",
+    "loginPageFeature3Title": "Share Links",
+    "loginPageFeature3Desc": "Generate a share link so anyone can view your timeline memos without signing in. Perfect for sharing with study groups or friends."
   },
   "landing": {
     "title": "YouTube Timeline Memo",
@@ -48,7 +55,55 @@
         "title": "Guest Mode",
         "desc": "Try it instantly without signing up. Connect your Google account later to keep all your memos"
       }
-    }
+    },
+    "howToUse": {
+      "sectionTitle": "How It Works",
+      "step1Num": "01",
+      "step1Title": "Paste a YouTube URL",
+      "step1Desc": "Paste the URL of any YouTube lecture or game walkthrough and the title and thumbnail are fetched automatically. You can also search YouTube directly within the app.",
+      "step2Num": "02",
+      "step2Title": "Add Memos at Key Moments",
+      "step2Desc": "When an important moment comes up during playback, click 'Capture Current Time'. The timestamp is recorded automatically and you can type your memo right away.",
+      "step3Num": "03",
+      "step3Title": "Jump to Any Moment with One Click",
+      "step3Desc": "Click any saved timestamp memo to jump directly to that point in the video. No more scrubbing from the beginning when reviewing lectures or checking a walkthrough.",
+      "step4Num": "04",
+      "step4Title": "Organize with Collections & Share",
+      "step4Desc": "Group related videos into collections by topic for easy management. Generate a share link so anyone can view your timeline memos without needing to sign in."
+    },
+    "useCases": {
+      "sectionTitle": "Who It's For",
+      "case1Icon": "🎓",
+      "case1Title": "Online Learners",
+      "case1Desc": "Save timestamps for key concept explanations, code examples, and exam-relevant moments so you can jump straight to them during review — no need to rewatch the entire video.",
+      "case2Icon": "🎮",
+      "case2Title": "Gamers & Speedrunners",
+      "case2Desc": "Bookmark boss strategies, hidden item locations, and quest hints so you can check them in an instant during gameplay without scrubbing through long walkthrough videos.",
+      "case3Icon": "🌍",
+      "case3Title": "Language Learners",
+      "case3Desc": "Mark timestamps for native expressions, pronunciation tips, and grammar explanations. Jump to shadowing practice segments instantly during repeat study sessions.",
+      "case4Icon": "📹",
+      "case4Title": "Creators & Reviewers",
+      "case4Desc": "Note directing techniques, editing points, and reference scenes from videos you admire. Share timestamps with teammates via a share link for collaborative feedback."
+    },
+    "faq": {
+      "sectionTitle": "Frequently Asked Questions",
+      "q1": "Is it completely free?",
+      "a1": "Yes, YouTube Timeline Memo is completely free. Sign in with Google or start as a guest immediately — all features including timeline memos, collections, and share links are available with no restrictions.",
+      "q2": "Can I use it without signing in?",
+      "a2": "Yes, you can try everything in Guest Mode without creating an account. When you connect your Google account later, all your guest memos are transferred automatically so nothing is lost.",
+      "q3": "Where are my memos stored?",
+      "a3": "All memos are stored securely on Google Firebase cloud servers. Once signed in with your Google account, you can access the same memos from any device — PC, smartphone, or tablet.",
+      "q4": "What can someone see with a share link?",
+      "a4": "Anyone with a share link can view the YouTube video along with all its saved timestamp memos without signing in. They can also click timestamps to jump to those moments. You can disable the share link at any time.",
+      "q5": "Does it work on mobile?",
+      "a5": "Yes, it works on smartphones and tablets in any modern web browser. No app installation required — just open the site and start using it.",
+      "q6": "Can I add any YouTube video?",
+      "a6": "Any publicly available YouTube video can be added by pasting its URL. You can also use the built-in YouTube search to find and add videos directly from within the app."
+    },
+    "ctaTitle": "Start for Free Today",
+    "ctaDesc": "Try it instantly as a guest or sign in with Google to get started.",
+    "ctaButton": "Get Started Free"
   },
   "dashboard": {
     "title": "Dashboard",

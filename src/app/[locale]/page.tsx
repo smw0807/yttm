@@ -52,6 +52,29 @@ export default async function LandingPage({ params }: Props) {
     { icon: '👤', key: 'guest' as const },
   ];
 
+  const howToUseSteps = [
+    { num: t('howToUse.step1Num'), title: t('howToUse.step1Title'), desc: t('howToUse.step1Desc') },
+    { num: t('howToUse.step2Num'), title: t('howToUse.step2Title'), desc: t('howToUse.step2Desc') },
+    { num: t('howToUse.step3Num'), title: t('howToUse.step3Title'), desc: t('howToUse.step3Desc') },
+    { num: t('howToUse.step4Num'), title: t('howToUse.step4Title'), desc: t('howToUse.step4Desc') },
+  ];
+
+  const useCases = [
+    { icon: t('useCases.case1Icon'), title: t('useCases.case1Title'), desc: t('useCases.case1Desc') },
+    { icon: t('useCases.case2Icon'), title: t('useCases.case2Title'), desc: t('useCases.case2Desc') },
+    { icon: t('useCases.case3Icon'), title: t('useCases.case3Title'), desc: t('useCases.case3Desc') },
+    { icon: t('useCases.case4Icon'), title: t('useCases.case4Title'), desc: t('useCases.case4Desc') },
+  ];
+
+  const faqs = [
+    { q: t('faq.q1'), a: t('faq.a1') },
+    { q: t('faq.q2'), a: t('faq.a2') },
+    { q: t('faq.q3'), a: t('faq.a3') },
+    { q: t('faq.q4'), a: t('faq.a4') },
+    { q: t('faq.q5'), a: t('faq.a5') },
+    { q: t('faq.q6'), a: t('faq.a6') },
+  ];
+
   return (
     <main className="bg-background min-h-screen overflow-x-hidden">
       <script
@@ -137,6 +160,78 @@ export default async function LandingPage({ params }: Props) {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* How to Use Section */}
+      <section className="px-4 py-16">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="mb-10 text-center text-3xl font-bold tracking-tight">
+            {t('howToUse.sectionTitle')}
+          </h2>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {howToUseSteps.map(({ num, title, desc }) => (
+              <div key={num} className="flex gap-4">
+                <div className="text-primary shrink-0 text-4xl font-extrabold opacity-20">{num}</div>
+                <div>
+                  <h3 className="mb-1 text-base font-semibold">{title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Use Cases Section */}
+      <section className="bg-muted/30 px-4 py-16">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="mb-10 text-center text-3xl font-bold tracking-tight">
+            {t('useCases.sectionTitle')}
+          </h2>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {useCases.map(({ icon, title, desc }) => (
+              <div
+                key={title}
+                className="bg-background rounded-2xl border p-6 text-left"
+              >
+                <div className="mb-3 text-3xl">{icon}</div>
+                <h3 className="mb-2 text-base font-semibold">{title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="px-4 py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-10 text-center text-3xl font-bold tracking-tight">
+            {t('faq.sectionTitle')}
+          </h2>
+          <div className="divide-border divide-y">
+            {faqs.map(({ q, a }) => (
+              <div key={q} className="py-6">
+                <h3 className="mb-2 text-base font-semibold">{q}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-primary/5 border-t px-4 py-16 text-center">
+        <div className="mx-auto max-w-xl">
+          <h2 className="mb-3 text-3xl font-bold tracking-tight">{t('ctaTitle')}</h2>
+          <p className="text-muted-foreground mb-8 text-base leading-relaxed">{t('ctaDesc')}</p>
+          <Link
+            href="/login"
+            className="bg-primary text-primary-foreground hover:bg-primary/80 inline-flex h-11 items-center justify-center rounded-lg px-10 text-base font-semibold transition-colors"
+          >
+            {t('ctaButton')} →
+          </Link>
         </div>
       </section>
     </main>
