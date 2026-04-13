@@ -37,47 +37,82 @@ export function LoginClient() {
     }
   }
 
+  const loginFeatures = [
+    {
+      icon: '▶',
+      title: t('loginPageFeature1Title'),
+      desc: t('loginPageFeature1Desc'),
+    },
+    {
+      icon: '📁',
+      title: t('loginPageFeature2Title'),
+      desc: t('loginPageFeature2Desc'),
+    },
+    {
+      icon: '🔗',
+      title: t('loginPageFeature3Title'),
+      desc: t('loginPageFeature3Desc'),
+    },
+  ];
+
   return (
-    <main className="bg-background flex min-h-screen items-center justify-center px-4">
+    <main className="bg-background min-h-screen px-4 py-12">
       <KakaoInAppBrowserGuard />
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-red-600 text-2xl font-bold text-white">
-            ▶
+      <div className="mx-auto flex max-w-3xl flex-col items-center gap-10">
+        <Card className="w-full max-w-sm">
+          <CardHeader className="text-center">
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-red-600 text-2xl font-bold text-white">
+              ▶
+            </div>
+            <CardTitle className="text-2xl">{t('login')}</CardTitle>
+            <CardDescription>
+              {t('loginDescription')
+                .split('\n')
+                .map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    {i === 0 && <br />}
+                  </span>
+                ))}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3">
+            <Button
+              variant="outline"
+              className="w-full gap-3 text-base"
+              onClick={handleGoogleLogin}
+              disabled={!!loading}
+            >
+              {loading === 'google' ? <Spinner /> : <GoogleIcon />}
+              {t('googleLogin')}
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full bg-gray-100 text-base hover:bg-gray-200"
+              onClick={handleGuestLogin}
+              disabled={!!loading}
+            >
+              {loading === 'guest' && <Spinner />}
+              {loading === 'guest' ? t('loggingIn') : t('guestLogin')}
+            </Button>
+          </CardContent>
+        </Card>
+
+        <section className="w-full max-w-2xl">
+          <h2 className="text-muted-foreground mb-6 text-center text-sm font-semibold uppercase tracking-widest">
+            {t('loginPageSubtitle')}
+          </h2>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            {loginFeatures.map(({ icon, title, desc }) => (
+              <div key={title} className="rounded-2xl border p-5 text-left">
+                <div className="mb-2 text-2xl">{icon}</div>
+                <h3 className="mb-1 text-sm font-semibold">{title}</h3>
+                <p className="text-muted-foreground text-xs leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </div>
-          <CardTitle className="text-2xl">{t('login')}</CardTitle>
-          <CardDescription>
-            {t('loginDescription')
-              .split('\n')
-              .map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i === 0 && <br />}
-                </span>
-              ))}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <Button
-            variant="outline"
-            className="w-full gap-3 text-base"
-            onClick={handleGoogleLogin}
-            disabled={!!loading}
-          >
-            {loading === 'google' ? <Spinner /> : <GoogleIcon />}
-            {t('googleLogin')}
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full bg-gray-100 text-base hover:bg-gray-200"
-            onClick={handleGuestLogin}
-            disabled={!!loading}
-          >
-            {loading === 'guest' && <Spinner />}
-            {loading === 'guest' ? t('loggingIn') : t('guestLogin')}
-          </Button>
-        </CardContent>
-      </Card>
+        </section>
+      </div>
     </main>
   );
 }
