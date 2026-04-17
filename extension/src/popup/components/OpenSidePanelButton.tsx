@@ -2,8 +2,11 @@ import React from 'react';
 import type { ExtMessage } from '../../types';
 
 export function OpenSidePanelButton() {
-  const handleClick = () => {
-    chrome.runtime.sendMessage<ExtMessage>({ type: 'OPEN_SIDE_PANEL' });
+  const handleClick = async () => {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab?.windowId) {
+      await chrome.sidePanel.open({ windowId: tab.windowId });
+    }
     window.close();
   };
 
