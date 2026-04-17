@@ -40,10 +40,17 @@ export function MemoForm({ onSubmit }: Props) {
         <button
           type="button"
           onClick={() => {
-            // 현재 탭에서 현재 시간 캡처 요청
             chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
               if (tab?.id) {
-                chrome.tabs.sendMessage(tab.id, { type: 'GET_CURRENT_TIME' });
+                chrome.tabs.sendMessage(
+                  tab.id,
+                  { type: 'GET_CURRENT_TIME' },
+                  (res: { timestampSec: number } | undefined) => {
+                    if (res?.timestampSec !== undefined) {
+                      setTimestampSec(res.timestampSec);
+                    }
+                  },
+                );
               }
             });
           }}

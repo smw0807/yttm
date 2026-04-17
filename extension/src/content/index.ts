@@ -55,7 +55,7 @@ function cleanup(): void {
 }
 
 // Background/사이드패널에서 오는 메시지 처리
-chrome.runtime.onMessage.addListener((message: ExtMessage) => {
+chrome.runtime.onMessage.addListener((message: ExtMessage, _sender, sendResponse) => {
   switch (message.type) {
     case 'RENDER_MARKERS': {
       cleanupMarkers?.();
@@ -65,6 +65,10 @@ chrome.runtime.onMessage.addListener((message: ExtMessage) => {
     case 'SEEK_TO': {
       const videoEl = document.querySelector('video.html5-main-video') as HTMLVideoElement | null;
       if (videoEl) videoEl.currentTime = message.payload.timestampSec;
+      break;
+    }
+    case 'GET_CURRENT_TIME': {
+      sendResponse({ timestampSec: getCurrentTimeSec() });
       break;
     }
   }

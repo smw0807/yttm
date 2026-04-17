@@ -49,7 +49,9 @@ export type ExtMessage =
   | { type: 'AUTH_STATE_CHANGED'; payload: { user: User | null } }
   // Background → Content Script
   | { type: 'RENDER_MARKERS'; payload: { memos: MemoWithId[]; durationSec: number } }
-  | { type: 'SEEK_TO'; payload: { timestampSec: number } };
+  | { type: 'SEEK_TO'; payload: { timestampSec: number } }
+  // Side Panel → Content Script (직접)
+  | { type: 'GET_CURRENT_TIME' };
 
 export interface VideoInfo {
   youtubeId: string;
