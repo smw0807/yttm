@@ -34,8 +34,15 @@ export function App() {
     <div className="flex flex-col bg-white font-sans">
       {/* 헤더 */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-200">
-        <span className="text-base">📝</span>
-        <span className="text-sm font-semibold text-gray-900">YouTube Timeline Memo</span>
+        <img src="/icons/icon32.png" alt="logo" className="w-6 h-6" />
+        <a
+          href="https://www.yttm.kr"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-semibold text-gray-900 hover:text-red-600 transition-colors"
+        >
+          YouTube Timeline Memo
+        </a>
       </div>
 
       {user === undefined ? (
