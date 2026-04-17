@@ -34,12 +34,19 @@ export async function POST(req: NextRequest) {
     }
     const userInfo = await userInfoRes.json() as { sub: string; email?: string; name?: string; picture?: string };
 
-    // Firebase 커스텀 토큰 생성
-    const customToken = await adminAuth.createCustomToken(userInfo.sub, {
-      email: userInfo.email,
-      name: userInfo.name,
-      picture: userInfo.picture,
-    });
+    // Google provider UID로 기존 Firebase 사용자 조회
+    // → 웹앱에서 Google 로그인한 유저와 동일 UID 사용
+    let firebaseUid: string;
+    try {
+      const userRecord = await adminAuth.getUserByProviderUid('google.com', userInfo.sub);
+      firebaseUid = userRecord.uid;
+    } catch {
+      // Firebase에 아직 없는 신규 사용자 → sub를 UID로 사용
+      // 웹앱에서 처음 로그인하면 Firebase가 sub를 UID로 생성하므로 이후 일치
+      firebaseUid = userInfo.sub;
+    }
+
+    const customToken = await adminAuth.createCustomToken(firebaseUid);
 
     return NextResponse.json({ customToken }, { headers: CORS_HEADERS });
   } catch (err) {
