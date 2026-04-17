@@ -1,21 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { getVideos } from '../../lib/firestore';
-import { formatTimestamp } from '../../lib/youtube';
 import type { VideoWithId, User } from '../../types';
 
 interface Props {
   user: User;
 }
 
+const PAGE_SIZE = 5;
+
 export function RecentVideoList({ user }: Props) {
   const [videos, setVideos] = useState<VideoWithId[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
+    setLoading(true);
+    setVisibleCount(PAGE_SIZE);
+
     getVideos(user.uid)
-      .then((vids) => setVideos(vids.slice(0, 5)))
+      .then((vids) => setVideos(vids))
       .finally(() => setLoading(false));
   }, [user.uid]);
+
+  const visibleVideos = videos.slice(0, visibleCount);
+  const hasMoreVideos = visibleCount < videos.length;
+  const hasOverflow = videos.length > PAGE_SIZE;
+
+  const openWebsite = async () => {
+    await chrome.tabs.create({ url: 'https://www.yttm.kr' });
+    window.close();
+  };
 
   if (loading) {
     return <div className="px-4 py-3 text-xs text-gray-400">불러오는 중...</div>;
@@ -34,7 +48,7 @@ export function RecentVideoList({ user }: Props) {
       <p className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
         최근 영상
       </p>
-      {videos.map((video) => (
+      {visibleVideos.map((video) => (
         <a
           key={video.id}
           href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
@@ -52,6 +66,24 @@ export function RecentVideoList({ user }: Props) {
           </div>
         </a>
       ))}
+      {hasOverflow && (
+        <div className="px-4 py-3 space-y-2">
+          {hasMoreVideos && (
+            <button
+              onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+              className="w-full rounded-md border border-gray-200 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              더보기
+            </button>
+          )}
+          <button
+            onClick={openWebsite}
+            className="w-full rounded-md bg-gray-900 py-2 text-xs font-medium text-white hover:bg-black transition-colors"
+          >
+            www.yttm.kr에서 전체 보기
+          </button>
+        </div>
+      )}
     </div>
   );
 }
