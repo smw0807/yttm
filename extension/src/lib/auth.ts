@@ -1,16 +1,30 @@
-import { signInWithCustomToken, signOut as firebaseSignOut } from 'firebase/auth';
-import { auth } from './firebase';
+import {
+  GoogleAuthProvider,
+  signInWithCredential,
+  signOut as firebaseSignOut,
+} from 'firebase/auth/web-extension';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { auth, db } from './firebase';
 
-const API_URL = import.meta.env.VITE_API_URL as string;
+async function ensureUserDoc() {
+  const user = auth.currentUser;
+  if (!user) return;
 
-/**
- * getAuthToken() → Next.js /api/auth/extension-token → Firebase customToken
- * redirect URI / OAuth audience 문제 없음
- */
-export async function signInWithGoogle(): Promise<void> {
-  // 1. Google access token 획득 (Chrome App OAuth 클라이언트 사용)
-  const accessToken = await new Promise<string>((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive: true }, (token) => {
+  const userRef = doc(db, 'users', user.uid);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) return;
+
+  await setDoc(userRef, {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName,
+    createdAt: serverTimestamp(),
+  });
+}
+
+function getChromeAuthToken(interactive: boolean): Promise<string> {
+  return new Promise((resolve, reject) => {
+    chrome.identity.getAuthToken({ interactive }, (token) => {
       if (chrome.runtime.lastError || !token) {
         reject(new Error(chrome.runtime.lastError?.message ?? 'Auth cancelled'));
       } else {
@@ -18,23 +32,58 @@ export async function signInWithGoogle(): Promise<void> {
       }
     });
   });
+}
 
-  // 2. Next.js API로 Firebase 커스텀 토큰 발급
-  const res = await fetch(`${API_URL}/api/auth/extension-token`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ accessToken }),
+async function removeCachedAuthToken(token: string): Promise<void> {
+  await new Promise<void>((resolve) => {
+    chrome.identity.removeCachedAuthToken({ token }, () => resolve());
   });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error((err as { error?: string }).error ?? 'Failed to get custom token');
-  }
-  const { customToken } = await res.json() as { customToken: string };
+}
 
-  // 3. Firebase 로그인
-  await signInWithCustomToken(auth, customToken);
+/**
+ * Chrome OAuth access token을 Firebase Google credential로 교환한다.
+ * 이 경로를 써야 Firebase 콘솔에서도 Google provider 사용자로 유지된다.
+ */
+export async function signInWithGoogle(): Promise<void> {
+  let accessToken = await getChromeAuthToken(true);
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const credential = GoogleAuthProvider.credential(null, accessToken);
+      await signInWithCredential(auth, credential);
+      await ensureUserDoc();
+      return;
+    } catch (err) {
+      const code =
+        typeof err === 'object' &&
+        err !== null &&
+        'code' in err &&
+        typeof (err as { code?: unknown }).code === 'string'
+          ? (err as { code: string }).code
+          : '';
+      const message = err instanceof Error ? err.message : 'Failed to sign in with Google';
+      const shouldRetry =
+        attempt === 0 &&
+        /auth\/invalid-credential|auth\/network-request-failed/i.test(code || message);
+
+      if (!shouldRetry) {
+        throw err instanceof Error ? err : new Error(message);
+      }
+
+      await removeCachedAuthToken(accessToken);
+      accessToken = await getChromeAuthToken(true);
+    }
+  }
+
+  throw new Error('Failed to sign in with Google');
 }
 
 export async function signOut(): Promise<void> {
   await firebaseSignOut(auth);
+  try {
+    const token = await getChromeAuthToken(false);
+    await removeCachedAuthToken(token);
+  } catch {
+    // 캐시된 토큰이 없으면 무시
+  }
 }
