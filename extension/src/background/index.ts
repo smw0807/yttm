@@ -1,4 +1,4 @@
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth/web-extension';
 import { auth } from '../lib/firebase';
 import { signInWithGoogle, signOut } from '../lib/auth';
 import type { ExtMessage, User, VideoInfo, MemoWithId } from '../types';
