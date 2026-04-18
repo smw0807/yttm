@@ -15,7 +15,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "videos": "My Videos",
-    "collections": "Collections"
+    "collections": "Collections",
+    "extension": "Extension"
   },
   "auth": {
     "login": "Sign In",
@@ -101,6 +102,18 @@
       "a5": "Yes, it works on smartphones and tablets in any modern web browser. No app installation required — just open the site and start using it.",
       "q6": "Can I add any YouTube video?",
       "a6": "Any publicly available YouTube video can be added by pasting its URL. You can also use the built-in YouTube search to find and add videos directly from within the app."
+    },
+    "extension": {
+      "sectionTitle": "Even More Convenient with the Chrome Extension",
+      "desc": "Take timestamp memos directly from any YouTube video you're watching. No need to open a new tab — just click the extension icon and the current video is recognized automatically.",
+      "feature1Title": "Auto-Detects the Current Tab",
+      "feature1Desc": "Click the icon while watching a YouTube video and it instantly loads the current video.",
+      "feature2Title": "Quick Timestamp Memos",
+      "feature2Desc": "Capture the current playback time and add a memo without leaving the video.",
+      "feature3Title": "Syncs with the Web App",
+      "feature3Desc": "Memos added via the extension sync in real time with yttm.kr.",
+      "downloadButton": "Install Free on Chrome Web Store",
+      "badge": "Chrome Web Store"
     },
     "ctaTitle": "Start for Free Today",
     "ctaDesc": "Try it instantly as a guest or sign in with Google to get started.",
