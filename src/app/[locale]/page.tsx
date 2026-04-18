@@ -181,6 +181,80 @@ export default async function LandingPage({ params }: Props) {
         </div>
       </section>
 
+      {/* Chrome Extension Section */}
+      <section className="px-4 py-16">
+        <div className="mx-auto max-w-4xl">
+          <div className="bg-card overflow-hidden rounded-3xl border shadow-sm">
+            <div className="flex flex-col items-center gap-8 p-8 sm:p-12 lg:flex-row lg:items-start">
+              {/* Icon + Badge */}
+              <div className="flex shrink-0 flex-col items-center gap-3">
+                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#4285F4]/10 text-5xl shadow-inner">
+                  🧩
+                </div>
+                <span className="bg-muted text-muted-foreground rounded-full px-3 py-1 text-xs font-medium">
+                  {t('extension.badge')}
+                </span>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 text-center lg:text-left">
+                <h2 className="mb-3 text-2xl font-bold tracking-tight sm:text-3xl">
+                  {t('extension.sectionTitle')}
+                </h2>
+                <p className="text-muted-foreground mb-6 text-base leading-relaxed">
+                  {t('extension.desc')}
+                </p>
+
+                {/* Features */}
+                <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  {(
+                    [
+                      { key: 'feature1', icon: '⚡' },
+                      { key: 'feature2', icon: '📝' },
+                      { key: 'feature3', icon: '🔄' },
+                    ] as const
+                  ).map(({ key, icon }) => (
+                    <div key={key} className="bg-muted/40 rounded-xl p-4 text-left">
+                      <div className="mb-2 text-xl">{icon}</div>
+                      <h3 className="mb-1 text-sm font-semibold">
+                        {t(`extension.${key}Title`)}
+                      </h3>
+                      <p className="text-muted-foreground text-xs leading-relaxed">
+                        {t(`extension.${key}Desc`)}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Download Button */}
+                <a
+                  href="https://chromewebstore.google.com/detail/akcenlcmjliffoildhkhmpmeiebnaiak?utm_source=item-share-cb"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[#4285F4] px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                >
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  {t('extension.downloadButton')}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* How to Use Section */}
       <section className="px-4 py-16">
         <div className="mx-auto max-w-4xl">

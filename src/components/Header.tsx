@@ -42,6 +42,14 @@ export function Header({ displayName, isAnonymous }: Props) {
           <Link href="/collections" className={navClass('/collections')}>
             {t('collections')}
           </Link>
+          <a
+            href="https://chromewebstore.google.com/detail/akcenlcmjliffoildhkhmpmeiebnaiak?utm_source=item-share-cb"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:bg-muted hover:text-foreground inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium transition-colors"
+          >
+            🧩 {t('extension')}
+          </a>
           <LocaleSwitcher />
           <UserMenu displayName={displayName} isAnonymous={isAnonymous} />
         </nav>
