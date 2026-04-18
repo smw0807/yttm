@@ -6,6 +6,8 @@ import type { User, ExtMessage } from '../types';
 
 export function App() {
   const [user, setUser] = useState<User | null | undefined>(undefined);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [signingIn, setSigningIn] = useState(false);
 
   useEffect(() => {
     chrome.runtime.sendMessage<ExtMessage>({ type: 'GET_AUTH_STATE' }, (res) => {
@@ -22,7 +24,24 @@ export function App() {
   }, []);
 
   const signIn = () => {
-    chrome.runtime.sendMessage<ExtMessage>({ type: 'SIGN_IN' });
+    setSigningIn(true);
+    setAuthError(null);
+    chrome.runtime.sendMessage<ExtMessage>({ type: 'SIGN_IN' }, (res) => {
+      setSigningIn(false);
+
+      if (chrome.runtime.lastError) {
+        const message = chrome.runtime.lastError.message ?? '로그인 요청에 실패했습니다.';
+        console.error('[popup] SIGN_IN runtime error', chrome.runtime.lastError);
+        setAuthError(message);
+        return;
+      }
+
+      if (!res?.ok) {
+        const message = res?.error ?? 'Google 로그인에 실패했습니다.';
+        console.error('[popup] SIGN_IN failed', res);
+        setAuthError(message);
+      }
+    });
   };
 
   const signOut = () => {
@@ -49,7 +68,13 @@ export function App() {
         <div className="px-4 py-3 text-xs text-gray-400">로딩 중...</div>
       ) : (
         <>
-          <AuthStatus user={user} onSignIn={signIn} onSignOut={signOut} />
+          <AuthStatus
+            user={user}
+            onSignIn={signIn}
+            onSignOut={signOut}
+            authError={authError}
+            signingIn={signingIn}
+          />
           {user && <RecentVideoList user={user} />}
           <OpenSidePanelButton />
         </>

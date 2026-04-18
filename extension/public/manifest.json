@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube Timeline Memo",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "유튜브 영상에 타임스탬프 메모를 남기세요",
   "permissions": [
     "identity",
@@ -46,7 +46,7 @@
     "128": "icons/icon128.png"
   },
   "oauth2": {
-    "client_id": "353724688068-gnrfe323316vg6r7nt8jt1vdsck9oj25.apps.googleusercontent.com",
+    "client_id": "353724688068-avp5sj9crph5la1pqipe4mhsa43mraab.apps.googleusercontent.com",
     "scopes": ["openid", "email", "profile"]
   }
 }

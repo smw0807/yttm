@@ -8,7 +8,7 @@ import { MemoForm } from './components/MemoForm';
 import { MemoList } from './components/MemoList';
 
 export function App() {
-  const { user, signIn, signOut } = useAuth();
+  const { user, signIn, signOut, authError, signingIn } = useAuth();
   const { videoInfo, refreshVideo } = useCurrentVideo();
   const { memos, loading, add, update, remove } = useMemos(videoInfo, user ?? null);
 
@@ -23,7 +23,7 @@ export function App() {
 
   // 미로그인
   if (!user) {
-    return <AuthScreen onSignIn={signIn} />;
+    return <AuthScreen onSignIn={signIn} authError={authError} signingIn={signingIn} />;
   }
 
   // YouTube watch 페이지가 아님
@@ -58,7 +58,14 @@ export function App() {
       {/* 헤더: 영상 정보 + 로그아웃 */}
       <div className="flex-shrink-0">
         <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-white">
-          <span className="text-xs font-semibold text-gray-700">Timeline Memo</span>
+          <a
+            href="https://www.yttm.kr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-semibold text-gray-700 hover:text-red-600 transition-colors"
+          >
+            YouTube Timeline Memo
+          </a>
           <div className="flex items-center gap-2">
             {user.photoURL && (
               <img src={user.photoURL} alt="" className="w-5 h-5 rounded-full" />

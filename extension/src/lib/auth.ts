@@ -23,11 +23,15 @@ async function ensureUserDoc() {
 }
 
 function getChromeAuthToken(interactive: boolean): Promise<string> {
+  console.info('[auth] Requesting Chrome identity token', { interactive });
   return new Promise((resolve, reject) => {
     chrome.identity.getAuthToken({ interactive }, (token) => {
       if (chrome.runtime.lastError || !token) {
-        reject(new Error(chrome.runtime.lastError?.message ?? 'Auth cancelled'));
+        const error = new Error(chrome.runtime.lastError?.message ?? 'Auth cancelled');
+        console.error('[auth] Failed to get Chrome identity token', error);
+        reject(error);
       } else {
+        console.info('[auth] Received Chrome identity token');
         resolve(token);
       }
     });
@@ -45,15 +49,22 @@ async function removeCachedAuthToken(token: string): Promise<void> {
  * 이 경로를 써야 Firebase 콘솔에서도 Google provider 사용자로 유지된다.
  */
 export async function signInWithGoogle(): Promise<void> {
+  console.info('[auth] Starting Google sign-in');
   let accessToken = await getChromeAuthToken(true);
 
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
+      console.info('[auth] Signing in with Firebase credential', { attempt: attempt + 1 });
       const credential = GoogleAuthProvider.credential(null, accessToken);
       await signInWithCredential(auth, credential);
       await ensureUserDoc();
+      console.info('[auth] Google sign-in completed', {
+        uid: auth.currentUser?.uid ?? null,
+        email: auth.currentUser?.email ?? null,
+      });
       return;
     } catch (err) {
+      console.error('[auth] Google sign-in failed', err);
       const code =
         typeof err === 'object' &&
         err !== null &&
@@ -79,6 +90,7 @@ export async function signInWithGoogle(): Promise<void> {
 }
 
 export async function signOut(): Promise<void> {
+  console.info('[auth] Signing out');
   await firebaseSignOut(auth);
   try {
     const token = await getChromeAuthToken(false);

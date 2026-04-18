@@ -99,8 +99,8 @@ export default function PrivacyPage() {
         <h2 className="mb-3 text-base font-semibold text-gray-900">6. 데이터 삭제</h2>
         <p>
           계정 및 메모 데이터 삭제를 원하시면{' '}
-          <a href="mailto:contact@yttm.kr" className="text-red-600 hover:underline">
-            contact@yttm.kr
+          <a href="mailto:smw0807@gmail.com" className="text-red-600 hover:underline">
+            smw0807@gmail.com
           </a>
           로 문의하시거나 서비스 내 삭제 기능을 이용하세요.
         </p>
@@ -110,8 +110,8 @@ export default function PrivacyPage() {
         <h2 className="mb-3 text-base font-semibold text-gray-900">7. 문의</h2>
         <p>
           개인정보 관련 문의:{' '}
-          <a href="mailto:contact@yttm.kr" className="text-red-600 hover:underline">
-            contact@yttm.kr
+          <a href="mailto:smw0807@gmail.com" className="text-red-600 hover:underline">
+            smw0807@gmail.com
           </a>
         </p>
       </section>
@@ -124,7 +124,7 @@ export default function PrivacyPage() {
         for authentication, and stores notes you create in Google Firebase. We do not sell your data
         to third parties or use it for advertising. You may request deletion of your data by
         contacting{' '}
-        <a href="mailto:contact@yttm.kr" className="text-red-600 hover:underline">
+        <a href="mailto:smw0807@gmail.com" className="text-red-600 hover:underline">
           smw0807@gmail.com
         </a>
         .
