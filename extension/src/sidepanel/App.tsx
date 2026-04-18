@@ -9,7 +9,7 @@ import { MemoList } from './components/MemoList';
 
 export function App() {
   const { user, signIn, signOut } = useAuth();
-  const videoInfo = useCurrentVideo();
+  const { videoInfo, refreshVideo } = useCurrentVideo();
   const { memos, loading, add, update, remove } = useMemos(videoInfo, user ?? null);
 
   // 로딩 중
@@ -37,6 +37,12 @@ export function App() {
             youtube.com/watch 페이지에서 메모를 사용할 수 있습니다
           </p>
         </div>
+        <button
+          onClick={() => void refreshVideo()}
+          className="rounded-md border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50"
+        >
+          영상 정보 새로고침
+        </button>
         <button
           onClick={signOut}
           className="text-xs text-gray-400 hover:text-gray-600 underline"

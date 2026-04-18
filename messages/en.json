@@ -38,6 +38,7 @@
     "title": "YouTube Timeline Memo",
     "description": "Take notes on key moments in YouTube lectures & game walkthroughs and <highlight>jump back with one click</highlight>",
     "startButton": "Get Started",
+    "liveDemo": "View live demo",
     "features": {
       "timeline": {
         "title": "Timeline Memos",

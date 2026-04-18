@@ -7,7 +7,7 @@ export function useCurrentVideo() {
   useEffect(() => {
     // 초기 상태 요청
     chrome.runtime.sendMessage<ExtMessage>({ type: 'GET_CURRENT_VIDEO' }, (res) => {
-      if (res?.video) setVideoInfo(res.video);
+      setVideoInfo(res?.video ?? null);
     });
 
     // 이후 변경 구독
@@ -20,5 +20,12 @@ export function useCurrentVideo() {
     return () => chrome.runtime.onMessage.removeListener(listener);
   }, []);
 
-  return videoInfo;
+  const refreshVideo = () =>
+    new Promise<boolean>((resolve) => {
+      chrome.runtime.sendMessage<ExtMessage>({ type: 'REFRESH_CURRENT_VIDEO' }, (res) => {
+        resolve(Boolean(res?.ok));
+      });
+    });
+
+  return { videoInfo, refreshVideo };
 }

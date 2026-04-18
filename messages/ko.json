@@ -38,6 +38,7 @@
     "title": "YouTube Timeline Memo",
     "description": "유튜브 강의·게임 공략, 중요한 장면에 메모 남기고 <highlight>클릭 한 번으로 바로 돌아가기</highlight>",
     "startButton": "시작하기",
+    "liveDemo": "라이브 데모 보기",
     "features": {
       "timeline": {
         "title": "타임라인 메모",

@@ -37,6 +37,7 @@ export type ExtMessage =
   | { type: 'TIMESTAMP_CAPTURED'; payload: { timestampSec: number } }
   // Side Panel → Background
   | { type: 'GET_CURRENT_VIDEO' }
+  | { type: 'REFRESH_CURRENT_VIDEO' }
   | { type: 'SIGN_IN' }
   | { type: 'SIGN_OUT' }
   | { type: 'MEMOS_UPDATED'; payload: { memos: MemoWithId[] } }
@@ -50,6 +51,7 @@ export type ExtMessage =
   // Background → Content Script
   | { type: 'RENDER_MARKERS'; payload: { memos: MemoWithId[]; durationSec: number } }
   | { type: 'SEEK_TO'; payload: { timestampSec: number } }
+  | { type: 'REQUEST_VIDEO_INFO' }
   // Side Panel → Content Script (직접)
   | { type: 'GET_CURRENT_TIME' };
 
