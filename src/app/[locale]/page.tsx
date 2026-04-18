@@ -130,8 +130,15 @@ export default async function LandingPage({ params }: Props) {
                 <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
                 <div className="h-3 w-3 rounded-full bg-[#28C840]" />
               </div>
-              <div className="bg-background/70 text-muted-foreground ml-2 flex-1 rounded-md px-3 py-1 text-center text-xs">
-                yttm.kr
+              <div className="bg-background/70 ml-2 flex-1 rounded-md px-3 py-1 text-center text-xs">
+                <a
+                  href="https://www.yttm.kr/share/0a90f10a-c604-41d4-bdcf-f22cdff1f262"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  yttm.kr
+                </a>
               </div>
             </div>
 
@@ -140,6 +147,17 @@ export default async function LandingPage({ params }: Props) {
           </div>
           {/* Reflection/shadow effect */}
           <div className="mx-8 h-4 rounded-b-2xl bg-gradient-to-b from-black/5 to-transparent" />
+          {/* Live demo link */}
+          <div className="mt-4 text-center">
+            <a
+              href="https://www.yttm.kr/share/0a90f10a-c604-41d4-bdcf-f22cdff1f262"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+            >
+              {t('liveDemo')} →
+            </a>
+          </div>
         </div>
       </section>
 
