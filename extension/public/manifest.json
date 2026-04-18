@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube Timeline Memo",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "유튜브 영상에 타임스탬프 메모를 남기세요",
   "permissions": [
     "identity",
