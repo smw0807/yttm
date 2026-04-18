@@ -70,6 +70,12 @@ async function handleMessage(
       break;
     }
 
+    case 'REFRESH_CURRENT_VIDEO': {
+      const refreshed = await sendToActiveContentScript({ type: 'REQUEST_VIDEO_INFO' });
+      sendResponse({ ok: refreshed });
+      break;
+    }
+
     case 'GET_AUTH_STATE': {
       sendResponse({ user: currentUser });
       break;
@@ -133,10 +139,14 @@ function broadcastToExtension(message: ExtMessage) {
 async function sendToActiveContentScript(message: ExtMessage) {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (tab?.id && tab.url?.includes('youtube.com/watch')) {
-    chrome.tabs.sendMessage(tab.id, message).catch(() => {
+    try {
+      await chrome.tabs.sendMessage(tab.id, message);
+      return true;
+    } catch {
       // content script 미로드 시 무시
-    });
+    }
   }
+  return false;
 }
 
 // 익스텐션 설치/업데이트 시 sidePanel 동작 설정

@@ -71,6 +71,11 @@ chrome.runtime.onMessage.addListener((message: ExtMessage, _sender, sendResponse
       sendResponse({ timestampSec: getCurrentTimeSec() });
       break;
     }
+    case 'REQUEST_VIDEO_INFO': {
+      handlePageChange();
+      sendResponse({ ok: true });
+      break;
+    }
   }
 });
 
