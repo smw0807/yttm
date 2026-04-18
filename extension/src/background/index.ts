@@ -1,12 +1,18 @@
 import { onAuthStateChanged } from 'firebase/auth/web-extension';
 import { auth } from '../lib/firebase';
 import { signInWithGoogle, signOut } from '../lib/auth';
+import { extractYouTubeId } from '../lib/youtube';
 import type { ExtMessage, User, VideoInfo, MemoWithId } from '../types';
 
 // 상태 (Background = 단일 상태 허브)
 let currentUser: User | null = null;
 let currentVideo: VideoInfo | null = null;
 let pendingTimestamp: number | null = null;
+
+const YOUTUBE_WATCH_URL_PATTERNS = [
+  'https://www.youtube.com/watch*',
+  'https://m.youtube.com/watch*',
+];
 
 // Firebase Auth 상태 구독
 onAuthStateChanged(auth, (firebaseUser) => {
@@ -71,8 +77,30 @@ async function handleMessage(
     }
 
     case 'REFRESH_CURRENT_VIDEO': {
-      const refreshed = await sendToActiveContentScript({ type: 'REQUEST_VIDEO_INFO' });
-      sendResponse({ ok: refreshed });
+      const tab = await findBestYouTubeTab();
+      if (!tab?.id) {
+        sendResponse({ ok: false });
+        break;
+      }
+
+      const refreshed = await sendToContentScript(tab.id, { type: 'REQUEST_VIDEO_INFO' });
+      if (refreshed) {
+        sendResponse({ ok: true });
+        break;
+      }
+
+      const fallbackVideo = buildVideoInfoFromTab(tab);
+      if (!fallbackVideo) {
+        sendResponse({ ok: false });
+        break;
+      }
+
+      currentVideo = fallbackVideo;
+      broadcastToExtension({
+        type: 'CURRENT_VIDEO_UPDATE',
+        payload: { video: currentVideo },
+      });
+      sendResponse({ ok: true, fallback: true });
       break;
     }
 
@@ -137,16 +165,59 @@ function broadcastToExtension(message: ExtMessage) {
 
 // 현재 활성 YouTube 탭의 content script에 메시지 전송
 async function sendToActiveContentScript(message: ExtMessage) {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (tab?.id && tab.url?.includes('youtube.com/watch')) {
-    try {
-      await chrome.tabs.sendMessage(tab.id, message);
-      return true;
-    } catch {
-      // content script 미로드 시 무시
-    }
+  const tab = await findBestYouTubeTab();
+  if (!tab?.id) {
+    return false;
   }
-  return false;
+
+  return sendToContentScript(tab.id, message);
+}
+
+async function sendToContentScript(tabId: number, message: ExtMessage) {
+  try {
+    await chrome.tabs.sendMessage(tabId, message);
+    return true;
+  } catch {
+    // content script 미로드 시 무시
+    return false;
+  }
+}
+
+async function findBestYouTubeTab() {
+  const [currentWindowTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (isYouTubeWatchTab(currentWindowTab)) {
+    return currentWindowTab;
+  }
+
+  const [lastFocusedWindowTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (isYouTubeWatchTab(lastFocusedWindowTab)) {
+    return lastFocusedWindowTab;
+  }
+
+  const [matchedTab] = await chrome.tabs.query({ url: YOUTUBE_WATCH_URL_PATTERNS });
+  return matchedTab;
+}
+
+function isYouTubeWatchTab(tab: chrome.tabs.Tab | undefined) {
+  return Boolean(tab?.id && tab.url && extractYouTubeId(tab.url));
+}
+
+function buildVideoInfoFromTab(tab: chrome.tabs.Tab): VideoInfo | null {
+  const youtubeId = tab.url ? extractYouTubeId(tab.url) : null;
+  if (!youtubeId) {
+    return null;
+  }
+
+  const rawTitle = (tab.title ?? '').trim();
+  const title =
+    rawTitle.replace(/\s*-\s*YouTube$/i, '').trim() || `YouTube Video ${youtubeId}`;
+
+  return {
+    youtubeId,
+    title,
+    thumbnail: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
+    durationSec: 0,
+  };
 }
 
 // 익스텐션 설치/업데이트 시 sidePanel 동작 설정
