@@ -8,7 +8,7 @@ import { MemoForm } from './components/MemoForm';
 import { MemoList } from './components/MemoList';
 
 export function App() {
-  const { user, signIn, signOut } = useAuth();
+  const { user, signIn, signOut, authError, signingIn } = useAuth();
   const { videoInfo, refreshVideo } = useCurrentVideo();
   const { memos, loading, add, update, remove } = useMemos(videoInfo, user ?? null);
 
@@ -23,7 +23,7 @@ export function App() {
 
   // 미로그인
   if (!user) {
-    return <AuthScreen onSignIn={signIn} />;
+    return <AuthScreen onSignIn={signIn} authError={authError} signingIn={signingIn} />;
   }
 
   // YouTube watch 페이지가 아님

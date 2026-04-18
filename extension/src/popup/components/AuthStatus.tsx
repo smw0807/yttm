@@ -5,19 +5,35 @@ interface Props {
   user: User | null;
   onSignIn: () => void;
   onSignOut: () => void;
+  authError?: string | null;
+  signingIn?: boolean;
 }
 
-export function AuthStatus({ user, onSignIn, onSignOut }: Props) {
+export function AuthStatus({
+  user,
+  onSignIn,
+  onSignOut,
+  authError = null,
+  signingIn = false,
+}: Props) {
   if (!user) {
     return (
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
-        <span className="text-xs text-gray-500">로그인이 필요합니다</span>
-        <button
-          onClick={onSignIn}
-          className="text-xs px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-        >
-          Google 로그인
-        </button>
+      <div className="px-4 py-2 bg-gray-50 border-b border-gray-200">
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-gray-500">로그인이 필요합니다</span>
+          <button
+            onClick={onSignIn}
+            disabled={signingIn}
+            className="text-xs px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {signingIn ? '로그인 중...' : 'Google 로그인'}
+          </button>
+        </div>
+        {authError && (
+          <p className="mt-2 text-[11px] leading-relaxed text-red-500 break-words">
+            로그인 실패: {authError}
+          </p>
+        )}
       </div>
     );
   }

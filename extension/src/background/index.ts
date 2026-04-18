@@ -111,9 +111,15 @@ async function handleMessage(
 
     case 'SIGN_IN': {
       try {
+        console.info('[background] SIGN_IN requested');
         await signInWithGoogle();
+        console.info('[background] SIGN_IN succeeded', {
+          uid: auth.currentUser?.uid ?? null,
+          email: auth.currentUser?.email ?? null,
+        });
         sendResponse({ ok: true });
       } catch (err) {
+        console.error('[background] SIGN_IN failed', err);
         sendResponse({ ok: false, error: String(err) });
       }
       break;
@@ -121,9 +127,11 @@ async function handleMessage(
 
     case 'SIGN_OUT': {
       try {
+        console.info('[background] SIGN_OUT requested');
         await signOut();
         sendResponse({ ok: true });
       } catch (err) {
+        console.error('[background] SIGN_OUT failed', err);
         sendResponse({ ok: false, error: String(err) });
       }
       break;
