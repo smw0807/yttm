@@ -60,10 +60,26 @@ export default async function LandingPage({ params }: Props) {
   ];
 
   const useCases = [
-    { icon: t('useCases.case1Icon'), title: t('useCases.case1Title'), desc: t('useCases.case1Desc') },
-    { icon: t('useCases.case2Icon'), title: t('useCases.case2Title'), desc: t('useCases.case2Desc') },
-    { icon: t('useCases.case3Icon'), title: t('useCases.case3Title'), desc: t('useCases.case3Desc') },
-    { icon: t('useCases.case4Icon'), title: t('useCases.case4Title'), desc: t('useCases.case4Desc') },
+    {
+      icon: t('useCases.case1Icon'),
+      title: t('useCases.case1Title'),
+      desc: t('useCases.case1Desc'),
+    },
+    {
+      icon: t('useCases.case2Icon'),
+      title: t('useCases.case2Title'),
+      desc: t('useCases.case2Desc'),
+    },
+    {
+      icon: t('useCases.case3Icon'),
+      title: t('useCases.case3Title'),
+      desc: t('useCases.case3Desc'),
+    },
+    {
+      icon: t('useCases.case4Icon'),
+      title: t('useCases.case4Title'),
+      desc: t('useCases.case4Desc'),
+    },
   ];
 
   const faqs = [
@@ -132,7 +148,7 @@ export default async function LandingPage({ params }: Props) {
               </div>
               <div className="bg-background/70 ml-2 flex-1 rounded-md px-3 py-1 text-center text-xs">
                 <a
-                  href="https://www.yttm.kr/share/0a90f10a-c604-41d4-bdcf-f22cdff1f262"
+                  href="https://www.yttm.kr/share/d541d9b6-0381-45c7-9e42-20eb198fa7b1"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors"
@@ -150,7 +166,7 @@ export default async function LandingPage({ params }: Props) {
           {/* Live demo link */}
           <div className="mt-4 text-center">
             <a
-              href="https://www.yttm.kr/share/0a90f10a-c604-41d4-bdcf-f22cdff1f262"
+              href="https://www.yttm.kr/share/d541d9b6-0381-45c7-9e42-20eb198fa7b1"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground text-sm transition-colors"
@@ -216,9 +232,7 @@ export default async function LandingPage({ params }: Props) {
                   ).map(({ key, icon }) => (
                     <div key={key} className="bg-muted/40 rounded-xl p-4 text-left">
                       <div className="mb-2 text-xl">{icon}</div>
-                      <h3 className="mb-1 text-sm font-semibold">
-                        {t(`extension.${key}Title`)}
-                      </h3>
+                      <h3 className="mb-1 text-sm font-semibold">{t(`extension.${key}Title`)}</h3>
                       <p className="text-muted-foreground text-xs leading-relaxed">
                         {t(`extension.${key}Desc`)}
                       </p>
@@ -264,7 +278,9 @@ export default async function LandingPage({ params }: Props) {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {howToUseSteps.map(({ num, title, desc }) => (
               <div key={num} className="flex gap-4">
-                <div className="text-primary shrink-0 text-4xl font-extrabold opacity-20">{num}</div>
+                <div className="text-primary shrink-0 text-4xl font-extrabold opacity-20">
+                  {num}
+                </div>
                 <div>
                   <h3 className="mb-1 text-base font-semibold">{title}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
@@ -283,10 +299,7 @@ export default async function LandingPage({ params }: Props) {
           </h2>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {useCases.map(({ icon, title, desc }) => (
-              <div
-                key={title}
-                className="bg-background rounded-2xl border p-6 text-left"
-              >
+              <div key={title} className="bg-background rounded-2xl border p-6 text-left">
                 <div className="mb-3 text-3xl">{icon}</div>
                 <h3 className="mb-2 text-base font-semibold">{title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
