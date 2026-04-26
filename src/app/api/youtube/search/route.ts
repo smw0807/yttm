@@ -19,13 +19,17 @@ export async function GET(request: NextRequest) {
     // Step 1: Search for videos
     const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=8&q=${encodeURIComponent(q.trim())}&key=${apiKey}`;
     const searchRes = await fetch(searchUrl);
-    if (!searchRes.ok) {
-      return NextResponse.json({ error: API_ERRORS.youtubeSearchFailed }, { status: 502 });
-    }
-    const searchData = await searchRes.json();
+    const searchData = await searchRes.json().catch(() => null);
 
-    if (searchData.error?.code === 403) {
-      return NextResponse.json({ error: API_ERRORS.youtubeApiKeyMissing }, { status: 500 });
+    if (searchData?.error) {
+      return NextResponse.json(
+        { error: searchData.error.message ?? API_ERRORS.youtubeSearchFailed },
+        { status: searchData.error.code ?? 502 },
+      );
+    }
+
+    if (!searchRes.ok || !searchData) {
+      return NextResponse.json({ error: API_ERRORS.youtubeSearchFailed }, { status: 502 });
     }
 
     if (!searchData.items || searchData.items.length === 0) {
@@ -36,10 +40,18 @@ export async function GET(request: NextRequest) {
     const videoIds = searchData.items.map((item: { id: { videoId: string } }) => item.id.videoId).join(',');
     const videosUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoIds}&key=${apiKey}`;
     const videosRes = await fetch(videosUrl);
-    if (!videosRes.ok) {
+    const videosData = await videosRes.json().catch(() => null);
+
+    if (videosData?.error) {
+      return NextResponse.json(
+        { error: videosData.error.message ?? API_ERRORS.youtubeDetailsFailed },
+        { status: videosData.error.code ?? 502 },
+      );
+    }
+
+    if (!videosRes.ok || !videosData) {
       return NextResponse.json({ error: API_ERRORS.youtubeDetailsFailed }, { status: 502 });
     }
-    const videosData = await videosRes.json();
 
     const results = (videosData.items ?? []).map(
       (item: {
