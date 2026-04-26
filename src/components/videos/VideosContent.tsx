@@ -1,32 +1,31 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/navigation';
 import { AddVideoDialog } from '@/components/videos/AddVideoDialog';
 import { VideoCard } from '@/components/videos/VideoCard';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { EmptyState } from '@/components/ui/empty-state';
+import { SearchField } from '@/components/ui/search-field';
+import { useTextFilter } from '@/hooks/useTextFilter';
 import { CARD_GRID } from '@/lib/constants';
-import type { Video } from '@/types';
+import type { VideoWithId } from '@/types';
 
 interface Props {
-  initialVideos: (Video & { id: string })[];
+  initialVideos: VideoWithId[];
   userId: string;
 }
 
-export function VideosContent({ initialVideos, userId }: Props) {
+function getVideoTitle(video: VideoWithId) {
+  return video.title;
+}
+
+export function VideosContent({ initialVideos }: Props) {
   const router = useRouter();
   const t = useTranslations('videos');
   const [addOpen, setAddOpen] = useState(false);
-  const [query, setQuery] = useState('');
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return initialVideos;
-    return initialVideos.filter((v) => v.title.toLowerCase().includes(q));
-  }, [initialVideos, query]);
+  const { query, setQuery, filtered } = useTextFilter(initialVideos, getVideoTitle);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
@@ -35,10 +34,10 @@ export function VideosContent({ initialVideos, userId }: Props) {
         <Button onClick={() => setAddOpen(true)}>{t('addVideo')}</Button>
       </div>
 
-      <Input
+      <SearchField
         placeholder={t('searchPlaceholder')}
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={setQuery}
         className="mb-6 max-w-sm"
       />
 

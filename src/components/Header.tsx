@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 import { UserMenu } from '@/components/UserMenu';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { SITE_SHORT_NAME } from '@/lib/constants';
 
 interface Props {
   displayName: string;
@@ -30,7 +31,7 @@ export function Header({ displayName, isAnonymous }: Props) {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <Image src="/yttm.png" alt="YTTM" width={28} height={28} className="rounded-lg" />
-          YT Timeline Memo
+          {SITE_SHORT_NAME}
         </Link>
         <nav className="flex items-center gap-1">
           <Link href="/dashboard" className={navClass('/dashboard')}>

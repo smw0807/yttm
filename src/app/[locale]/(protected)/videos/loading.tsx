@@ -1,3 +1,5 @@
+import { CARD_GRID } from '@/lib/constants';
+
 export default function VideosLoading() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
@@ -6,7 +8,7 @@ export default function VideosLoading() {
         <div className="bg-muted h-9 w-24 animate-pulse rounded" />
       </div>
       <div className="bg-muted mb-6 h-9 w-64 animate-pulse rounded" />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className={CARD_GRID}>
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="overflow-hidden rounded-xl border">
             <div className="bg-muted aspect-video w-full animate-pulse" />

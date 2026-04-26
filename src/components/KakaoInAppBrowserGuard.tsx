@@ -1,46 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { useKakaoInAppBrowserGuard } from '@/hooks/useKakaoInAppBrowserGuard';
 
 export function KakaoInAppBrowserGuard() {
   const t = useTranslations('kakaoGuard');
-  const [showIosGuide, setShowIosGuide] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    const ua = navigator.userAgent.toLowerCase();
-    if (!ua.includes('kakaotalk')) return;
-
-    const currentUrl = window.location.href;
-
-    if (ua.includes('android')) {
-      // Android → Chrome intent로 자동 리다이렉트
-      const { host, pathname, search } = window.location;
-      window.location.href = `intent://${host}${pathname}${search}#Intent;scheme=https;package=com.android.chrome;end`;
-    } else if (ua.includes('iphone') || ua.includes('ipad')) {
-      // iOS → 자동 리다이렉트 불가, 안내 배너 표시
-      setShowIosGuide(true);
-    }
-  }, []);
-
-  async function handleCopyUrl() {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // clipboard API 미지원 시 fallback
-      const el = document.createElement('textarea');
-      el.value = window.location.href;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  }
+  const { showIosGuide, copied, copyCurrentUrl } = useKakaoInAppBrowserGuard();
 
   if (!showIosGuide) return null;
 
@@ -53,7 +18,7 @@ export function KakaoInAppBrowserGuard() {
           {t('description')}
         </p>
         <button
-          onClick={handleCopyUrl}
+          onClick={copyCurrentUrl}
           className="w-full rounded-lg bg-yellow-400 py-3 text-sm font-semibold text-black transition-colors hover:bg-yellow-300 active:bg-yellow-500"
         >
           {copied ? t('copied') : t('copyUrl')}

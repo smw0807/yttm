@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import yttmIcon from '@/app/public/yttm.png';
+import { SITE_SHORT_NAME } from '@/lib/constants';
 
 export default function NotFound() {
   const t = useTranslations('notFound');
@@ -10,7 +11,7 @@ export default function NotFound() {
     <main className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
       <Image
         src={yttmIcon}
-        alt="YT Timeline Memo"
+        alt={SITE_SHORT_NAME}
         width={64}
         height={64}
         className="rounded-2xl shadow-lg"
