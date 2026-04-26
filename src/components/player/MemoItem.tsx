@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
-import { formatTimestamp } from '@/lib/youtube';
+import { MemoTimestamp } from '@/components/player/MemoTimestamp';
 
 interface MemoItemProps {
   timestampSec: number;
@@ -31,19 +31,11 @@ export function MemoItem({
         seekOnItemClick ? 'cursor-pointer' : 'group',
       )}
     >
-      {seekOnItemClick ? (
-        <span className="mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700">
-          {formatTimestamp(timestampSec)}
-        </span>
-      ) : (
-        <button
-          onClick={() => onSeek(timestampSec)}
-          aria-label={seekAriaLabel}
-          className="mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700 hover:bg-red-200"
-        >
-          {formatTimestamp(timestampSec)}
-        </button>
-      )}
+      <MemoTimestamp
+        timestampSec={timestampSec}
+        onSeek={seekOnItemClick ? undefined : onSeek}
+        ariaLabel={seekAriaLabel}
+      />
       {children}
       {actions}
     </li>

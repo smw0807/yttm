@@ -1,3 +1,5 @@
+import { CARD_GRID } from '@/lib/constants';
+
 export default function CollectionsLoading() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
@@ -6,7 +8,7 @@ export default function CollectionsLoading() {
         <div className="bg-muted h-9 w-28 animate-pulse rounded" />
       </div>
       <div className="bg-muted mb-6 h-24 w-full animate-pulse rounded-lg" />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className={CARD_GRID}>
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="overflow-hidden rounded-xl border">
             <div className="bg-muted aspect-video w-full animate-pulse" />

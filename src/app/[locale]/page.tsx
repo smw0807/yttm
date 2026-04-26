@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation';
 import yttmIcon from '@/app/public/yttm.png';
 import appScreenshot from '@/app/public/screenshot.png';
 import ScreenshotLightbox from '@/components/landing/ScreenshotLightbox';
+import { SITE_NAME, SITE_SHORT_NAME } from '@/lib/constants';
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -14,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
   return {
-    title: 'YouTube Timeline Memo — 유튜브 강의·게임 공략 타임스탬프 메모',
+    title: `${SITE_NAME} — 유튜브 강의·게임 공략 타임스탬프 메모`,
     description:
       locale === 'ko'
         ? '유튜브 강의나 게임 공략 영상의 중요한 장면에 타임스탬프 메모를 남기세요. 클릭 한 번으로 해당 시점으로 즉시 이동하고, 컬렉션으로 주제별 영상을 묶어 관리할 수 있습니다. 로그인 없이 게스트로 바로 체험 가능.'
@@ -32,7 +33,7 @@ export default async function LandingPage({ params }: Props) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'YouTube Timeline Memo',
+    name: SITE_NAME,
     description:
       '유튜브 강의·게임 공략 영상의 중요한 장면에 타임스탬프 메모를 남기고, 클릭 한 번으로 해당 시점으로 즉시 이동하는 서비스. 컬렉션으로 주제별 영상을 묶고 공유 링크로 타임라인을 공유할 수 있습니다.',
     applicationCategory: 'ProductivityApplication',
@@ -108,7 +109,7 @@ export default async function LandingPage({ params }: Props) {
           <div className="flex items-center gap-3">
             <Image
               src={yttmIcon}
-              alt="YT Timeline Memo"
+              alt={SITE_SHORT_NAME}
               width={48}
               height={48}
               className="rounded-xl shadow-md"

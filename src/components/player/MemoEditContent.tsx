@@ -4,10 +4,11 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
-import { formatTimestamp } from '@/lib/youtube';
-import { deleteMemo, updateMemo } from '@/lib/firebase/firestore';
+import { MemoEditForm } from '@/components/player/MemoEditForm';
+import { MemoTimestamp } from '@/components/player/MemoTimestamp';
+import { useMemoEditing } from '@/hooks/useMemoEditing';
+import { cn } from '@/lib/utils';
 import type { Video, Memo } from '@/types';
 
 interface Props {
@@ -20,42 +21,30 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
   const t = useTranslations('memoEdit');
   const tc = useTranslations('common');
   const [memos, setMemos] = useState(initialMemos);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editValue, setEditValue] = useState('');
-  const [savingId, setSavingId] = useState<string | null>(null);
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  function startEdit(memo: Memo & { id: string }) {
-    setEditingId(memo.id);
-    setEditValue(memo.content);
-  }
-
-  function cancelEdit() {
-    setEditingId(null);
-    setEditValue('');
-  }
-
-  async function handleSave(memoId: string) {
-    if (!editValue.trim()) return;
-    setSavingId(memoId);
-    await updateMemo(video.id, memoId, editValue.trim());
-    setMemos((prev) =>
-      prev.map((m) => (m.id === memoId ? { ...m, content: editValue.trim() } : m)),
-    );
-    setEditingId(null);
-    setEditValue('');
-    setSavingId(null);
-  }
-
-  async function handleDeleteConfirm() {
-    if (!deleteTargetId) return;
-    setDeletingId(deleteTargetId);
-    setDeleteTargetId(null);
-    await deleteMemo(video.id, deleteTargetId);
-    setMemos((prev) => prev.filter((m) => m.id !== deleteTargetId));
-    setDeletingId(null);
-  }
+  const {
+    editingId,
+    editValue,
+    setEditValue,
+    savingId,
+    deleteTargetId,
+    deletingId,
+    error,
+    startEdit,
+    cancelEdit,
+    requestDelete,
+    saveEdit,
+    confirmDelete,
+    cancelDelete,
+  } = useMemoEditing({
+    videoId: video.id,
+    defaultError: tc('error'),
+    onAfterUpdate: (memoId, content) => {
+      setMemos((prev) => prev.map((m) => (m.id === memoId ? { ...m, content } : m)));
+    },
+    onAfterDelete: (memoId) => {
+      setMemos((prev) => prev.filter((m) => m.id !== memoId));
+    },
+  });
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6">
@@ -78,36 +67,26 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
       ) : (
         <ul className="flex flex-col gap-2">
           {memos.map((memo) => (
-            <li key={memo.id} className={`flex items-start gap-3 rounded-lg border p-3 transition-opacity ${deletingId === memo.id ? 'opacity-50' : ''}`}>
-              <span className="mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700">
-                {formatTimestamp(memo.timestampSec)}
-              </span>
+            <li
+              key={memo.id}
+              className={cn(
+                'flex items-start gap-3 rounded-lg border p-3 transition-opacity',
+                deletingId === memo.id && 'opacity-50',
+              )}
+            >
+              <MemoTimestamp timestampSec={memo.timestampSec} />
 
               {editingId === memo.id ? (
-                <div className="flex flex-1 flex-col gap-2">
-                  <Input
-                    value={editValue}
-                    onChange={(e) => setEditValue(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handleSave(memo.id);
-                      if (e.key === 'Escape') cancelEdit();
-                    }}
-                    autoFocus
-                    className="text-sm"
-                  />
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() => handleSave(memo.id)}
-                      disabled={savingId === memo.id || !editValue.trim()}
-                    >
-                      {savingId === memo.id ? t('saving') : t('saveButton')}
-                    </Button>
-                    <Button size="sm" variant="ghost" onClick={cancelEdit}>
-                      {t('cancelButton')}
-                    </Button>
-                  </div>
-                </div>
+                <MemoEditForm
+                  value={editValue}
+                  onChange={setEditValue}
+                  onSave={() => saveEdit(memo.id)}
+                  onCancel={cancelEdit}
+                  saving={savingId === memo.id}
+                  saveLabel={t('saveButton')}
+                  savingLabel={t('saving')}
+                  cancelLabel={t('cancelButton')}
+                />
               ) : (
                 <p className="flex-1 text-sm leading-relaxed">{memo.content}</p>
               )}
@@ -121,7 +100,7 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
                     size="sm"
                     variant="ghost"
                     className="text-destructive hover:text-destructive"
-                    onClick={() => setDeleteTargetId(memo.id)}
+                    onClick={() => requestDelete(memo.id)}
                     disabled={deletingId === memo.id}
                   >
                     {deletingId === memo.id ? t('deleting') : t('deleteButton')}
@@ -133,6 +112,8 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
         </ul>
       )}
 
+      {error && <p className="text-destructive mt-3 text-sm">{error}</p>}
+
       <div className="mt-6 flex justify-end">
         <Button onClick={() => router.push(`/videos/${video.id}`)}>{t('backToVideo')}</Button>
       </div>
@@ -142,8 +123,8 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
         title={t('confirmDeleteTitle')}
         description={t('confirmDeleteDesc')}
         confirmLabel={t('deleteButton')}
-        onConfirm={handleDeleteConfirm}
-        onCancel={() => setDeleteTargetId(null)}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
       />
     </div>
   );

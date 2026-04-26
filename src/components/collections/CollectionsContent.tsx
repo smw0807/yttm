@@ -1,53 +1,32 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { CollectionCard } from './CollectionCard';
 import { AddCollectionDialog } from './AddCollectionDialog';
 import { CollectionDetailDialog } from './CollectionDetailDialog';
-import { deleteCollection } from '@/lib/firebase/firestore';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { AdBanner } from '@/components/ads/AdBanner';
 import { EmptyState } from '@/components/ui/empty-state';
+import { useCollectionDialogs } from '@/hooks/useCollectionDialogs';
 import { CARD_GRID } from '@/lib/constants';
-import type { Collection, Video } from '@/types';
+import type { CollectionWithId, VideoWithId } from '@/types';
 
 interface Props {
-  initialCollections: (Collection & { id: string })[];
-  videos: (Video & { id: string })[];
+  initialCollections: CollectionWithId[];
+  videos: VideoWithId[];
   userId: string;
 }
 
 export function CollectionsContent({ initialCollections, videos, userId }: Props) {
-  const router = useRouter();
   const t = useTranslations('collections');
-  const [addOpen, setAddOpen] = useState(false);
-  const [selectedCollection, setSelectedCollection] = useState<(Collection & { id: string }) | null>(null);
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
-
-  function handleAdded() {
-    router.refresh();
-  }
-
-  function handleDetailClose() {
-    setSelectedCollection(null);
-    router.refresh();
-  }
-
-  async function handleDeleteConfirm() {
-    if (!deleteTargetId) return;
-    await deleteCollection(deleteTargetId);
-    setDeleteTargetId(null);
-    router.refresh();
-  }
+  const collectionDialogs = useCollectionDialogs();
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t('title')}</h1>
-        <Button onClick={() => setAddOpen(true)}>{t('addCollection')}</Button>
+        <Button onClick={collectionDialogs.openAdd}>{t('addCollection')}</Button>
       </div>
 
       <AdBanner
@@ -58,7 +37,7 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
 
       {initialCollections.length === 0 ? (
         <EmptyState message={t('noCollections')}>
-          <Button variant="outline" onClick={() => setAddOpen(true)}>
+          <Button variant="outline" onClick={collectionDialogs.openAdd}>
             {t('createFirst')}
           </Button>
         </EmptyState>
@@ -69,36 +48,36 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
               key={col.id}
               collection={col}
               videos={videos}
-              onClick={() => setSelectedCollection(col)}
-              onDelete={() => setDeleteTargetId(col.id)}
+              onClick={() => collectionDialogs.selectCollection(col)}
+              onDelete={() => collectionDialogs.requestDelete(col.id)}
             />
           ))}
         </div>
       )}
 
       <AddCollectionDialog
-        open={addOpen}
-        onClose={() => setAddOpen(false)}
+        open={collectionDialogs.addOpen}
+        onClose={collectionDialogs.closeAdd}
         userId={userId}
-        onAdded={handleAdded}
+        onAdded={collectionDialogs.refresh}
       />
 
-      {selectedCollection && (
+      {collectionDialogs.selectedCollection && (
         <CollectionDetailDialog
-          open={!!selectedCollection}
-          onClose={handleDetailClose}
-          collection={selectedCollection}
+          open={!!collectionDialogs.selectedCollection}
+          onClose={collectionDialogs.closeDetail}
+          collection={collectionDialogs.selectedCollection}
           allVideos={videos}
         />
       )}
 
       <ConfirmDialog
-        open={!!deleteTargetId}
+        open={!!collectionDialogs.deleteTargetId}
         title={t('confirmDeleteTitle')}
         description={t('confirmDeleteDesc')}
         confirmLabel={t('confirmDeleteTitle')}
-        onConfirm={handleDeleteConfirm}
-        onCancel={() => setDeleteTargetId(null)}
+        onConfirm={collectionDialogs.confirmDelete}
+        onCancel={collectionDialogs.cancelDelete}
       />
     </div>
   );

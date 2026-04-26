@@ -1,3 +1,5 @@
+import { CARD_GRID } from '@/lib/constants';
+
 export default function DashboardLoading() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-6">
@@ -12,7 +14,7 @@ export default function DashboardLoading() {
           <div className="bg-muted h-6 w-20 animate-pulse rounded" />
           <div className="bg-muted h-4 w-16 animate-pulse rounded" />
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className={CARD_GRID}>
           {Array.from({ length: 4 }).map((_, i) => (
             <CardSkeleton key={i} />
           ))}
@@ -25,7 +27,7 @@ export default function DashboardLoading() {
           <div className="bg-muted h-6 w-20 animate-pulse rounded" />
           <div className="bg-muted h-4 w-16 animate-pulse rounded" />
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className={CARD_GRID}>
           {Array.from({ length: 4 }).map((_, i) => (
             <CardSkeleton key={i} />
           ))}

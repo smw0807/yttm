@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { getVideoByShareTokenAdmin, getMemosAdmin } from '@/lib/firebase/admin-firestore';
 import { ShareViewerClient } from '@/components/player/ShareViewerClient';
+import { SITE_SHORT_NAME } from '@/lib/constants';
 
 interface Props {
   params: Promise<{ token: string; locale: string }>;
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'shareViewer' });
 
   return {
-    title: `${video.title} — YT Timeline Memo`,
+    title: `${video.title} — ${SITE_SHORT_NAME}`,
     openGraph: {
       title: video.title,
       description: `${t('sharedTimeline')} ${video.title}`,

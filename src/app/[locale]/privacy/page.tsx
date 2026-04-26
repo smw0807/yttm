@@ -1,6 +1,8 @@
+import { SITE_NAME } from '@/lib/constants';
+
 export const metadata = {
-  title: '개인정보처리방침 | YouTube Timeline Memo',
-  description: 'YouTube Timeline Memo 개인정보처리방침',
+  title: `개인정보처리방침 | ${SITE_NAME}`,
+  description: `${SITE_NAME} 개인정보처리방침`,
 };
 
 export default function PrivacyPage() {
@@ -12,7 +14,7 @@ export default function PrivacyPage() {
       <section className="mb-8">
         <h2 className="mb-3 text-base font-semibold text-gray-900">1. 수집하는 정보</h2>
         <p className="mb-2">
-          YouTube Timeline Memo(이하 "서비스")는 Google 로그인을 통해 다음 정보를 수집합니다.
+          {SITE_NAME}(이하 &quot;서비스&quot;)는 Google 로그인을 통해 다음 정보를 수집합니다.
         </p>
         <ul className="ml-2 list-inside list-disc space-y-1">
           <li>Google 계정 이메일 주소</li>
@@ -120,9 +122,9 @@ export default function PrivacyPage() {
 
       <h2 className="mb-3 text-base font-semibold text-gray-900">Privacy Policy (English)</h2>
       <p className="mb-4">
-        YouTube Timeline Memo collects your Google account email, display name, and profile photo
-        for authentication, and stores notes you create in Google Firebase. We do not sell your data
-        to third parties or use it for advertising. You may request deletion of your data by
+        {SITE_NAME} collects your Google account email, display name, and profile photo for
+        authentication, and stores notes you create in Google Firebase. We do not sell your data to
+        third parties or use it for advertising. You may request deletion of your data by
         contacting{' '}
         <a href="mailto:smw0807@gmail.com" className="text-red-600 hover:underline">
           smw0807@gmail.com

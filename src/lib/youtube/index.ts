@@ -1,3 +1,11 @@
+export const YOUTUBE_ID_REGEX = /^[a-zA-Z0-9_-]{11}$/;
+
+interface YouTubeThumbnail {
+  url: string;
+}
+
+type YouTubeThumbnails = Record<string, YouTubeThumbnail | undefined>;
+
 export function extractYouTubeId(url: string): string | null {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
@@ -8,6 +16,21 @@ export function extractYouTubeId(url: string): string | null {
     if (match) return match[1];
   }
   return null;
+}
+
+export function isValidYouTubeId(id: string): boolean {
+  return YOUTUBE_ID_REGEX.test(id);
+}
+
+export function pickYouTubeThumbnail(
+  thumbnails: YouTubeThumbnails,
+  preference: string[] = ['maxres', 'high', 'medium', 'default'],
+): string {
+  for (const key of preference) {
+    const thumbnail = thumbnails[key];
+    if (thumbnail?.url) return thumbnail.url;
+  }
+  return '';
 }
 
 export function formatTimestamp(seconds: number): string {

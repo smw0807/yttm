@@ -11,7 +11,6 @@ import { addMemo, getMemos } from '@/lib/firebase/firestore';
 import { formatTimestamp } from '@/lib/youtube';
 import { Button } from '@/components/ui/button';
 import type { Video, Memo } from '@/types';
-import { AdBanner } from '@/components/ads/AdBanner';
 
 interface Props {
   video: Video & { id: string };

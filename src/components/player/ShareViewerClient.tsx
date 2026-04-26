@@ -2,8 +2,10 @@
 
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { useYouTubePlayer } from '@/hooks/useYouTubePlayer';
 import { formatTimestamp } from '@/lib/youtube';
+import { SITE_SHORT_NAME } from '@/lib/constants';
 import { AdBanner } from '@/components/ads/AdBanner';
 import { MemoItem } from '@/components/player/MemoItem';
 import type { Video, Memo } from '@/types';
@@ -20,10 +22,10 @@ export function ShareViewerClient({ video, memos }: Props) {
   return (
     <div className="flex flex-col md:h-screen">
       <header className="flex h-12 items-center justify-between border-b px-4">
-        <a href="/" className="flex items-center gap-1.5 font-semibold hover:text-red-700">
-          <Image src="/yttm.png" alt="YT Timeline Memo" width={24} height={24} />
+        <Link href="/" className="flex items-center gap-1.5 font-semibold hover:text-red-700">
+          <Image src="/yttm.png" alt={SITE_SHORT_NAME} width={24} height={24} />
           {t('siteTitle')}
-        </a>
+        </Link>
         <span className="text-muted-foreground min-w-0 truncate text-sm">
           {t('sharedTimeline')} <span className="text-foreground font-medium">{video.title}</span>
         </span>
