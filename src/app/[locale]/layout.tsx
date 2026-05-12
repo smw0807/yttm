@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -89,14 +88,6 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
-      {process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (
-        <Script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT}`}
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-      )}
     </html>
   );
 }

@@ -30,11 +30,7 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
       </div>
 
       {initialCollections.length > 0 && (
-        <AdBanner
-          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_COLLECTIONS ?? ''}
-          format="horizontal"
-          className="mb-6 h-24 w-full"
-        />
+        <AdBanner className="mb-6 w-full overflow-hidden" />
       )}
 
       {initialCollections.length === 0 ? (

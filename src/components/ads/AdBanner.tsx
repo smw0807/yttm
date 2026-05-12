@@ -1,43 +1,29 @@
 'use client';
 
-import { useEffect } from 'react';
-
-declare global {
-  interface Window {
-    adsbygoogle: unknown[];
-  }
-}
+import Script from 'next/script';
 
 interface Props {
-  slot: string;
-  format?: 'auto' | 'horizontal' | 'rectangle' | 'vertical';
+  unit?: string;
+  width?: number;
+  height?: number;
   className?: string;
 }
 
-export function AdBanner({ slot, format = 'auto', className }: Props) {
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+export function AdBanner({ unit, width = 728, height = 90, className }: Props) {
+  const adUnit = unit ?? process.env.NEXT_PUBLIC_ADFIT_UNIT;
 
-  useEffect(() => {
-    if (!client) return;
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {
-      // AdSense 스크립트 미로드 시 무시
-    }
-  }, [client]);
-
-  if (!client) return null;
+  if (!adUnit) return null;
 
   return (
     <div className={className}>
       <ins
-        className="adsbygoogle"
-        style={{ display: 'block' }}
-        data-ad-client={client}
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive="true"
+        className="kakao_ad_area"
+        style={{ display: 'none' }}
+        data-ad-unit={adUnit}
+        data-ad-width={String(width)}
+        data-ad-height={String(height)}
       />
+      <Script src="//t1.kakaocdn.net/kas/static/ba.min.js" strategy="afterInteractive" />
     </div>
   );
 }

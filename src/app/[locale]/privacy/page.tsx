@@ -73,24 +73,15 @@ export default function PrivacyPage() {
             <strong>YouTube</strong> — 영상 정보 표시 (YouTube Data API)
           </li>
           <li>
-            <strong>Google AdSense</strong> — 광고 게재. Google은 쿠키를 사용하여 사용자의 이전
-            방문 기록을 바탕으로 맞춤 광고를 제공할 수 있습니다. 광고 쿠키 사용을 거부하려면{' '}
+            <strong>Kakao AdFit</strong> — 광고 게재. Kakao는 쿠키를 사용하여 맞춤 광고를 제공할
+            수 있습니다. (
             <a
-              href="https://www.google.com/settings/ads"
+              href="https://policy.kakao.com/ko/privacy"
               target="_blank"
               rel="noopener noreferrer"
               className="text-red-600 hover:underline"
             >
-              Google 광고 설정
-            </a>
-            을 방문하세요. (
-            <a
-              href="https://policies.google.com/privacy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-red-600 hover:underline"
-            >
-              개인정보처리방침
+              카카오 개인정보처리방침
             </a>
             )
           </li>
@@ -154,16 +145,15 @@ export default function PrivacyPage() {
         .
       </p>
       <p className="mb-4">
-        This site uses Google AdSense to display advertisements. Google may use cookies to serve ads
-        based on your prior visits to this or other websites. You may opt out of personalized
-        advertising by visiting{' '}
+        This site uses Kakao AdFit to display advertisements. Kakao may use cookies to serve
+        personalized ads. For more information, see the{' '}
         <a
-          href="https://www.google.com/settings/ads"
+          href="https://policy.kakao.com/en/privacy"
           target="_blank"
           rel="noopener noreferrer"
           className="text-red-600 hover:underline"
         >
-          Google Ads Settings
+          Kakao Privacy Policy
         </a>
         .
       </p>

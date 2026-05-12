@@ -32,11 +32,7 @@ export function ShareViewerClient({ video, memos }: Props) {
       </header>
 
       {memos.length > 0 && (
-        <AdBanner
-          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SHARE ?? ''}
-          format="horizontal"
-          className="h-20 w-full border-b"
-        />
+        <AdBanner className="w-full overflow-hidden border-b" />
       )}
 
       <div className="flex flex-col md:flex-1 md:flex-row md:overflow-hidden">
