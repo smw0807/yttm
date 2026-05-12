@@ -29,11 +29,13 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
         <Button onClick={collectionDialogs.openAdd}>{t('addCollection')}</Button>
       </div>
 
-      <AdBanner
-        slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_COLLECTIONS ?? ''}
-        format="horizontal"
-        className="mb-6 h-24 w-full"
-      />
+      {initialCollections.length > 0 && (
+        <AdBanner
+          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_COLLECTIONS ?? ''}
+          format="horizontal"
+          className="mb-6 h-24 w-full"
+        />
+      )}
 
       {initialCollections.length === 0 ? (
         <EmptyState message={t('noCollections')}>

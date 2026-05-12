@@ -264,5 +264,10 @@
     "noCollections": "No collections registered",
     "loading": "Loading...",
     "videoCountTemplate": "{count} videos"
+  },
+  "footer": {
+    "privacy": "Privacy Policy",
+    "about": "About",
+    "copyright": "© {year} YouTube Timeline Memo"
   }
 }

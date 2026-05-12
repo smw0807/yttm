@@ -29,11 +29,13 @@ export function DashboardContent({ initialVideos, initialCollections }: Props) {
         <Button onClick={collectionDialogs.openAdd}>{t('addVideo')}</Button>
       </div>
 
-      <AdBanner
-        slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_DASHBOARD ?? ''}
-        format="horizontal"
-        className="mb-6 h-24 w-full"
-      />
+      {(initialVideos.length > 0 || initialCollections.length > 0) && (
+        <AdBanner
+          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_DASHBOARD ?? ''}
+          format="horizontal"
+          className="mb-6 h-24 w-full"
+        />
+      )}
 
       <DashboardVideosSection
         videos={initialVideos}
