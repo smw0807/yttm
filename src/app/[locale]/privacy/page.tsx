@@ -72,6 +72,28 @@ export default function PrivacyPage() {
           <li>
             <strong>YouTube</strong> — 영상 정보 표시 (YouTube Data API)
           </li>
+          <li>
+            <strong>Google AdSense</strong> — 광고 게재. Google은 쿠키를 사용하여 사용자의 이전
+            방문 기록을 바탕으로 맞춤 광고를 제공할 수 있습니다. 광고 쿠키 사용을 거부하려면{' '}
+            <a
+              href="https://www.google.com/settings/ads"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-red-600 hover:underline"
+            >
+              Google 광고 설정
+            </a>
+            을 방문하세요. (
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-red-600 hover:underline"
+            >
+              개인정보처리방침
+            </a>
+            )
+          </li>
         </ul>
       </section>
 
@@ -128,6 +150,20 @@ export default function PrivacyPage() {
         contacting{' '}
         <a href="mailto:smw0807@gmail.com" className="text-red-600 hover:underline">
           smw0807@gmail.com
+        </a>
+        .
+      </p>
+      <p className="mb-4">
+        This site uses Google AdSense to display advertisements. Google may use cookies to serve ads
+        based on your prior visits to this or other websites. You may opt out of personalized
+        advertising by visiting{' '}
+        <a
+          href="https://www.google.com/settings/ads"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-red-600 hover:underline"
+        >
+          Google Ads Settings
         </a>
         .
       </p>
