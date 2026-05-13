@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function LandingPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'landing' });
+  const tf = await getTranslations({ locale, namespace: 'footer' });
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -344,12 +345,12 @@ export default async function LandingPage({ params }: Props) {
       {/* Footer */}
       <footer className="border-t px-4 py-6 text-center">
         <div className="text-muted-foreground flex flex-col items-center gap-2 text-xs sm:flex-row sm:justify-center sm:gap-4">
-          <span>{t('footer.copyright', { year: new Date().getFullYear() })}</span>
+          <span>{tf('copyright', { year: new Date().getFullYear() })}</span>
           <Link href="/about" className="hover:text-foreground transition-colors underline-offset-2 hover:underline">
-            {t('footer.about')}
+            {tf('about')}
           </Link>
           <Link href="/privacy" className="hover:text-foreground transition-colors underline-offset-2 hover:underline">
-            {t('footer.privacy')}
+            {tf('privacy')}
           </Link>
         </div>
       </footer>
