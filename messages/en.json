@@ -263,7 +263,12 @@
     "noVideos": "No videos registered",
     "noCollections": "No collections registered",
     "loading": "Loading...",
-    "videoCountTemplate": "{count} videos"
+    "videoCountTemplate": "{count} videos",
+    "accessDenied": {
+      "title": "Access denied",
+      "description": "Only an administrator account can access this page.",
+      "confirm": "OK"
+    }
   },
   "footer": {
     "privacy": "Privacy Policy",

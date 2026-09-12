@@ -21,8 +21,8 @@ export const adminAuth = getAuth(app);
 export const adminDb = getFirestore(app);
 
 export function isAdmin(uid: string): boolean {
-  const adminUids = (process.env.ADMIN_UIDS ?? '').split(',').map((s) => s.trim()).filter(Boolean);
-  return adminUids.includes(uid);
+  const adminUid = process.env.ADMIN_UID?.trim();
+  return Boolean(adminUid) && uid === adminUid;
 }
 
 /** 요청당 1회 실행 (React cache) - session cookie → DecodedIdToken */
@@ -34,7 +34,12 @@ export const getSessionUser = cache(async () => {
   try {
     const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
     const isAnonymous = decoded.firebase?.sign_in_provider === 'anonymous';
-    return { uid: decoded.uid, email: decoded.email ?? null, name: decoded.name ?? null, isAnonymous };
+    return {
+      uid: decoded.uid,
+      email: decoded.email ?? null,
+      name: decoded.name ?? null,
+      isAnonymous,
+    };
   } catch {
     return null;
   }
