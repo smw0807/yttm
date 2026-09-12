@@ -55,14 +55,6 @@ export async function updateVideoShareToken(videoId: string, token: string | nul
   await updateDoc(doc(db, 'videos', videoId), { shareToken: token });
 }
 
-export async function getVideoByShareToken(token: string) {
-  const q = query(collection(db, 'videos'), where('shareToken', '==', token));
-  const snap = await getDocs(q);
-  if (snap.empty) return null;
-  const d = snap.docs[0];
-  return { id: d.id, ...d.data() } as Video;
-}
-
 // Memos
 export async function getMemos(videoId: string) {
   const q = query(collection(db, 'videos', videoId, 'memos'), orderBy('timestampSec', 'asc'));

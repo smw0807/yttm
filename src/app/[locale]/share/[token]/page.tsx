@@ -40,5 +40,18 @@ export default async function SharePage({ params }: Props) {
 
   const memos = await getMemosAdmin(video.id);
 
-  return <ShareViewerClient video={video} memos={memos} />;
+  return (
+    <ShareViewerClient
+      video={{
+        youtubeId: video.youtubeId,
+        title: video.title,
+        durationSec: video.durationSec,
+      }}
+      memos={memos.map((memo) => ({
+        id: memo.id,
+        timestampSec: memo.timestampSec,
+        content: memo.content,
+      }))}
+    />
+  );
 }

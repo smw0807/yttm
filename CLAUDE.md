@@ -26,6 +26,8 @@ YouTube Timeline Memo — Next.js 16.2 App Router + Firebase, no separate backen
 - `src/lib/firebase/auth.ts` — Client-only (`"use client"`) Google/anonymous sign-in helpers
 - `src/lib/firebase/firestore.ts` — Client CRUD helpers
 - `src/lib/firebase/admin-firestore.ts` — Server-only Firestore queries
+- `src/lib/api/authorization.ts` — Same-origin session auth + per-user rate-limit enforcement
+- `src/lib/api/rate-limit.ts` — Firestore transaction-backed fixed-window rate limiter
 
 **Route structure:** All pages live under `src/app/[locale]/` (locales: `ko`, `en`; default: `ko`). Auth-guarded pages live inside `(protected)/` — `layout.tsx` calls `getSessionUser()` and redirects to `/{locale}/login` if null. API routes at `src/app/api/` have no locale prefix.
 
@@ -41,4 +43,5 @@ YouTube Timeline Memo — Next.js 16.2 App Router + Firebase, no separate backen
 - `ADMIN_UID` is the Firebase UID that grants admin access.
 - `src/proxy.ts` is the middleware file (not `middleware.ts`) — Next.js 16.2 convention.
 - Firestore memos are a subcollection: `videos/{videoId}/memos/{memoId}`.
+- YouTube API routes require a valid session and store hashed per-user counters in `_rateLimits`.
 - `createNavigation`'s server `redirect` requires `{ href, locale }` object; use `next/navigation`'s `redirect` with a locale-prefixed string instead.
