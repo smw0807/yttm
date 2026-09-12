@@ -11,8 +11,8 @@ import { MemoItem } from '@/components/player/MemoItem';
 import type { Video, Memo } from '@/types';
 
 interface Props {
-  video: Video & { id: string };
-  memos: (Memo & { id: string })[];
+  video: Pick<Video, 'youtubeId' | 'title' | 'durationSec'>;
+  memos: (Pick<Memo, 'timestampSec' | 'content'> & { id: string })[];
 }
 
 export function ShareViewerClient({ video, memos }: Props) {
@@ -31,13 +31,11 @@ export function ShareViewerClient({ video, memos }: Props) {
         </span>
       </header>
 
-      {memos.length > 0 && (
-        <AdBanner className="w-full overflow-hidden border-b" />
-      )}
+      {memos.length > 0 && <AdBanner className="w-full overflow-hidden border-b" />}
 
       <div className="flex flex-col md:flex-1 md:flex-row md:overflow-hidden">
         {/* 플레이어 (모바일: 상단 / 데스크탑: 좌측 60%) */}
-        <div className="flex w-full flex-col gap-3 border-b p-4 md:w-[60%] md:overflow-y-auto md:border-b-0 md:border-r">
+        <div className="flex w-full flex-col gap-3 border-b p-4 md:w-[60%] md:overflow-y-auto md:border-r md:border-b-0">
           <div
             className="yt-player-container relative w-full overflow-hidden rounded-xl bg-black"
             style={{ paddingBottom: '56.25%' }}

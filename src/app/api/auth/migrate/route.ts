@@ -1,40 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminAuth, adminDb } from '@/lib/firebase/admin';
+import { adminAuth, adminDb, getSessionUser } from '@/lib/firebase/admin';
+import { isValidOrigin } from '@/lib/api/validation';
+
+const MIGRATION_BATCH_SIZE = 450;
 
 export async function POST(request: NextRequest) {
-  const { guestUid, idToken } = await request.json();
-  if (!guestUid || !idToken) {
-    return NextResponse.json({ error: 'guestUid and idToken are required' }, { status: 400 });
+  if (!isValidOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  let newUid: string;
+  const guest = await getSessionUser();
+  if (!guest || !guest.isAnonymous) {
+    return NextResponse.json({ error: 'Anonymous session required' }, { status: 401 });
+  }
+
+  let idToken: unknown;
   try {
-    const decoded = await adminAuth.verifyIdToken(idToken);
-    newUid = decoded.uid;
+    ({ idToken } = (await request.json()) as { idToken?: unknown });
   } catch {
-    return NextResponse.json({ error: '인증 실패' }, { status: 401 });
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  if (newUid === guestUid) {
+  if (typeof idToken !== 'string' || !idToken) {
+    return NextResponse.json({ error: 'idToken is required' }, { status: 400 });
+  }
+
+  let targetUid: string;
+  try {
+    const decoded = await adminAuth.verifyIdToken(idToken, true);
+    if (decoded.firebase?.sign_in_provider !== 'google.com') {
+      return NextResponse.json({ error: 'Google account required' }, { status: 403 });
+    }
+    targetUid = decoded.uid;
+  } catch {
+    return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
+  }
+
+  if (targetUid === guest.uid) {
     return NextResponse.json({ success: true, message: 'same uid, no migration needed' });
   }
 
   try {
-    const batch = adminDb.batch();
+    const [videosSnap, collectionsSnap] = await Promise.all([
+      adminDb.collection('videos').where('userId', '==', guest.uid).get(),
+      adminDb.collection('collections').where('userId', '==', guest.uid).get(),
+    ]);
 
-    const videosSnap = await adminDb.collection('videos').where('userId', '==', guestUid).get();
-    videosSnap.docs.forEach((d) => batch.update(d.ref, { userId: newUid }));
+    const documents = [...videosSnap.docs, ...collectionsSnap.docs];
+    for (let offset = 0; offset < documents.length; offset += MIGRATION_BATCH_SIZE) {
+      const batch = adminDb.batch();
+      documents
+        .slice(offset, offset + MIGRATION_BATCH_SIZE)
+        .forEach((document) => batch.update(document.ref, { userId: targetUid }));
+      await batch.commit();
+    }
 
-    const colsSnap = await adminDb
-      .collection('collections')
-      .where('userId', '==', guestUid)
-      .get();
-    colsSnap.docs.forEach((d) => batch.update(d.ref, { userId: newUid }));
-
-    await batch.commit();
-
-    return NextResponse.json({ success: true, migrated: videosSnap.size + colsSnap.size });
-  } catch {
-    return NextResponse.json({ error: '데이터 이관 실패' }, { status: 500 });
+    return NextResponse.json({ success: true, migrated: documents.length });
+  } catch (error) {
+    console.error('[auth/migrate] Migration failed', error);
+    return NextResponse.json({ error: 'Migration failed' }, { status: 500 });
   }
 }

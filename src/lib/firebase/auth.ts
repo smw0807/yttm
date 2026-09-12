@@ -61,7 +61,6 @@ export async function signInAsGuest() {
 export async function upgradeGuestToGoogle(): Promise<'linked' | 'migrated'> {
   const currentUser = auth.currentUser;
   if (!currentUser) throw new Error('No current user');
-  const guestUid = currentUser.uid;
 
   try {
     await linkWithPopup(currentUser, provider);
@@ -79,7 +78,7 @@ export async function upgradeGuestToGoogle(): Promise<'linked' | 'migrated'> {
       const migrateRes = await fetch('/api/auth/migrate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guestUid, idToken }),
+        body: JSON.stringify({ idToken }),
       });
       if (!migrateRes.ok) throw new Error('Migration failed');
       await createSession(idToken);
