@@ -40,8 +40,8 @@
      ▼
 [ Next.js (Vercel) ]
 ├── App Router (Server Components + Client Components)
-├── /api/youtube           ← YouTube 영상 정보 파싱 (API Key 서버에서만 사용)
-├── /api/youtube/search    ← YouTube 키워드 검색
+├── /api/youtube           ← 인증 사용자 영상 정보 파싱 (사용자별 rate limit + 6시간 캐시)
+├── /api/youtube/search    ← 인증 사용자 키워드 검색 (사용자별 rate limit + 5분 캐시)
 ├── /api/videos            ← 영상 추가 (서버 사이드 Firestore 쓰기)
 ├── /api/share             ← shareToken 생성/폐기
 ├── /api/auth/session      ← Firebase Admin SDK 세션 쿠키 발급/삭제
@@ -210,6 +210,9 @@ videos/{videoId}/memos/{memoId}
 
 collections/{colId}
   - name, description, videoIds[], userId, createdAt
+
+_rateLimits/{hashedScopeAndUid}   # 서버 전용
+  - count, resetAt
 ```
 
 ## SEO
