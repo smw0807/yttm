@@ -38,7 +38,7 @@ YouTube Timeline Memo — Next.js 16.2 App Router + Firebase, no separate backen
 ## Key Pitfalls
 
 - `FIREBASE_ADMIN_SDK` env var must be base64-encoded service account JSON.
-- `ADMIN_UIDS` is a comma-separated list of Firebase UIDs that grants admin access.
+- `ADMIN_UID` is the Firebase UID that grants admin access.
 - `src/proxy.ts` is the middleware file (not `middleware.ts`) — Next.js 16.2 convention.
 - Firestore memos are a subcollection: `videos/{videoId}/memos/{memoId}`.
 - `createNavigation`'s server `redirect` requires `{ href, locale }` object; use `next/navigation`'s `redirect` with a locale-prefixed string instead.
