@@ -8,6 +8,8 @@ if (
   throw new Error('Use yarn test:e2e to run against the isolated local emulators');
 }
 const live = process.env.E2E_LIVE_YOUTUBE === '1';
+const webPort = process.env.E2E_PORT ?? '3100';
+const baseURL = `http://localhost:${webPort}`;
 export default defineConfig({
   testDir: './tests/e2e',
   testMatch: live ? '**/*.live.spec.ts' : '**/*.spec.ts',
@@ -30,7 +32,7 @@ export default defineConfig({
     ],
   ],
   use: {
-    baseURL: 'http://localhost:3100',
+    baseURL,
     channel:
       process.env.E2E_BROWSER_CHANNEL || (process.platform === 'darwin' ? 'chrome' : undefined),
     trace: 'retain-on-failure',
@@ -41,8 +43,8 @@ export default defineConfig({
     ...(live ? [] : [{ name: 'mobile', use: { ...devices['Pixel 7'] } }]),
   ],
   webServer: {
-    command: 'node node_modules/next/dist/bin/next dev --hostname localhost --port 3100',
-    url: 'http://localhost:3100/login',
+    command: `node node_modules/next/dist/bin/next dev --hostname localhost --port ${webPort}`,
+    url: `${baseURL}/login`,
     reuseExistingServer: false,
     timeout: 120000,
     gracefulShutdown: { signal: 'SIGTERM', timeout: 5000 },

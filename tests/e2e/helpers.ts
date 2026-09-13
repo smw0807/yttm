@@ -16,7 +16,7 @@ if (
 const app = getApps()[0] ?? initializeApp({ projectId: 'demo-yttm-e2e' });
 export const db = getFirestore(app);
 const auth = getAuth(app);
-export const baseURL = 'http://localhost:3100';
+export const baseURL = `http://localhost:${process.env.E2E_PORT ?? '3100'}`;
 export const localizedPath = (locale: 'ko' | 'en', path: string) =>
   locale === 'ko' ? path : `/en${path}`;
 export const video = {
@@ -89,6 +89,34 @@ export function metricRef(uid: string) {
     .doc(createHash('sha256').update(`onboarding-v1:${uid}`).digest('hex'));
 }
 
+export async function changeMetricsConsent(
+  page: Page,
+  locale: 'ko' | 'en',
+  enabled: boolean,
+  expectedStatus = 200,
+) {
+  const action = enabled ? 'enable' : 'disable';
+  const m = messages(locale).onboarding;
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.url().endsWith('/api/onboarding') &&
+        response.request().method() === 'POST' &&
+        response.request().postDataJSON()?.action === action,
+      { timeout: 15000 },
+    ),
+    page
+      .getByRole('button', { name: enabled ? m.metricsEnable : m.metricsDisable, exact: true })
+      .click(),
+  ]);
+  // Report API failures directly instead of timing out on a missing success message.
+  const detail =
+    response.status() === expectedStatus
+      ? ''
+      : await response.text().catch(() => '(response body unavailable)');
+  expect(response.status(), `Metrics ${action} response: ${detail}`).toBe(expectedStatus);
+}
+
 export async function addVideo(page: Page, locale: 'ko' | 'en') {
   const m = messages(locale);
   await page.getByRole('button', { name: m.dashboard.addVideo, exact: true }).click();
@@ -139,7 +167,7 @@ export async function adminPage(browser: Browser) {
   expect(typeof idToken).toBe('string');
   const context = await browser.newContext();
   const session = await context.request.post(`${baseURL}/api/auth/session`, {
-    headers: { origin: baseURL, host: 'localhost:3100' },
+    headers: { origin: baseURL, host: new URL(baseURL).host },
     data: { idToken },
   });
   expect(session.ok()).toBe(true);

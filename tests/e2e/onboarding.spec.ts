@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import {
   addVideo,
   adminPage,
+  changeMetricsConsent,
   db,
   guestLogin,
   localizedPath,
@@ -40,7 +41,7 @@ for (const consent of [false, true]) {
     await page.getByRole('button', { name: m.onboarding.reopen, exact: true }).click();
     await expect(page.getByRole('heading', { name: m.onboarding.title })).toBeVisible();
     if (consent) {
-      await page.getByRole('button', { name: m.onboarding.metricsEnable, exact: true }).click();
+      await changeMetricsConsent(page, locale, true);
       await expect(page.getByText(m.onboarding.metricsEnabled, { exact: true })).toBeVisible();
     }
     const videoId = await addVideo(page, locale);
@@ -69,7 +70,10 @@ for (const consent of [false, true]) {
         const funnel = admin.getByRole('region', { name: messages('en').onboarding.funnelTitle });
         await expect(funnel.getByText('100%', { exact: true })).toHaveCount(4);
         await page.goto(localizedPath(locale, '/dashboard'));
-        await page.getByRole('button', { name: m.onboarding.metricsDisable, exact: true }).click();
+        // SSR defaults to consent=false. The persisted true state proves that the
+        // client store has hydrated before we interact after a full navigation.
+        await expect(page.getByText(m.onboarding.metricsEnabled, { exact: true })).toBeVisible();
+        await changeMetricsConsent(page, locale, false);
         await expect(page.getByText(m.onboarding.metricsDeleted, { exact: true })).toBeVisible();
         expect((await metricRef(uid).get()).data()).toEqual({ enabled: false });
         await admin.reload();
@@ -92,3 +96,31 @@ for (const consent of [false, true]) {
     expect(errors).toEqual([]);
   });
 }
+
+test('failed metrics withdrawal stays retryable and never reports deletion early', async ({
+  page,
+}, testInfo) => {
+  const locale = testInfo.project.name === 'mobile' ? 'en' : 'ko';
+  const m = messages(locale).onboarding;
+  const settings = page.getByRole('region', { name: m.metricsTitle, exact: true });
+  const uid = await guestLogin(page, locale);
+  await changeMetricsConsent(page, locale, true);
+  await expect(page.getByText(m.metricsEnabled, { exact: true })).toBeVisible();
+
+  await page.route(
+    '**/api/onboarding',
+    (route) => route.fulfill({ status: 503, json: { error: 'Service temporarily unavailable' } }),
+    { times: 1 },
+  );
+  await changeMetricsConsent(page, locale, false, 503);
+  await expect(settings.getByRole('alert')).toHaveText(m.metricsError);
+  await expect(page.getByText(m.metricsDeleted, { exact: true })).not.toBeVisible();
+  await expect(page.getByText(m.metricsDisabled, { exact: true })).toBeVisible();
+  expect((await metricRef(uid).get()).data()?.enabled).toBe(true);
+
+  // Local consent is already off, but server deletion must still be retryable.
+  await changeMetricsConsent(page, locale, false);
+  await expect(page.getByText(m.metricsDeleted, { exact: true })).toBeVisible();
+  await expect(settings.getByRole('alert')).not.toBeVisible();
+  expect((await metricRef(uid).get()).data()).toEqual({ enabled: false });
+});

@@ -3,12 +3,15 @@
 import {
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithCredential,
   linkWithPopup,
   signInAnonymously,
   signOut,
   getAuth,
   connectAuthEmulator,
+  type User,
 } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { app, db, useFirebaseEmulators } from './config';
 
@@ -62,32 +65,65 @@ export async function signInAsGuest() {
   await createSession(idToken);
 }
 
-export async function upgradeGuestToGoogle(): Promise<'linked' | 'migrated'> {
+type UpgradeResult = 'linked' | 'migrated';
+// Keep only progress, never OAuth credentials. A failed session refresh can resume
+// without repeating a completed migration or opening another popup.
+let pendingUpgrade: { uid: string; result: UpgradeResult; needsMigration: boolean } | null = null;
+let upgradeInFlight: Promise<UpgradeResult> | null = null;
+
+async function finishGuestUpgrade(user: User): Promise<UpgradeResult> {
+  const progress = pendingUpgrade;
+  if (!progress || progress.uid !== user.uid) throw new Error('Account changed during upgrade');
+  const idToken = await user.getIdToken(true);
+  if (progress.needsMigration) {
+    // The server still has the anonymous session cookie and determines the source
+    // UID itself. Do not replace that cookie until migration succeeds.
+    const response = await fetch('/api/auth/migrate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken }),
+    });
+    if (!response.ok) throw new Error('Migration failed');
+    progress.needsMigration = false;
+  }
+  await createSession(idToken);
+  pendingUpgrade = null;
+  return progress.result;
+}
+
+async function performGuestUpgrade(): Promise<UpgradeResult> {
+  // Firebase restores its persisted identity asynchronously after a full reload.
+  if (!auth.currentUser) await auth.authStateReady();
   const currentUser = auth.currentUser;
   if (!currentUser) throw new Error('No current user');
-
-  try {
-    await linkWithPopup(currentUser, provider);
-    const idToken = await auth.currentUser!.getIdToken(true);
-    await createSession(idToken);
-    return 'linked';
-  } catch (err: unknown) {
-    if (
-      err instanceof Error &&
-      'code' in err &&
-      (err as { code: string }).code === 'auth/credential-already-in-use'
-    ) {
-      await signInWithPopup(auth, provider);
-      const idToken = await auth.currentUser!.getIdToken();
-      const migrateRes = await fetch('/api/auth/migrate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-      });
-      if (!migrateRes.ok) throw new Error('Migration failed');
-      await createSession(idToken);
-      return 'migrated';
-    }
-    throw err;
+  if (pendingUpgrade?.uid !== currentUser.uid) pendingUpgrade = null;
+  if (!currentUser.isAnonymous) {
+    // Also recover after a reload between Firebase sign-in and server migration.
+    // The server rejects this unless its session is still anonymous.
+    pendingUpgrade ??= { uid: currentUser.uid, result: 'migrated', needsMigration: true };
+    return finishGuestUpgrade(currentUser);
   }
+  let user: User;
+  let result: UpgradeResult;
+  try {
+    ({ user } = await linkWithPopup(currentUser, provider));
+    result = 'linked';
+  } catch (err: unknown) {
+    if (!(err instanceof FirebaseError) || err.code !== 'auth/credential-already-in-use') throw err;
+    const credential = GoogleAuthProvider.credentialFromError(err);
+    if (!credential) throw err;
+    // Reuse the credential from the first popup. A second asynchronous popup can
+    // lose the browser's user activation and fail with auth/popup-blocked.
+    ({ user } = await signInWithCredential(auth, credential));
+    result = 'migrated';
+  }
+  pendingUpgrade = { uid: user.uid, result, needsMigration: result === 'migrated' };
+  return finishGuestUpgrade(user);
+}
+
+export function upgradeGuestToGoogle(): Promise<UpgradeResult> {
+  upgradeInFlight ??= performGuestUpgrade().finally(() => {
+    upgradeInFlight = null;
+  });
+  return upgradeInFlight;
 }
