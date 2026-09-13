@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -10,5 +10,17 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+export const useFirebaseEmulators = process.env.NEXT_PUBLIC_FIREBASE_EMULATORS === '1';
+if (
+  useFirebaseEmulators &&
+  (process.env.NODE_ENV === 'production' || firebaseConfig.projectId !== 'demo-yttm-e2e')
+) {
+  throw new Error('Firebase emulators require development mode and the demo-yttm-e2e project');
+}
+const existingApp = getApps().length > 0;
+export const app = existingApp ? getApp() : initializeApp(firebaseConfig);
+if (useFirebaseEmulators && app.options.projectId !== 'demo-yttm-e2e') {
+  throw new Error('An existing Firebase app does not belong to the E2E demo project');
+}
 export const db = getFirestore(app);
+if (useFirebaseEmulators && !existingApp) connectFirestoreEmulator(db, '127.0.0.1', 8086);

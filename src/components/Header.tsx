@@ -28,12 +28,12 @@ export function Header({ displayName, isAnonymous }: Props) {
 
   return (
     <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-        <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-2 lg:h-14 lg:flex-nowrap lg:py-0">
+        <Link href="/dashboard" className="flex shrink-0 items-center gap-2 font-semibold">
           <Image src="/yttm.png" alt="YTTM" width={28} height={28} className="rounded-lg" />
-          {SITE_SHORT_NAME}
+          <span className="sr-only sm:not-sr-only">{SITE_SHORT_NAME}</span>
         </Link>
-        <nav className="flex items-center gap-1">
+        <nav className="order-3 flex w-full min-w-0 items-center gap-1 overflow-x-auto lg:order-2 lg:ml-auto lg:w-auto">
           <Link href="/dashboard" className={navClass('/dashboard')}>
             {t('dashboard')}
           </Link>
@@ -51,9 +51,11 @@ export function Header({ displayName, isAnonymous }: Props) {
           >
             🧩 {t('extension')}
           </a>
+        </nav>
+        <div className="order-2 flex max-w-full flex-wrap items-center gap-1 lg:order-3 lg:flex-nowrap">
           <LocaleSwitcher />
           <UserMenu displayName={displayName} isAnonymous={isAnonymous} />
-        </nav>
+        </div>
       </div>
     </header>
   );

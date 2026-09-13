@@ -52,7 +52,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
 
   return (
     <>
-      <div className="flex flex-col md:h-[calc(100vh-3.5rem)] md:flex-row md:overflow-hidden">
+      <div className="flex flex-col md:flex-row lg:h-[calc(100vh-3.5rem)] lg:overflow-hidden">
         {/* ── 플레이어 (모바일: 상단 / 데스크탑: 좌측 60%) ── */}
         <div className="flex w-full flex-col gap-3 border-b p-4 md:w-[60%] md:overflow-y-auto md:border-r md:border-b-0">
           <div className="flex items-start justify-between gap-2">

@@ -13,6 +13,9 @@
     "test:watch": "vitest",
     "test:emulator": "firebase emulators:exec --only firestore --project demo-yttm-tests --config firebase.test.json --non-interactive \"vitest run --config vitest.emulator.config.mts\"",
     "test:all": "yarn test && yarn test:emulator",
+    "test:e2e": "node scripts/e2e.mjs",
+    "test:e2e:live": "node scripts/e2e.mjs --live-youtube",
+    "dev:emulator": "node scripts/e2e.mjs --serve",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -36,6 +39,7 @@
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "5.0.2",
+    "@playwright/test": "1.58.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

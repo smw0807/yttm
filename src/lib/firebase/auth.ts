@@ -7,11 +7,15 @@ import {
   signInAnonymously,
   signOut,
   getAuth,
+  connectAuthEmulator,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { app, db } from './config';
+import { app, db, useFirebaseEmulators } from './config';
 
 const auth = getAuth(app);
+if (useFirebaseEmulators && !auth.emulatorConfig) {
+  connectAuthEmulator(auth, 'http://127.0.0.1:9098', { disableWarnings: true });
+}
 const provider = new GoogleAuthProvider();
 
 export { auth };
