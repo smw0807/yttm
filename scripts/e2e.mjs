@@ -3,7 +3,16 @@ import { generateKeyPairSync } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 
-for (const port of [3100, 8086, 9098]) {
+const webPort = Number(process.env.E2E_PORT ?? 3100);
+if (
+  !Number.isInteger(webPort) ||
+  webPort < 1024 ||
+  webPort > 65535 ||
+  [8086, 9098, 9150].includes(webPort)
+) {
+  throw new Error('E2E_PORT must be an available non-emulator port between 1024 and 65535');
+}
+for (const port of [webPort, 8086, 9098]) {
   await new Promise((resolve, reject) => {
     const server = createServer();
     server.once('error', () =>
@@ -19,6 +28,7 @@ const { privateKey } = generateKeyPairSync('rsa', {
 });
 const env = {
   ...process.env,
+  E2E_PORT: String(webPort),
   NEXT_TELEMETRY_DISABLED: '1',
   NEXT_PUBLIC_FIREBASE_EMULATORS: '1',
   NEXT_PUBLIC_FIREBASE_API_KEY: 'demo-not-a-real-api-key',
@@ -27,7 +37,7 @@ const env = {
   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: 'demo-yttm-e2e.appspot.com',
   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: '1234567890',
   NEXT_PUBLIC_FIREBASE_APP_ID: '1:1234567890:web:e2e',
-  NEXT_PUBLIC_BASE_URL: 'http://localhost:3100',
+  NEXT_PUBLIC_BASE_URL: `http://localhost:${webPort}`,
   NEXT_PUBLIC_ADFIT_UNIT: '',
   NEXT_PUBLIC_ADSENSE_CLIENT: '',
   YOUTUBE_API_KEY: '',
@@ -45,7 +55,7 @@ const env = {
   E2E_LIVE_YOUTUBE: process.argv.includes('--live-youtube') ? '1' : '0',
 };
 const command = process.argv.includes('--serve')
-  ? 'node node_modules/next/dist/bin/next dev --hostname localhost --port 3100'
+  ? `node node_modules/next/dist/bin/next dev --hostname localhost --port ${webPort}`
   : 'node node_modules/@playwright/test/cli.js test';
 const child = spawn(
   process.execPath,
