@@ -16,6 +16,7 @@
     "test:e2e": "node scripts/e2e.mjs",
     "test:e2e:live": "node scripts/e2e.mjs --live-youtube",
     "dev:emulator": "node scripts/e2e.mjs --serve",
+    "verify:firestore:live": "node scripts/firestore-access.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
