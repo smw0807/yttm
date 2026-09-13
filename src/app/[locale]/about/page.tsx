@@ -16,8 +16,8 @@ export default function AboutPage() {
       <section className="mb-8">
         <h2 className="mb-3 text-base font-semibold text-gray-900">1. 서비스란?</h2>
         <p className="mb-2">
-          <strong>{SITE_NAME}</strong>은 유튜브 영상의 특정 시점에 메모를 남기고, 나중에 클릭
-          한 번으로 해당 장면으로 바로 이동할 수 있는 타임스탬프 메모 서비스입니다.
+          <strong>{SITE_NAME}</strong>은 유튜브 영상의 특정 시점에 메모를 남기고, 나중에 클릭 한
+          번으로 해당 장면으로 바로 이동할 수 있는 타임스탬프 메모 서비스입니다.
         </p>
         <p>
           강의 영상에서 핵심 내용을 정리하거나, 게임 공략 영상에서 중요한 전략을 기록하거나,
@@ -29,13 +29,12 @@ export default function AboutPage() {
         <h2 className="mb-3 text-base font-semibold text-gray-900">2. 개발 동기</h2>
         <p className="mb-2">
           유튜브로 프로그래밍 강의나 게임 공략 영상을 보다 보면 &quot;이 부분 나중에 다시
-          봐야지&quot; 싶은 순간이 자주 생깁니다. 그런데 YouTube 재생목록이나 북마크로는 영상
-          전체를 저장할 수는 있어도, <em>특정 시점</em>을 바로 기록하고 메모를 붙이는 방법이
-          없었습니다.
+          봐야지&quot; 싶은 순간이 자주 생깁니다. 그런데 YouTube 재생목록이나 북마크로는 영상 전체를
+          저장할 수는 있어도, <em>특정 시점</em>을 바로 기록하고 메모를 붙이는 방법이 없었습니다.
         </p>
         <p>
-          이 불편함을 해소하기 위해 타임스탬프 단위로 메모를 저장하고, 클릭 한 번으로 해당
-          장면으로 이동하는 도구를 직접 만들었습니다.
+          이 불편함을 해소하기 위해 타임스탬프 단위로 메모를 저장하고, 클릭 한 번으로 해당 장면으로
+          이동하는 도구를 직접 만들었습니다.
         </p>
       </section>
 
@@ -43,8 +42,8 @@ export default function AboutPage() {
         <h2 className="mb-3 text-base font-semibold text-gray-900">3. 주요 기능</h2>
         <ul className="ml-2 list-inside list-disc space-y-2">
           <li>
-            <strong>타임스탬프 메모</strong> — 영상 재생 중 현재 시점에 메모를 남기고, 메모
-            클릭 시 해당 시간으로 즉시 이동
+            <strong>타임스탬프 메모</strong> — 영상 재생 중 현재 시점에 메모를 남기고, 메모 클릭 시
+            해당 시간으로 즉시 이동
           </li>
           <li>
             <strong>컬렉션</strong> — 관련 영상을 주제별로 묶어 관리 (예: &quot;파이썬 강의&quot;,
@@ -54,8 +53,8 @@ export default function AboutPage() {
             <strong>공유 링크</strong> — 내 메모 타임라인을 링크 하나로 다른 사람과 공유
           </li>
           <li>
-            <strong>크롬 확장프로그램</strong> — YouTube 페이지를 떠나지 않고 사이드 패널에서
-            바로 메모 작성·조회
+            <strong>크롬 확장프로그램</strong> — YouTube 페이지를 떠나지 않고 사이드 패널에서 바로
+            메모 작성·조회
           </li>
           <li>
             <strong>게스트 모드</strong> — 회원가입 없이 즉시 체험 가능
@@ -93,7 +92,8 @@ export default function AboutPage() {
       </p>
       <p className="mb-3">
         It&apos;s built for learners who study with YouTube lectures, gamers who reference strategy
-        videos, and anyone who wants to save and revisit specific moments in long-form video content.
+        videos, and anyone who wants to save and revisit specific moments in long-form video
+        content.
       </p>
       <p className="mb-3">
         Key features: timestamp memos, topic-based collections, shareable timeline links, and a
@@ -107,7 +107,7 @@ export default function AboutPage() {
       </p>
 
       <div className="mt-10">
-        <Link href="/" className="text-red-600 hover:underline text-xs">
+        <Link href="/" className="text-xs text-red-600 hover:underline">
           ← 홈으로 돌아가기
         </Link>
       </div>

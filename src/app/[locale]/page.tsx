@@ -94,7 +94,7 @@ export default async function LandingPage({ params }: Props) {
   ];
 
   return (
-    <main className="bg-background min-h-screen overflow-x-hidden">
+    <main className="min-h-screen overflow-x-hidden bg-background">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -121,10 +121,10 @@ export default async function LandingPage({ params }: Props) {
           <h1 className="text-5xl font-extrabold tracking-tight lg:text-6xl">{t('title')}</h1>
 
           {/* Description */}
-          <p className="text-muted-foreground max-w-xl text-xl leading-relaxed">
+          <p className="max-w-xl text-xl leading-relaxed text-muted-foreground">
             {t.rich('description', {
               highlight: (chunks) => (
-                <span className="text-foreground font-semibold">{chunks}</span>
+                <span className="font-semibold text-foreground">{chunks}</span>
               ),
             })}
           </p>
@@ -132,7 +132,7 @@ export default async function LandingPage({ params }: Props) {
           {/* CTA */}
           <Link
             href="/login"
-            className="bg-primary text-primary-foreground hover:bg-primary/80 inline-flex h-11 items-center justify-center rounded-lg px-10 text-base font-semibold transition-colors"
+            className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-10 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/80"
           >
             {t('startButton')} →
           </Link>
@@ -140,20 +140,20 @@ export default async function LandingPage({ params }: Props) {
 
         {/* Browser mockup with screenshot */}
         <div className="mt-14 w-full max-w-4xl">
-          <div className="bg-card overflow-hidden rounded-2xl border shadow-2xl ring-1 ring-black/5">
+          <div className="overflow-hidden rounded-2xl border bg-card shadow-2xl ring-1 ring-black/5">
             {/* Browser chrome */}
-            <div className="bg-muted/60 flex items-center gap-2 border-b px-4 py-3">
+            <div className="flex items-center gap-2 border-b bg-muted/60 px-4 py-3">
               <div className="flex gap-1.5">
                 <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
                 <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
                 <div className="h-3 w-3 rounded-full bg-[#28C840]" />
               </div>
-              <div className="bg-background/70 ml-2 flex-1 rounded-md px-3 py-1 text-center text-xs">
+              <div className="ml-2 flex-1 rounded-md bg-background/70 px-3 py-1 text-center text-xs">
                 <a
                   href="https://www.yttm.kr/share/d541d9b6-0381-45c7-9e42-20eb198fa7b1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
                 >
                   yttm.kr
                 </a>
@@ -171,7 +171,7 @@ export default async function LandingPage({ params }: Props) {
               href="https://www.yttm.kr/share/d541d9b6-0381-45c7-9e42-20eb198fa7b1"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               {t('liveDemo')} →
             </a>
@@ -186,11 +186,11 @@ export default async function LandingPage({ params }: Props) {
             {features.map(({ icon, key }) => (
               <div
                 key={key}
-                className="bg-background hover:border-border/80 rounded-2xl border p-6 text-left transition-shadow hover:shadow-md"
+                className="rounded-2xl border bg-background p-6 text-left transition-shadow hover:border-border/80 hover:shadow-md"
               >
                 <div className="mb-3 text-3xl">{icon}</div>
                 <h3 className="mb-2 text-base font-semibold">{t(`features.${key}.title`)}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
+                <p className="text-sm leading-relaxed text-muted-foreground">
                   {t(`features.${key}.desc`)}
                 </p>
               </div>
@@ -202,14 +202,14 @@ export default async function LandingPage({ params }: Props) {
       {/* Chrome Extension Section */}
       <section className="px-4 py-16">
         <div className="mx-auto max-w-4xl">
-          <div className="bg-card overflow-hidden rounded-3xl border shadow-sm">
+          <div className="overflow-hidden rounded-3xl border bg-card shadow-sm">
             <div className="flex flex-col items-center gap-8 p-8 sm:p-12 lg:flex-row lg:items-start">
               {/* Icon + Badge */}
               <div className="flex shrink-0 flex-col items-center gap-3">
                 <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#4285F4]/10 text-5xl shadow-inner">
                   🧩
                 </div>
-                <span className="bg-muted text-muted-foreground rounded-full px-3 py-1 text-xs font-medium">
+                <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                   {t('extension.badge')}
                 </span>
               </div>
@@ -219,7 +219,7 @@ export default async function LandingPage({ params }: Props) {
                 <h2 className="mb-3 text-2xl font-bold tracking-tight sm:text-3xl">
                   {t('extension.sectionTitle')}
                 </h2>
-                <p className="text-muted-foreground mb-6 text-base leading-relaxed">
+                <p className="mb-6 text-base leading-relaxed text-muted-foreground">
                   {t('extension.desc')}
                 </p>
 
@@ -232,10 +232,10 @@ export default async function LandingPage({ params }: Props) {
                       { key: 'feature3', icon: '🔄' },
                     ] as const
                   ).map(({ key, icon }) => (
-                    <div key={key} className="bg-muted/40 rounded-xl p-4 text-left">
+                    <div key={key} className="rounded-xl bg-muted/40 p-4 text-left">
                       <div className="mb-2 text-xl">{icon}</div>
                       <h3 className="mb-1 text-sm font-semibold">{t(`extension.${key}Title`)}</h3>
-                      <p className="text-muted-foreground text-xs leading-relaxed">
+                      <p className="text-xs leading-relaxed text-muted-foreground">
                         {t(`extension.${key}Desc`)}
                       </p>
                     </div>
@@ -280,12 +280,12 @@ export default async function LandingPage({ params }: Props) {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {howToUseSteps.map(({ num, title, desc }) => (
               <div key={num} className="flex gap-4">
-                <div className="text-primary shrink-0 text-4xl font-extrabold opacity-20">
+                <div className="shrink-0 text-4xl font-extrabold text-primary opacity-20">
                   {num}
                 </div>
                 <div>
                   <h3 className="mb-1 text-base font-semibold">{title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{desc}</p>
                 </div>
               </div>
             ))}
@@ -301,10 +301,10 @@ export default async function LandingPage({ params }: Props) {
           </h2>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {useCases.map(({ icon, title, desc }) => (
-              <div key={title} className="bg-background rounded-2xl border p-6 text-left">
+              <div key={title} className="rounded-2xl border bg-background p-6 text-left">
                 <div className="mb-3 text-3xl">{icon}</div>
                 <h3 className="mb-2 text-base font-semibold">{title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">{desc}</p>
               </div>
             ))}
           </div>
@@ -317,11 +317,11 @@ export default async function LandingPage({ params }: Props) {
           <h2 className="mb-10 text-center text-3xl font-bold tracking-tight">
             {t('faq.sectionTitle')}
           </h2>
-          <div className="divide-border divide-y">
+          <div className="divide-y divide-border">
             {faqs.map(({ q, a }) => (
               <div key={q} className="py-6">
                 <h3 className="mb-2 text-base font-semibold">{q}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{a}</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">{a}</p>
               </div>
             ))}
           </div>
@@ -329,13 +329,13 @@ export default async function LandingPage({ params }: Props) {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-primary/5 border-t px-4 py-16 text-center">
+      <section className="border-t bg-primary/5 px-4 py-16 text-center">
         <div className="mx-auto max-w-xl">
           <h2 className="mb-3 text-3xl font-bold tracking-tight">{t('ctaTitle')}</h2>
-          <p className="text-muted-foreground mb-8 text-base leading-relaxed">{t('ctaDesc')}</p>
+          <p className="mb-8 text-base leading-relaxed text-muted-foreground">{t('ctaDesc')}</p>
           <Link
             href="/login"
-            className="bg-primary text-primary-foreground hover:bg-primary/80 inline-flex h-11 items-center justify-center rounded-lg px-10 text-base font-semibold transition-colors"
+            className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-10 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/80"
           >
             {t('ctaButton')} →
           </Link>
@@ -344,12 +344,18 @@ export default async function LandingPage({ params }: Props) {
 
       {/* Footer */}
       <footer className="border-t px-4 py-6 text-center">
-        <div className="text-muted-foreground flex flex-col items-center gap-2 text-xs sm:flex-row sm:justify-center sm:gap-4">
+        <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground sm:flex-row sm:justify-center sm:gap-4">
           <span>{tf('copyright', { year: new Date().getFullYear() })}</span>
-          <Link href="/about" className="hover:text-foreground transition-colors underline-offset-2 hover:underline">
+          <Link
+            href="/about"
+            className="underline-offset-2 transition-colors hover:text-foreground hover:underline"
+          >
             {tf('about')}
           </Link>
-          <Link href="/privacy" className="hover:text-foreground transition-colors underline-offset-2 hover:underline">
+          <Link
+            href="/privacy"
+            className="underline-offset-2 transition-colors hover:text-foreground hover:underline"
+          >
             {tf('privacy')}
           </Link>
         </div>

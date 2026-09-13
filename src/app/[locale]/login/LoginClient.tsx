@@ -56,7 +56,7 @@ export function LoginClient() {
   ];
 
   return (
-    <main className="bg-background min-h-screen px-4 py-12">
+    <main className="min-h-screen bg-background px-4 py-12">
       <KakaoInAppBrowserGuard />
       <div className="mx-auto flex max-w-3xl flex-col items-center gap-10">
         <Card className="w-full max-w-sm">
@@ -99,7 +99,7 @@ export function LoginClient() {
         </Card>
 
         <section className="w-full max-w-2xl">
-          <h2 className="text-muted-foreground mb-6 text-center text-sm font-semibold uppercase tracking-widest">
+          <h2 className="mb-6 text-center text-sm font-semibold tracking-widest text-muted-foreground uppercase">
             {t('loginPageSubtitle')}
           </h2>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -107,7 +107,7 @@ export function LoginClient() {
               <div key={title} className="rounded-2xl border p-5 text-left">
                 <div className="mb-2 text-2xl">{icon}</div>
                 <h3 className="mb-1 text-sm font-semibold">{title}</h3>
-                <p className="text-muted-foreground text-xs leading-relaxed">{desc}</p>
+                <p className="text-xs leading-relaxed text-muted-foreground">{desc}</p>
               </div>
             ))}
           </div>

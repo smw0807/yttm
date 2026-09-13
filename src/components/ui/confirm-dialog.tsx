@@ -26,7 +26,7 @@ export function ConfirmDialog({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        {description && <p className="text-muted-foreground text-sm">{description}</p>}
+        {description && <p className="text-sm text-muted-foreground">{description}</p>}
         <div className="flex justify-end gap-2 pt-2">
           <Button variant="outline" onClick={onCancel}>
             취소

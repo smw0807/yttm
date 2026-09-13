@@ -12,5 +12,7 @@ export default async function DashboardPage() {
     getCollectionsAdmin(user.uid),
   ]);
 
-  return <DashboardContent initialVideos={videos} initialCollections={collections} userId={user.uid} />;
+  return (
+    <DashboardContent initialVideos={videos} initialCollections={collections} userId={user.uid} />
+  );
 }

@@ -52,7 +52,7 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
 
   if (memos.length === 0) {
     return (
-      <p className="text-muted-foreground whitespace-pre-line py-10 text-center text-sm">
+      <p className="py-10 text-center text-sm whitespace-pre-line text-muted-foreground">
         {t('noMemos')}
       </p>
     );
@@ -67,10 +67,10 @@ export function MemoList({ videoId, memos, onSeek, onDeleted, onUpdated }: Props
         className="h-8 text-sm"
       />
 
-      {error && <p className="text-destructive text-xs">{error}</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
 
       {filtered.length === 0 ? (
-        <p className="text-muted-foreground py-6 text-center text-sm">{t('noSearchResults')}</p>
+        <p className="py-6 text-center text-sm text-muted-foreground">{t('noSearchResults')}</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {filtered.map((memo) => (

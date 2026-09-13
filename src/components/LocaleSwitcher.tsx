@@ -24,7 +24,7 @@ export function LocaleSwitcher() {
       value={locale}
       onChange={handleChange}
       disabled={isPending}
-      className="text-muted-foreground hover:text-foreground bg-transparent text-xs font-medium outline-none cursor-pointer disabled:opacity-50"
+      className="cursor-pointer bg-transparent text-xs font-medium text-muted-foreground outline-none hover:text-foreground disabled:opacity-50"
     >
       {routing.locales.map((loc) => (
         <option key={loc} value={loc}>

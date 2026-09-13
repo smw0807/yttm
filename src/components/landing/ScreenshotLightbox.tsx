@@ -49,7 +49,7 @@ export default function ScreenshotLightbox({ src, alt }: Props) {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+            className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
             aria-label="닫기"
           >
             ✕
@@ -60,12 +60,7 @@ export default function ScreenshotLightbox({ src, alt }: Props) {
             className="relative max-h-[90vh] max-w-[90vw] cursor-zoom-out overflow-hidden rounded-xl shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <Image
-              src={src}
-              alt={alt}
-              className="max-h-[90vh] w-auto object-contain"
-              priority
-            />
+            <Image src={src} alt={alt} className="max-h-[90vh] w-auto object-contain" priority />
           </div>
         </div>
       )}

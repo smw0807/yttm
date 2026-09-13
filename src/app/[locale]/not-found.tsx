@@ -17,11 +17,11 @@ export default function NotFound() {
         className="rounded-2xl shadow-lg"
       />
       <h1 className="mt-6 text-6xl font-bold tracking-tight">{t('title')}</h1>
-      <p className="text-muted-foreground mt-3 text-lg">{t('message')}</p>
-      <p className="text-muted-foreground mt-1 text-sm">{t('detail')}</p>
+      <p className="mt-3 text-lg text-muted-foreground">{t('message')}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{t('detail')}</p>
       <Link
         href="/dashboard"
-        className="bg-primary text-primary-foreground hover:bg-primary/80 mt-8 inline-flex h-10 items-center rounded-lg px-6 text-sm font-medium transition-colors"
+        className="mt-8 inline-flex h-10 items-center rounded-lg bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
       >
         {t('backToDashboard')}
       </Link>

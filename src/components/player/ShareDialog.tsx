@@ -67,14 +67,14 @@ export function ShareDialog({ open, onClose, videoId, token, onTokenChange }: Pr
                 {copied ? t('copied') : t('copy')}
               </Button>
             </div>
-            <p className="text-muted-foreground text-xs">{t('shareInfo')}</p>
+            <p className="text-xs text-muted-foreground">{t('shareInfo')}</p>
             <Button variant="destructive" onClick={handleRevoke} disabled={loading}>
               {t('revokeLink')}
             </Button>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
-            <p className="text-muted-foreground text-sm">{t('createInfo')}</p>
+            <p className="text-sm text-muted-foreground">{t('createInfo')}</p>
             <Button onClick={handleCreate} disabled={loading}>
               {t('createLink')}
             </Button>

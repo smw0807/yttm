@@ -33,7 +33,10 @@ export type MemoWithId = Memo & { id: string };
 // Extension message protocol
 export type ExtMessage =
   // Content Script → Background
-  | { type: 'VIDEO_CHANGED'; payload: { youtubeId: string; title: string; thumbnail: string; durationSec: number } }
+  | {
+      type: 'VIDEO_CHANGED';
+      payload: { youtubeId: string; title: string; thumbnail: string; durationSec: number };
+    }
   | { type: 'TIMESTAMP_CAPTURED'; payload: { timestampSec: number } }
   // Side Panel → Background
   | { type: 'GET_CURRENT_VIDEO' }

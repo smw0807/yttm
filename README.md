@@ -20,15 +20,15 @@
 
 ## 기술 스택
 
-| 영역 | 기술 |
-|------|------|
-| Framework | Next.js 16.2 (App Router) + TypeScript |
-| Auth | Firebase Auth (Google OAuth + Anonymous) |
-| Database | Firestore (Firebase) |
-| Styling | Tailwind CSS v4 + shadcn/ui (Base UI) |
-| i18n | next-intl v4.9 (ko / en) |
-| 배포 | Vercel |
-| 외부 API | YouTube Data API v3 |
+| 영역      | 기술                                     |
+| --------- | ---------------------------------------- |
+| Framework | Next.js 16.2 (App Router) + TypeScript   |
+| Auth      | Firebase Auth (Google OAuth + Anonymous) |
+| Database  | Firestore (Firebase)                     |
+| Styling   | Tailwind CSS v4 + shadcn/ui (Base UI)    |
+| i18n      | next-intl v4.9 (ko / en)                 |
+| 배포      | Vercel                                   |
+| 외부 API  | YouTube Data API v3                      |
 
 ## 아키텍처
 
@@ -55,6 +55,7 @@
 ```
 
 **인증 방식:** Firebase Admin SDK 세션 쿠키 (`__session`, httpOnly)
+
 - Google 로그인 → `getIdToken` → `POST /api/auth/session` → 서버 컴포넌트에서 쿠키 검증
 - 게스트 로그인 → `signInAnonymously` → 동일 흐름으로 세션 쿠키 발급 (Firestore 보안 규칙 그대로 적용)
 - 게스트 → Google 계정 업그레이드: `linkWithPopup`으로 UID 유지, 이미 존재하는 계정이면 `/api/auth/migrate`로 데이터 이관
@@ -63,17 +64,17 @@
 
 URL은 `/[locale]/...` 형식입니다 (예: `/ko/dashboard`, `/en/login`).
 
-| 경로 | 설명 |
-|------|------|
-| `/` | 랜딩 페이지 |
-| `/login` | Google 로그인 / 게스트로 시작하기 |
-| `/dashboard` | 내 영상 (최대 4개) + 컬렉션 (최대 4개) 요약 |
-| `/videos` | 영상 목록 전체 (제목 검색 필터) |
-| `/videos/:id` | 영상 뷰어 + 타임라인 메모 (핵심 페이지) |
-| `/videos/:id/edit` | 메모 전체 목록 수정/삭제 |
-| `/collections` | 컬렉션 관리 |
-| `/share/:token` | 공유 읽기 전용 (로그인 불필요) |
-| `/admin` | 관리자 대시보드 (통계 + 사용자별 현황) |
+| 경로               | 설명                                        |
+| ------------------ | ------------------------------------------- |
+| `/`                | 랜딩 페이지                                 |
+| `/login`           | Google 로그인 / 게스트로 시작하기           |
+| `/dashboard`       | 내 영상 (최대 4개) + 컬렉션 (최대 4개) 요약 |
+| `/videos`          | 영상 목록 전체 (제목 검색 필터)             |
+| `/videos/:id`      | 영상 뷰어 + 타임라인 메모 (핵심 페이지)     |
+| `/videos/:id/edit` | 메모 전체 목록 수정/삭제                    |
+| `/collections`     | 컬렉션 관리                                 |
+| `/share/:token`    | 공유 읽기 전용 (로그인 불필요)              |
+| `/admin`           | 관리자 대시보드 (통계 + 사용자별 현황)      |
 
 ## 로컬 실행
 
@@ -217,18 +218,36 @@ _rateLimits/{hashedScopeAndUid}   # 서버 전용
 
 ## SEO
 
-| 항목 | 내용 |
-|------|------|
-| 메타데이터 | title template, description, keywords, OG/Twitter 카드 |
-| sitemap.xml | `/`, `/login` 자동 생성 |
-| robots.txt | 보호 페이지(`/dashboard`, `/videos`, `/collections`, `/api/`) 크롤 차단 |
-| OG 이미지 | `/opengraph-image` — SNS 링크 공유 시 미리보기 이미지 자동 생성 |
-| JSON-LD | 랜딩 페이지 `SoftwareApplication` 구조화 데이터 |
-| noindex | 로그인 필요 페이지 전체 검색엔진 색인 제외 |
+| 항목        | 내용                                                                    |
+| ----------- | ----------------------------------------------------------------------- |
+| 메타데이터  | title template, description, keywords, OG/Twitter 카드                  |
+| sitemap.xml | `/`, `/login` 자동 생성                                                 |
+| robots.txt  | 보호 페이지(`/dashboard`, `/videos`, `/collections`, `/api/`) 크롤 차단 |
+| OG 이미지   | `/opengraph-image` — SNS 링크 공유 시 미리보기 이미지 자동 생성         |
+| JSON-LD     | 랜딩 페이지 `SoftwareApplication` 구조화 데이터                         |
+| noindex     | 로그인 필요 페이지 전체 검색엔진 색인 제외                              |
 
 배포 후 [Google Search Console](https://search.google.com/search-console)에 `sitemap.xml`을 등록하세요.
 
 ## 빌드
+
+### 품질 검사와 CI
+
+Node.js 22와 Yarn 1.22.22를 기준으로 웹과 확장프로그램을 함께 검사합니다.
+
+```bash
+yarn install --frozen-lockfile
+yarn --cwd extension install --frozen-lockfile
+yarn lint
+yarn format:check
+yarn typecheck
+yarn build:ci
+yarn --cwd extension build
+```
+
+GitHub Actions는 모든 PR과 `main` / `master` / `develop` 푸시에 위 검사를 실행합니다. 린트 경고도 실패로 처리하며 생성물과 환경변수 파일은 포맷 대상에서 제외합니다. `yarn format`으로 웹(Tailwind v4)과 확장프로그램(Tailwind v3)을 각 설정에 맞춰 정렬할 수 있습니다.
+
+`build:ci`는 실행 시 생성한 임시 Firebase 자격증명으로 빌드하므로 GitHub Secrets가 필요하지 않습니다. 이 빌드 결과는 배포용이 아니며, 실제 Firebase 인증·조회 동작을 테스트하지 않습니다. Google Fonts 다운로드에는 네트워크 연결이 필요합니다. 배포용 빌드는 실제 환경변수를 설정한 후 아래 명령을 사용하세요.
 
 ```bash
 yarn build
@@ -238,49 +257,58 @@ yarn start
 ## 구현 화면
 
 ### 랜딩 페이지 (`/`)
+
 서비스 소개와 주요 기능 카드, 시작하기 버튼으로 구성된 메인 진입 화면입니다.
 
 ![랜딩 페이지 1](img/main1.png)
 ![랜딩 페이지 2](img/main2.png)
 
 ### 로그인 (`/login`)
+
 Google 계정으로 로그인하거나, 로그인 없이 게스트로 바로 서비스를 체험할 수 있습니다. 게스트로 시작한 경우 상단 헤더에 "게스트" 배지가 표시되며, "Google로 계정 연결" 버튼으로 언제든지 계정을 업그레이드할 수 있습니다. 업그레이드 시 기존에 작성한 영상·메모·컬렉션 데이터가 그대로 유지됩니다.
 
 ![로그인](img/login.png)
 
 ### 대시보드 (`/dashboard`)
+
 로그인 후 첫 화면입니다. 최근 영상(최대 4개)과 컬렉션(최대 4개)을 한눈에 확인하고, 각 섹션에서 모두 보기로 전체 목록 페이지로 이동할 수 있습니다.
 
 ![대시보드](img/dashboard.png)
 
 ### 영상 목록 (`/videos`)
+
 등록한 전체 영상을 카드 형태로 확인합니다. 제목 검색 필터로 원하는 영상을 빠르게 찾을 수 있습니다.
 
 ![영상 목록](img/my-video-list.png)
 
 ### 영상 추가
+
 YouTube URL을 직접 입력하거나 키워드 검색으로 영상을 추가합니다. 제목·썸네일·재생 시간이 자동으로 파싱됩니다.
 
 ![영상 추가 — URL 입력](img/add-youtube-url.png)
 ![영상 추가 — 키워드 검색](img/add-youtube-search.png)
 
 ### 영상 뷰어 (`/videos/:id`)
+
 서비스의 핵심 페이지입니다. 좌측 YouTube 플레이어와 우측 타임라인 메모 목록이 좌우 분할 구조로 배치됩니다. 메모 클릭 시 해당 시점으로 즉시 이동하며, 메모 더블클릭으로 인라인 수정이 가능합니다.
 
 ![영상 뷰어](img/youtube-memo.png)
 
 ### 컬렉션 (`/collections`)
+
 영상을 주제별 폴더로 묶어서 관리합니다. 컬렉션 카드를 클릭하면 포함된 영상 목록과 추가 가능한 영상을 관리할 수 있는 다이얼로그가 열립니다.
 
 ![컬렉션 목록](img/my-collection-list.png)
 ![컬렉션 상세 다이얼로그](img/collection.png)
 
 ### 공유 링크
+
 영상 뷰어에서 공유 버튼을 누르면 타임라인 메모가 담긴 공유 URL을 생성하고 복사할 수 있습니다. 링크를 받은 누구나 로그인 없이 타임라인 메모를 열람할 수 있습니다.
 
 ![공유 링크 다이얼로그](img/share-link.png)
 
 ### 관리자 페이지 (`/admin`)
+
 관리자 계정 전용 페이지입니다. 전체 사용자·영상·컬렉션 통계를 확인하고, 사용자별 등록 영상과 컬렉션 상세 현황을 펼쳐볼 수 있습니다.
 
 ![관리자 페이지](img/admin-page.png)

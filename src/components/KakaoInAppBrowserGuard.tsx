@@ -10,11 +10,11 @@ export function KakaoInAppBrowserGuard() {
   if (!showIosGuide) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-end bg-black/40 pb-6 px-4">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-end bg-black/40 px-4 pb-6">
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
         <div className="mb-1 text-center text-2xl">🌐</div>
         <h2 className="mb-1 text-center text-base font-bold">{t('title')}</h2>
-        <p className="text-muted-foreground mb-5 text-center text-sm leading-relaxed whitespace-pre-line">
+        <p className="mb-5 text-center text-sm leading-relaxed whitespace-pre-line text-muted-foreground">
           {t('description')}
         </p>
         <button

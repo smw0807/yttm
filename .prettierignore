@@ -1,4 +1,11 @@
 .next/
-node_modules/
-public/
-*.md
+**/node_modules/
+extension/dist/
+out/
+build/
+coverage/
+next-env.d.ts
+*.tsbuildinfo
+.env*
+**/.env*
+.claude/

@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ExtMessage } from '../../types';
 
 export function OpenSidePanelButton() {
   const handleClick = async () => {
@@ -13,9 +12,9 @@ export function OpenSidePanelButton() {
   return (
     <button
       onClick={handleClick}
-      className="flex items-center justify-center gap-2 w-full py-2.5 bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors"
+      className="flex w-full items-center justify-center gap-2 bg-red-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-700"
     >
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"

@@ -25,7 +25,12 @@ export function AddCollectionDialog({ open, onClose, userId, onAdded }: Props) {
     e.preventDefault();
     if (!name.trim()) return;
     setLoading(true);
-    await addCollection({ name: name.trim(), description: description.trim(), videoIds: [], userId });
+    await addCollection({
+      name: name.trim(),
+      description: description.trim(),
+      videoIds: [],
+      userId,
+    });
     setLoading(false);
     setName('');
     setDescription('');

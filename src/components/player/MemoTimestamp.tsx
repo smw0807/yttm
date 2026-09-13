@@ -13,12 +13,7 @@ interface MemoTimestampProps {
 const timestampClassName =
   'mt-0.5 shrink-0 rounded-md bg-red-100 px-2 py-0.5 font-mono text-xs font-semibold text-red-700';
 
-export function MemoTimestamp({
-  timestampSec,
-  onSeek,
-  ariaLabel,
-  className,
-}: MemoTimestampProps) {
+export function MemoTimestamp({ timestampSec, onSeek, ariaLabel, className }: MemoTimestampProps) {
   const label = formatTimestamp(timestampSec);
 
   if (!onSeek) {

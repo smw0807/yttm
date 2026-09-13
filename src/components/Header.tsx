@@ -27,7 +27,7 @@ export function Header({ displayName, isAnonymous }: Props) {
   }
 
   return (
-    <header className="bg-background/95 sticky top-0 z-10 border-b backdrop-blur">
+    <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <Image src="/yttm.png" alt="YTTM" width={28} height={28} className="rounded-lg" />
@@ -47,7 +47,7 @@ export function Header({ displayName, isAnonymous }: Props) {
             href="https://chromewebstore.google.com/detail/akcenlcmjliffoildhkhmpmeiebnaiak?utm_source=item-share-cb"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground hover:bg-muted hover:text-foreground inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium transition-colors"
+            className="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             🧩 {t('extension')}
           </a>

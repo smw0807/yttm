@@ -48,7 +48,7 @@ export function VideosContent({ initialVideos }: Props) {
           </Button>
         </EmptyState>
       ) : filtered.length === 0 ? (
-        <p className="text-muted-foreground py-10 text-center">{t('noSearchResults')}</p>
+        <p className="py-10 text-center text-muted-foreground">{t('noSearchResults')}</p>
       ) : (
         <div className={CARD_GRID}>
           {filtered.map((video) => (

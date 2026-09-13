@@ -35,8 +35,8 @@ export function MemoForm({ onSubmit }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-3 border-b border-gray-200 bg-white">
-      <div className="flex items-center gap-2 mb-2">
+    <form onSubmit={handleSubmit} className="border-b border-gray-200 bg-white p-3">
+      <div className="mb-2 flex items-center gap-2">
         <button
           type="button"
           onClick={() => {
@@ -54,7 +54,7 @@ export function MemoForm({ onSubmit }: Props) {
               }
             });
           }}
-          className="flex items-center gap-1 px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+          className="flex items-center gap-1 rounded bg-red-600 px-2 py-1 text-xs text-white transition-colors hover:bg-red-700"
         >
           <span>⏱</span>
           <span>현재 시간</span>
@@ -70,7 +70,7 @@ export function MemoForm({ onSubmit }: Props) {
             else if (parts.length === 3) sec = parts[0] * 3600 + parts[1] * 60 + parts[2];
             if (!isNaN(sec)) setTimestampSec(sec);
           }}
-          className="w-20 px-2 py-1 text-xs border border-gray-300 rounded font-mono"
+          className="w-20 rounded border border-gray-300 px-2 py-1 font-mono text-xs"
           placeholder="0:00"
         />
       </div>
@@ -80,12 +80,12 @@ export function MemoForm({ onSubmit }: Props) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="메모 내용..."
-          className="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-red-500"
+          className="flex-1 rounded border border-gray-300 px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
         />
         <button
           type="submit"
           disabled={submitting || !content.trim()}
-          className="px-3 py-1.5 bg-red-600 text-white text-sm rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="rounded bg-red-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {submitting ? '...' : '저장'}
         </button>

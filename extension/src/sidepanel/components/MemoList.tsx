@@ -20,7 +20,7 @@ export function MemoList({ memos, loading, onUpdate, onDelete }: Props) {
 
   if (memos.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-8 text-center text-sm text-gray-400 gap-2">
+      <div className="flex flex-col items-center justify-center gap-2 py-8 text-center text-sm text-gray-400">
         <span className="text-2xl">📝</span>
         <p>메모가 없습니다</p>
         <p className="text-xs">플로팅 버튼 또는 Alt+M으로 메모를 추가하세요</p>

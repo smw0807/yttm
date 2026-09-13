@@ -8,18 +8,18 @@ interface Props {
 
 export function AuthScreen({ onSignIn, authError = null, signingIn = false }: Props) {
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-6 p-6 text-center">
+    <div className="flex h-full flex-col items-center justify-center gap-6 p-6 text-center">
       <div className="text-4xl">📝</div>
       <div>
         <h1 className="text-lg font-bold text-gray-900">YouTube Timeline Memo</h1>
-        <p className="text-sm text-gray-500 mt-1">Google 계정으로 로그인하여 메모를 저장하세요</p>
+        <p className="mt-1 text-sm text-gray-500">Google 계정으로 로그인하여 메모를 저장하세요</p>
       </div>
       <button
         onClick={onSignIn}
         disabled={signingIn}
-        className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow text-sm font-medium text-gray-700"
+        className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-shadow hover:shadow-md"
       >
-        <svg className="w-4 h-4" viewBox="0 0 24 24">
+        <svg className="h-4 w-4" viewBox="0 0 24 24">
           <path
             fill="#4285F4"
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -40,7 +40,7 @@ export function AuthScreen({ onSignIn, authError = null, signingIn = false }: Pr
         {signingIn ? '로그인 중...' : 'Google로 로그인'}
       </button>
       {authError && (
-        <p className="max-w-[280px] text-xs leading-relaxed text-red-500 break-words">
+        <p className="max-w-[280px] break-words text-xs leading-relaxed text-red-500">
           로그인 실패: {authError}
         </p>
       )}

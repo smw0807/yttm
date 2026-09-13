@@ -27,7 +27,15 @@ type Props = {
   labels: Labels;
 };
 
-function SortIcon({ column, sortKey, sortDir }: { column: SortKey; sortKey: SortKey; sortDir: SortDir }) {
+function SortIcon({
+  column,
+  sortKey,
+  sortDir,
+}: {
+  column: SortKey;
+  sortKey: SortKey;
+  sortDir: SortDir;
+}) {
   if (column !== sortKey) return <ArrowUpDown className="ml-1 inline h-3 w-3 opacity-40" />;
   return sortDir === 'asc' ? (
     <ArrowUp className="ml-1 inline h-3 w-3" />
@@ -70,7 +78,8 @@ export function UsersTable({ users, labels }: Props) {
     videoCountTemplate: labels.videoCountTemplate,
   };
 
-  const thClass = 'px-4 py-3 font-medium cursor-pointer select-none hover:bg-muted/80 whitespace-nowrap';
+  const thClass =
+    'px-4 py-3 font-medium cursor-pointer select-none hover:bg-muted/80 whitespace-nowrap';
 
   return (
     <div className="overflow-x-auto rounded-lg border">

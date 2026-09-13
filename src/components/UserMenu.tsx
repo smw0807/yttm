@@ -32,7 +32,7 @@ export function UserMenu({ displayName, isAnonymous }: Props) {
     <div className="flex items-center gap-3">
       {isAnonymous ? (
         <>
-          <span className="bg-muted text-muted-foreground rounded px-2 py-0.5 text-xs font-medium">
+          <span className="rounded bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
             {t('guest')}
           </span>
           <Button
@@ -45,7 +45,7 @@ export function UserMenu({ displayName, isAnonymous }: Props) {
           </Button>
         </>
       ) : (
-        <span className="text-muted-foreground hidden text-sm sm:block">{displayName}</span>
+        <span className="hidden text-sm text-muted-foreground sm:block">{displayName}</span>
       )}
       <Button variant="outline" size="sm" onClick={handleLogout}>
         {t('logout')}

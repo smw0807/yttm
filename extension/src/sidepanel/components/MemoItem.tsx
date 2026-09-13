@@ -37,15 +37,15 @@ export function MemoItem({ memo, onUpdate, onDelete }: Props) {
   };
 
   return (
-    <div className="flex gap-2 p-2 hover:bg-gray-50 rounded group">
+    <div className="group flex gap-2 rounded p-2 hover:bg-gray-50">
       <button
         onClick={handleSeek}
-        className="flex-shrink-0 px-1.5 py-0.5 text-xs font-mono text-red-600 bg-red-50 rounded hover:bg-red-100 transition-colors"
+        className="flex-shrink-0 rounded bg-red-50 px-1.5 py-0.5 font-mono text-xs text-red-600 transition-colors hover:bg-red-100"
         title="해당 시점으로 이동"
       >
         {formatTimestamp(memo.timestampSec)}
       </button>
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         {editing ? (
           <div className="flex gap-1">
             <input
@@ -56,29 +56,29 @@ export function MemoItem({ memo, onUpdate, onDelete }: Props) {
                 if (e.key === 'Enter') handleSave();
                 if (e.key === 'Escape') setEditing(false);
               }}
-              className="flex-1 px-1.5 py-0.5 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-red-500"
+              className="flex-1 rounded border border-gray-300 px-1.5 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-red-500"
               autoFocus
             />
             <button
               onClick={handleSave}
               disabled={saving}
-              className="px-2 py-0.5 text-xs bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+              className="rounded bg-red-600 px-2 py-0.5 text-xs text-white hover:bg-red-700 disabled:opacity-50"
             >
               저장
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="px-2 py-0.5 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+              className="rounded bg-gray-200 px-2 py-0.5 text-xs text-gray-700 hover:bg-gray-300"
             >
               취소
             </button>
           </div>
         ) : (
-          <p className="text-xs text-gray-800 break-words">{memo.content}</p>
+          <p className="break-words text-xs text-gray-800">{memo.content}</p>
         )}
       </div>
       {!editing && (
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+        <div className="flex flex-shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100">
           <button
             onClick={() => {
               setEditContent(memo.content);
@@ -87,7 +87,7 @@ export function MemoItem({ memo, onUpdate, onDelete }: Props) {
             className="p-0.5 text-gray-400 hover:text-gray-600"
             title="수정"
           >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -101,7 +101,7 @@ export function MemoItem({ memo, onUpdate, onDelete }: Props) {
             className="p-0.5 text-gray-400 hover:text-red-500"
             title="삭제"
           >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

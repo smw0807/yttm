@@ -15,7 +15,7 @@ export function App() {
   // 로딩 중
   if (user === undefined) {
     return (
-      <div className="flex items-center justify-center h-full text-sm text-gray-400">
+      <div className="flex h-full items-center justify-center text-sm text-gray-400">
         로딩 중...
       </div>
     );
@@ -29,11 +29,11 @@ export function App() {
   // YouTube watch 페이지가 아님
   if (!videoInfo) {
     return (
-      <div className="flex flex-col items-center justify-center h-full gap-4 p-6 text-center">
+      <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
         <span className="text-3xl">▶️</span>
         <div>
           <p className="text-sm font-medium text-gray-700">YouTube 영상을 재생하세요</p>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="mt-1 text-xs text-gray-400">
             youtube.com/watch 페이지에서 메모를 사용할 수 있습니다
           </p>
         </div>
@@ -43,10 +43,7 @@ export function App() {
         >
           영상 정보 새로고침
         </button>
-        <button
-          onClick={signOut}
-          className="text-xs text-gray-400 hover:text-gray-600 underline"
-        >
+        <button onClick={signOut} className="text-xs text-gray-400 underline hover:text-gray-600">
           로그아웃
         </button>
       </div>
@@ -54,26 +51,21 @@ export function App() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex h-full flex-col bg-white">
       {/* 헤더: 영상 정보 + 로그아웃 */}
       <div className="flex-shrink-0">
-        <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-white">
+        <div className="flex items-center justify-between border-b border-gray-200 bg-white px-3 py-2">
           <a
             href="https://www.yttm.kr"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-semibold text-gray-700 hover:text-red-600 transition-colors"
+            className="text-xs font-semibold text-gray-700 transition-colors hover:text-red-600"
           >
             YouTube Timeline Memo
           </a>
           <div className="flex items-center gap-2">
-            {user.photoURL && (
-              <img src={user.photoURL} alt="" className="w-5 h-5 rounded-full" />
-            )}
-            <button
-              onClick={signOut}
-              className="text-xs text-gray-400 hover:text-gray-600"
-            >
+            {user.photoURL && <img src={user.photoURL} alt="" className="h-5 w-5 rounded-full" />}
+            <button onClick={signOut} className="text-xs text-gray-400 hover:text-gray-600">
               로그아웃
             </button>
           </div>

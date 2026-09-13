@@ -13,7 +13,7 @@ export function EmptyState({ message, children, className }: EmptyStateProps) {
   return (
     <div
       className={cn(
-        'text-muted-foreground flex flex-col items-center justify-center gap-4 py-20',
+        'flex flex-col items-center justify-center gap-4 py-20 text-muted-foreground',
         className,
       )}
     >

@@ -3,13 +3,7 @@
   "name": "YouTube Timeline Memo",
   "version": "1.1.1",
   "description": "유튜브 영상에 타임스탬프 메모를 남기세요",
-  "permissions": [
-    "identity",
-    "storage",
-    "sidePanel",
-    "tabs",
-    "activeTab"
-  ],
+  "permissions": ["identity", "storage", "sidePanel", "tabs", "activeTab"],
   "host_permissions": [
     "https://www.youtube.com/*",
     "https://*.firebaseio.com/*",

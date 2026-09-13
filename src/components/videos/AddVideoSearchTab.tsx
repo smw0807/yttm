@@ -48,7 +48,7 @@ export function AddVideoSearchTab({
           {loading ? labels.searching : labels.searchButton}
         </Button>
       </form>
-      {error && <p className="text-destructive text-xs">{error}</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
       <SearchResultList
         results={results}
         addingId={addingId}

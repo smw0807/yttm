@@ -15,7 +15,7 @@ export function LoadingSpinner({ size = 'md', overlay = false }: LoadingSpinnerP
 
   if (overlay) {
     return (
-      <div className="bg-background/70 absolute inset-0 flex items-center justify-center rounded-xl">
+      <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-background/70">
         {spinner}
       </div>
     );
