@@ -38,7 +38,9 @@ export function MemoForm({ onSave, getCurrentTime }: Props) {
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold">{t('title')}</span>
         <Button size="sm" variant="outline" onClick={captureTime}>
-          {timestamp !== null ? t('captured', { time: formatTimestamp(timestamp) }) : t('captureTime')}
+          {timestamp !== null
+            ? t('captured', { time: formatTimestamp(timestamp) })
+            : t('captureTime')}
         </Button>
       </div>
       <Textarea

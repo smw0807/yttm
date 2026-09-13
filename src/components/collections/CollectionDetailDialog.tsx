@@ -46,15 +46,17 @@ export function CollectionDetailDialog({ open, onClose, collection, allVideos }:
         <DialogHeader>
           <DialogTitle>{collection.name}</DialogTitle>
           {collection.description && (
-            <p className="text-muted-foreground text-sm">{collection.description}</p>
+            <p className="text-sm text-muted-foreground">{collection.description}</p>
           )}
         </DialogHeader>
 
         <div className="flex flex-col gap-6">
           <section>
-            <h3 className="mb-3 text-sm font-semibold">{t('includedVideos', { count: inCollection.length })}</h3>
+            <h3 className="mb-3 text-sm font-semibold">
+              {t('includedVideos', { count: inCollection.length })}
+            </h3>
             {inCollection.length === 0 ? (
-              <p className="text-muted-foreground text-sm">{t('noVideosInCollection')}</p>
+              <p className="text-sm text-muted-foreground">{t('noVideosInCollection')}</p>
             ) : (
               <ul className="flex flex-col gap-2">
                 {inCollection.map((video) => (
@@ -119,7 +121,7 @@ function VideoRow({
       </div>
       <div className="min-w-0 flex-1">
         <p className="line-clamp-2 text-sm font-medium">{video.title}</p>
-        <p className="text-muted-foreground text-xs">{formatTimestamp(video.durationSec)}</p>
+        <p className="text-xs text-muted-foreground">{formatTimestamp(video.durationSec)}</p>
       </div>
     </>
   );

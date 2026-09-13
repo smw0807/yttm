@@ -29,9 +29,7 @@ export function CollectionsContent({ initialCollections, videos, userId }: Props
         <Button onClick={collectionDialogs.openAdd}>{t('addCollection')}</Button>
       </div>
 
-      {initialCollections.length > 0 && (
-        <AdBanner className="mb-6 w-full overflow-hidden" />
-      )}
+      {initialCollections.length > 0 && <AdBanner className="mb-6 w-full overflow-hidden" />}
 
       {initialCollections.length === 0 ? (
         <EmptyState message={t('noCollections')}>

@@ -35,7 +35,7 @@ export function VideoCard({ video, onDeleted }: Props) {
   return (
     <div className="group relative overflow-hidden rounded-xl border transition-shadow hover:shadow-md">
       <Link href={`/videos/${video.id}`} className="block">
-        <div className="bg-muted relative aspect-video">
+        <div className="relative aspect-video bg-muted">
           <Image
             src={video.thumbnail}
             alt={video.title}
@@ -43,7 +43,7 @@ export function VideoCard({ video, onDeleted }: Props) {
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          <span className="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-xs text-white">
+          <span className="absolute right-2 bottom-2 rounded bg-black/80 px-1.5 py-0.5 text-xs text-white">
             {formatTimestamp(video.durationSec)}
           </span>
         </div>
@@ -53,12 +53,12 @@ export function VideoCard({ video, onDeleted }: Props) {
 
       <div className="flex items-start gap-1 p-3">
         <Link href={`/videos/${video.id}`} className="min-w-0 flex-1">
-          <p className="line-clamp-2 text-sm font-medium leading-snug">{video.title}</p>
+          <p className="line-clamp-2 text-sm leading-snug font-medium">{video.title}</p>
         </Link>
         <button
           onClick={handleDeleteClick}
           disabled={deleting}
-          className="text-muted-foreground hover:text-destructive mt-0.5 shrink-0 rounded p-0.5 opacity-0 transition-opacity group-hover:opacity-100 disabled:opacity-50"
+          className="mt-0.5 shrink-0 rounded p-0.5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive disabled:opacity-50"
           title={t('deleteTitle')}
         >
           ✕

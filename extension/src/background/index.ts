@@ -2,7 +2,7 @@ import { onAuthStateChanged } from 'firebase/auth/web-extension';
 import { auth } from '../lib/firebase';
 import { signInWithGoogle, signOut } from '../lib/auth';
 import { extractYouTubeId } from '../lib/youtube';
-import type { ExtMessage, User, VideoInfo, MemoWithId } from '../types';
+import type { ExtMessage, User, VideoInfo } from '../types';
 
 // 상태 (Background = 단일 상태 허브)
 let currentUser: User | null = null;
@@ -33,12 +33,10 @@ onAuthStateChanged(auth, (firebaseUser) => {
 });
 
 // 메시지 라우터
-chrome.runtime.onMessage.addListener(
-  (message: ExtMessage, sender, sendResponse) => {
-    handleMessage(message, sender, sendResponse);
-    return true; // async response 허용
-  },
-);
+chrome.runtime.onMessage.addListener((message: ExtMessage, sender, sendResponse) => {
+  handleMessage(message, sender, sendResponse);
+  return true; // async response 허용
+});
 
 async function handleMessage(
   message: ExtMessage,
@@ -217,8 +215,7 @@ function buildVideoInfoFromTab(tab: chrome.tabs.Tab): VideoInfo | null {
   }
 
   const rawTitle = (tab.title ?? '').trim();
-  const title =
-    rawTitle.replace(/\s*-\s*YouTube$/i, '').trim() || `YouTube Video ${youtubeId}`;
+  const title = rawTitle.replace(/\s*-\s*YouTube$/i, '').trim() || `YouTube Video ${youtubeId}`;
 
   return {
     youtubeId,

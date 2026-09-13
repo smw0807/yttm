@@ -27,7 +27,7 @@ export function MemoItem({
     <li
       onClick={seekOnItemClick ? () => onSeek(timestampSec) : undefined}
       className={cn(
-        'hover:bg-muted/40 flex items-start gap-3 rounded-lg border p-3 transition-colors',
+        'flex items-start gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/40',
         seekOnItemClick ? 'cursor-pointer' : 'group',
       )}
     >

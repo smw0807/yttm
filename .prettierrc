@@ -4,5 +4,17 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "printWidth": 100,
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "overrides": [
+    {
+      "files": "src/**/*",
+      "options": { "tailwindStylesheet": "./src/app/globals.css" }
+    },
+    {
+      "files": "extension/**/*",
+      "options": {
+        "tailwindConfig": "./extension/tailwind.config.ts"
+      }
+    }
+  ]
 }

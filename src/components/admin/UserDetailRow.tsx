@@ -58,7 +58,11 @@ export function UserDetailRow({ user, labels }: Props) {
           {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-'}
         </td>
         <td className="px-4 py-3 text-center text-muted-foreground">
-          {expanded ? <ChevronUp className="mx-auto h-4 w-4" /> : <ChevronDown className="mx-auto h-4 w-4" />}
+          {expanded ? (
+            <ChevronUp className="mx-auto h-4 w-4" />
+          ) : (
+            <ChevronDown className="mx-auto h-4 w-4" />
+          )}
         </td>
       </tr>
       {expanded && (
@@ -103,7 +107,9 @@ export function UserDetailRow({ user, labels }: Props) {
                       {detail.collections.map((c) => (
                         <li key={c.id} className="flex justify-between text-sm">
                           <span>{c.name}</span>
-                          <span className="text-muted-foreground">{formatVideoCount(c.videoCount)}</span>
+                          <span className="text-muted-foreground">
+                            {formatVideoCount(c.videoCount)}
+                          </span>
                         </li>
                       ))}
                     </ul>

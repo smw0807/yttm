@@ -1,13 +1,11 @@
 import { extractYouTubeId, extractVideoMetaFromDOM, getCurrentTimeSec } from '../lib/youtube';
 import { onYouTubeNavigate } from './navigation';
-import { injectFloatingButton, removeFloatingButton } from './floatingButton';
-import { renderProgressMarkers, removeProgressMarkers } from './progressBar';
-import type { ExtMessage, MemoWithId } from '../types';
+import { injectFloatingButton } from './floatingButton';
+import { renderProgressMarkers } from './progressBar';
+import type { ExtMessage } from '../types';
 
-let cleanupNav: (() => void) | null = null;
 let cleanupBtn: (() => void) | null = null;
 let cleanupMarkers: (() => void) | null = null;
-let currentVideoId: string | null = null;
 
 function isWatchPage(): boolean {
   return location.pathname === '/watch' && !!new URLSearchParams(location.search).get('v');
@@ -34,8 +32,6 @@ function handlePageChange(): void {
   const thumbnail = meta?.thumbnail ?? `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`;
   const durationSec = meta?.durationSec ?? 0;
 
-  currentVideoId = youtubeId;
-
   // Background에 영상 변경 알림
   chrome.runtime.sendMessage<ExtMessage>({
     type: 'VIDEO_CHANGED',
@@ -51,7 +47,6 @@ function cleanup(): void {
   cleanupBtn = null;
   cleanupMarkers?.();
   cleanupMarkers = null;
-  currentVideoId = null;
 }
 
 // Background/사이드패널에서 오는 메시지 처리
@@ -87,4 +82,4 @@ document.addEventListener('keydown', (e) => {
 });
 
 // SPA 네비게이션 감지 시작
-cleanupNav = onYouTubeNavigate(handlePageChange);
+onYouTubeNavigate(handlePageChange);

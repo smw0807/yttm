@@ -11,9 +11,14 @@ yarn start        # Run production build
 yarn lint         # ESLint check
 yarn format       # Prettier write
 yarn format:check # Prettier check (CI)
+yarn typecheck    # Generate Next route types, type-check web and extension
+yarn build:ci     # Web build with disposable Firebase credentials (never deploy this output)
+yarn --cwd extension build # Extension production build
 ```
 
 No test framework is configured.
+
+CI runs lint (zero warnings), formatting, both type checks, and both builds on PRs and pushes to main/master/develop. Install both lockfiles with Yarn 1.22.22 and `--frozen-lockfile`. CI uses Node 22 and requires no repository secrets. The web build still downloads Google Fonts. Extension lint keeps React/TypeScript rules but excludes Next-only rules; Prettier uses Tailwind v4 for web and v3 for extension.
 
 ## Architecture
 

@@ -73,8 +73,8 @@ export default function PrivacyPage() {
             <strong>YouTube</strong> — 영상 정보 표시 (YouTube Data API)
           </li>
           <li>
-            <strong>Kakao AdFit</strong> — 광고 게재. Kakao는 쿠키를 사용하여 맞춤 광고를 제공할
-            수 있습니다. (
+            <strong>Kakao AdFit</strong> — 광고 게재. Kakao는 쿠키를 사용하여 맞춤 광고를 제공할 수
+            있습니다. (
             <a
               href="https://policy.kakao.com/ko/privacy"
               target="_blank"
@@ -137,8 +137,7 @@ export default function PrivacyPage() {
       <p className="mb-4">
         {SITE_NAME} collects your Google account email, display name, and profile photo for
         authentication, and stores notes you create in Google Firebase. We do not sell your data to
-        third parties or use it for advertising. You may request deletion of your data by
-        contacting{' '}
+        third parties or use it for advertising. You may request deletion of your data by contacting{' '}
         <a href="mailto:smw0807@gmail.com" className="text-red-600 hover:underline">
           smw0807@gmail.com
         </a>

@@ -11,7 +11,6 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp,
-  setDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import type { Video, Memo, VideoWithId, MemoWithId } from '../types';
@@ -67,10 +66,7 @@ export async function ensureVideo(video: Omit<Video, 'id' | 'createdAt'>): Promi
 
 // Memos
 export async function getMemos(videoDocId: string): Promise<MemoWithId[]> {
-  const q = query(
-    collection(db, 'videos', videoDocId, 'memos'),
-    orderBy('timestampSec', 'asc'),
-  );
+  const q = query(collection(db, 'videos', videoDocId, 'memos'), orderBy('timestampSec', 'asc'));
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as MemoWithId);
 }
@@ -78,15 +74,17 @@ export async function getMemos(videoDocId: string): Promise<MemoWithId[]> {
 export function subscribeToMemos(
   videoDocId: string,
   callback: (memos: MemoWithId[]) => void,
+  onError?: (error: Error) => void,
 ): () => void {
-  const q = query(
-    collection(db, 'videos', videoDocId, 'memos'),
-    orderBy('timestampSec', 'asc'),
+  const q = query(collection(db, 'videos', videoDocId, 'memos'), orderBy('timestampSec', 'asc'));
+  return onSnapshot(
+    q,
+    (snap) => {
+      const memos = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as MemoWithId);
+      callback(memos);
+    },
+    onError,
   );
-  return onSnapshot(q, (snap) => {
-    const memos = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as MemoWithId);
-    callback(memos);
-  });
 }
 
 export async function addMemo(

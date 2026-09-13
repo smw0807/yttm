@@ -19,7 +19,10 @@ export function SearchResultList({ results, addingId, onAdd, labels }: SearchRes
   return (
     <ul className="-mx-1 flex max-h-72 flex-col gap-1 overflow-y-auto px-1">
       {results.map((result) => (
-        <li key={result.youtubeId} className="hover:bg-muted flex items-center gap-3 rounded-md p-2">
+        <li
+          key={result.youtubeId}
+          className="flex items-center gap-3 rounded-md p-2 hover:bg-muted"
+        >
           {/* YouTube thumbnail hosts vary by result, so keep a plain img here. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

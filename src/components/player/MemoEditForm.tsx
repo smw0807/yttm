@@ -41,7 +41,12 @@ export function MemoEditForm({
         className={inputClassName}
       />
       <div className="flex gap-2">
-        <Button size="sm" className={buttonClassName} onClick={onSave} disabled={saving || !value.trim()}>
+        <Button
+          size="sm"
+          className={buttonClassName}
+          onClick={onSave}
+          disabled={saving || !value.trim()}
+        >
           {saving ? savingLabel : saveLabel}
         </Button>
         <Button size="sm" variant="ghost" className={buttonClassName} onClick={onCancel}>

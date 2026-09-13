@@ -13,7 +13,7 @@ export function SectionHeader({ title, viewAllHref, viewAllLabel }: SectionHeade
       {viewAllHref && viewAllLabel && (
         <Link
           href={viewAllHref}
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           {viewAllLabel}
         </Link>

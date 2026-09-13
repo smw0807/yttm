@@ -52,18 +52,18 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href={`/videos/${video.id}`}
-          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           {tc('back')}
         </Link>
         <div className="min-w-0">
           <h1 className="truncate text-lg font-bold">{video.title}</h1>
-          <p className="text-muted-foreground text-xs">{t('subtitle', { count: memos.length })}</p>
+          <p className="text-xs text-muted-foreground">{t('subtitle', { count: memos.length })}</p>
         </div>
       </div>
 
       {memos.length === 0 ? (
-        <p className="text-muted-foreground py-20 text-center">{t('noMemos')}</p>
+        <p className="py-20 text-center text-muted-foreground">{t('noMemos')}</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {memos.map((memo) => (
@@ -93,7 +93,12 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
 
               {editingId !== memo.id && (
                 <div className="flex shrink-0 gap-1">
-                  <Button size="sm" variant="ghost" onClick={() => startEdit(memo)} disabled={deletingId === memo.id}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => startEdit(memo)}
+                    disabled={deletingId === memo.id}
+                  >
                     {t('editButton')}
                   </Button>
                   <Button
@@ -112,7 +117,7 @@ export function MemoEditContent({ video, memos: initialMemos }: Props) {
         </ul>
       )}
 
-      {error && <p className="text-destructive mt-3 text-sm">{error}</p>}
+      {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
 
       <div className="mt-6 flex justify-end">
         <Button onClick={() => router.push(`/videos/${video.id}`)}>{t('backToVideo')}</Button>

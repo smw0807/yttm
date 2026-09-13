@@ -28,7 +28,7 @@ export function CollectionCard({ collection, videos, onClick, onDelete }: Props)
     >
       {/* 썸네일 그리드 */}
       {previewVideos.length > 0 ? (
-        <div className="bg-muted grid aspect-video grid-cols-2 gap-0.5 overflow-hidden rounded-t-xl">
+        <div className="grid aspect-video grid-cols-2 gap-0.5 overflow-hidden rounded-t-xl bg-muted">
           {previewVideos.map((video) => (
             <div
               key={video.id}
@@ -45,17 +45,19 @@ export function CollectionCard({ collection, videos, onClick, onDelete }: Props)
           ))}
         </div>
       ) : (
-        <div className="bg-muted flex aspect-video items-center justify-center rounded-t-xl">
-          <span className="text-muted-foreground text-sm">{t('noVideos')}</span>
+        <div className="flex aspect-video items-center justify-center rounded-t-xl bg-muted">
+          <span className="text-sm text-muted-foreground">{t('noVideos')}</span>
         </div>
       )}
 
       <div className="p-3">
         <h3 className="line-clamp-1 font-semibold">{collection.name}</h3>
         {collection.description && (
-          <p className="text-muted-foreground mt-1 line-clamp-2 text-xs">{collection.description}</p>
+          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+            {collection.description}
+          </p>
         )}
-        <p className="text-muted-foreground mt-1 text-xs">
+        <p className="mt-1 text-xs text-muted-foreground">
           {t('videoCount', { count: collectionVideos.length })}
         </p>
       </div>
@@ -63,7 +65,7 @@ export function CollectionCard({ collection, videos, onClick, onDelete }: Props)
       {/* 삭제 버튼 */}
       <button
         onClick={handleDelete}
-        className="text-muted-foreground hover:text-destructive absolute right-2 top-2 rounded p-1 opacity-0 transition-opacity group-hover:opacity-100"
+        className="absolute top-2 right-2 rounded p-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive"
         title={t('confirmDeleteTitle')}
       >
         ✕

@@ -26,8 +26,8 @@ export function ShareViewerClient({ video, memos }: Props) {
           <Image src="/yttm.png" alt={SITE_SHORT_NAME} width={24} height={24} />
           {t('siteTitle')}
         </Link>
-        <span className="text-muted-foreground min-w-0 truncate text-sm">
-          {t('sharedTimeline')} <span className="text-foreground font-medium">{video.title}</span>
+        <span className="min-w-0 truncate text-sm text-muted-foreground">
+          {t('sharedTimeline')} <span className="font-medium text-foreground">{video.title}</span>
         </span>
       </header>
 
@@ -42,18 +42,18 @@ export function ShareViewerClient({ video, memos }: Props) {
           >
             <div ref={containerRef} className="absolute inset-0" />
           </div>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-xs text-muted-foreground">
             {t('totalDuration', { duration: formatTimestamp(video.durationSec) })}
           </p>
         </div>
 
         {/* 메모 목록 (모바일: 하단 / 데스크탑: 우측 40%) */}
         <div className="flex w-full flex-col gap-2 p-4 md:w-[40%] md:overflow-y-auto">
-          <h2 className="text-muted-foreground text-sm font-semibold">
+          <h2 className="text-sm font-semibold text-muted-foreground">
             {t('timeline', { count: memos.length })}
           </h2>
           {memos.length === 0 ? (
-            <p className="text-muted-foreground py-10 text-center text-sm">{t('noMemos')}</p>
+            <p className="py-10 text-center text-sm text-muted-foreground">{t('noMemos')}</p>
           ) : (
             <ul className="flex flex-col gap-2">
               {memos.map((memo) => (

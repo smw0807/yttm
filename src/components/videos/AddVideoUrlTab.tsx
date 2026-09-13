@@ -33,7 +33,7 @@ export function AddVideoUrlTab({
         onChange={(e) => onUrlChange(e.target.value)}
         autoFocus
       />
-      {error && <p className="text-destructive text-xs">{error}</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
       <Button type="submit" disabled={loading || !url.trim()}>
         {loading ? labels.loadingButton : labels.addButton}
       </Button>

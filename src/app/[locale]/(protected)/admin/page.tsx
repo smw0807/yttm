@@ -5,8 +5,8 @@ import { UsersTable } from '@/components/admin/UsersTable';
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="bg-card text-card-foreground rounded-lg border p-6 shadow-sm">
-      <p className="text-muted-foreground text-sm">{label}</p>
+    <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
+      <p className="text-sm text-muted-foreground">{label}</p>
       <p className="mt-1 text-3xl font-bold">{value.toLocaleString()}</p>
     </div>
   );
