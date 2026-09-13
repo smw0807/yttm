@@ -245,10 +245,22 @@ yarn firebase deploy --only firestore:rules --project yttm-38af5 --config fireba
 - README의 이전 AdSense 설정을 실제 Kakao AdFit 설정으로 교체하고 `ADMIN_UID`, 네이버 검증 설정을 보완했다. Firebase 서비스 계정 형식을 Base64로 바로잡고 두 환경변수 예제를 일치시켰다.
 - [Vercel 문서](https://vercel.com/docs/environment-variables)에 따라 환경변수 변경은 기존 배포에 소급 적용되지 않는다. 다음 웹 배포 때 로그인, YouTube 조회, 관리자/비관리자 접근을 확인해야 한다.
 
+## 구버전 확장 인증 API 보강 — 2026-09-13
+
+- 현재 `extension/src/lib/auth.ts`는 Google credential로 Firebase `signInWithCredential`을 직접 호출한다. 현재 웹·확장 소스에서 `/api/auth/extension-token` 호출부는 찾지 못했다. **운영 트래픽과 배포된 구버전 확장의 사용 여부는 확인하지 않았으므로 API를 삭제하지 않았다.**
+- 기존 `{ accessToken }` → `{ customToken }` 계약과 확장용 CORS/OPTIONS는 유지했다. CORS는 인증 수단이 아니며, Firebase가 해석한 Google 사용자 UID만 토큰 발급에 사용한다. 요청의 `uid`는 사용하지 않는다.
+- JSON Content-Type, 객체 형태, 비어 있지 않은 문자열 토큰(최대 4,096자, 공백 불가)을 검사한다. 본문은 헤더 유무와 무관하게 스트림 기준 8,192바이트로 제한하며 초과 시 읽기를 취소한다. 제한값은 이 호환 API의 정책이며 Google 토큰 길이의 공식 상한을 의미하지 않는다.
+- 기존 Firestore 트랜잭션 기반 제한기를 재사용한다. 인증 전 전체 API 예산은 60초 창당 120회, 인증 완료 후 UID별 발급 시도는 60초 창당 10회다. 초과 시 429와 Retry-After를 반환하고 제한기 장애 시 503으로 발급을 중단한다. 원문 토큰/IP를 제한 키로 저장하지 않는다.
+- 전체 예산은 익명 요청의 Firebase 호출을 제한하지만 공격자가 소진하면 정상 구버전 로그인도 해당 창 동안 제한된다. 또한 거절된 요청도 제한기 조회 비용이 발생하므로 DDoS/비용 보호 전체를 해결한 것은 아니다. 운영 트래픽 확인 후 임계값과 플랫폼 방화벽 필요성을 검토한다. 현재 확장의 직접 Firebase 로그인 경로는 이 예산을 사용하지 않는다.
+- Firebase 요청에 10초 제한과 no-store를 적용했다. 응답도 성공·실패 모두 no-store이며, upstream 오류 본문과 예외 객체는 응답·로그에 노출하지 않는다. 불필요한 IdP 자격증명 반환 요청을 제거했다.
+- Firebase가 성공 상태를 반환해도 Google provider, 유효한 UID와 ID token의 존재를 확인하고 계정 연결 확인/MFA 대기/오류 응답에서는 커스텀 토큰을 발급하지 않는다. 응답 필드 의미는 [Identity Platform signInWithIdp 문서](https://docs.cloud.google.com/identity-platform/docs/reference/rest/v1/accounts/signInWithIdp)를 근거로 했다. 실제 MFA 로그인 지원을 추가한 것은 아니다.
+- 검증은 Firebase·네트워크·제한기를 모킹한 단위 테스트로 수행한다. 운영 API 호출, 실제 Google credential 교환, 운영 카운터 쓰기, 웹 배포는 수행하지 않았다. 이 변경은 다음 커밋·배포 대상이다.
+- 결과: 새 API 테스트 50개를 포함한 전체 단위 테스트 205개 통과, 웹·확장 타입 검사, 변경 코드 ESLint, 포맷과 diff 검사 통과. 임시 자격증명을 사용하는 `yarn build:ci`도 성공했으며 이 빌드 결과는 배포하지 않는다. 빌드 중 `metadataBase` 미설정 경고가 있었고 이번 인증 API 작업에서는 수정하지 않았다. E2E와 운영 구버전 로그인은 이번 단계에서 재검증하지 않았다.
+
 ## 남은 우선순위
 
 1. 환경변수 정리 적용 승인: 서버 비밀값 2개 Secret 전환과 미사용 `ADMIN_UIDS` 삭제. 점검·문서/예제 수정은 완료했고 운영 변경은 대기 중이다. 광고는 현 상태 유지, 활성화 여부는 별도 결정한다.
-2. 구버전 확장프로그램의 `/api/auth/extension-token` 사용 여부를 확인한 뒤 API 제거 또는 입력 검증·호출 제한 보강.
+2. 구버전 확장 인증 API 보강분 커밋·배포 및 실제 호환성 확인. 입력 검증·호출 제한 보강은 완료했다. 운영 요청량과 구버전 사용 여부를 확인한 뒤 유지/폐기를 결정한다.
 3. 모바일 실기기·Safari와 공유 생성/폐기·컬렉션 편집 등 추가 시나리오 검사. 운영 쓰기 테스트가 필요하면 데이터 범위를 먼저 합의한다.
 
 이 기록만으로 전체 운영 검증 완료를 선언하지 않는다.
