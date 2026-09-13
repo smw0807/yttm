@@ -4,6 +4,8 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
+  // Keep the existing development server's build output untouched during E2E runs.
+  distDir: process.env.NEXT_PUBLIC_FIREBASE_EMULATORS === '1' ? '.next-e2e' : '.next',
   async headers() {
     return [
       {

@@ -40,6 +40,9 @@ const eslintConfig = defineConfig([
   prettier, // Prettier와 충돌하는 ESLint 규칙 비활성화
   globalIgnores([
     '.next/**',
+    '.next-e2e/**',
+    'test-results/**',
+    'playwright-report/**',
     'out/**',
     'build/**',
     '**/node_modules/**',
