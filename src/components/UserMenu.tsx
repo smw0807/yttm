@@ -29,7 +29,7 @@ export function UserMenu({ displayName, isAnonymous }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex max-w-full flex-wrap items-center gap-2 lg:flex-nowrap lg:gap-3">
       {isAnonymous ? (
         <>
           <span className="rounded bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
