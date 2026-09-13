@@ -15,14 +15,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!video) return {};
 
   const t = await getTranslations({ locale, namespace: 'shareViewer' });
+  const path = `${locale === 'ko' ? '' : '/en'}/share/${encodeURIComponent(token)}`;
 
   return {
     title: `${video.title} — ${SITE_SHORT_NAME}`,
+    alternates: { canonical: path },
     openGraph: {
       title: video.title,
       description: `${t('sharedTimeline')} ${video.title}`,
       images: [{ url: video.thumbnail, width: 1280, height: 720 }],
       type: 'video.other',
+      url: path,
       locale: locale === 'ko' ? 'ko_KR' : 'en_US',
     },
     twitter: {

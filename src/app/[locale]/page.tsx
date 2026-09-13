@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import yttmIcon from '@/app/public/yttm.png';
@@ -11,17 +11,43 @@ interface Props {
   params: Promise<{ locale: string }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { locale } = await params;
+  const inherited = await parent;
+  const title =
+    locale === 'ko'
+      ? `${SITE_NAME} — 유튜브 강의·게임 공략 타임스탬프 메모`
+      : `${SITE_NAME} — Timestamp Notes for YouTube`;
+  const description =
+    locale === 'ko'
+      ? '유튜브 강의나 게임 공략 영상의 중요한 장면에 타임스탬프 메모를 남기세요. 클릭 한 번으로 해당 시점으로 즉시 이동하고, 컬렉션으로 주제별 영상을 묶어 관리할 수 있습니다. 로그인 없이 게스트로 바로 체험 가능.'
+      : 'Leave timestamp memos on key moments in YouTube lectures and game walkthroughs. Jump to any moment with one click, organize videos by topic with collections. Try it instantly as a guest.';
+  const path = locale === 'ko' ? '/' : '/en';
 
   return {
-    title: `${SITE_NAME} — 유튜브 강의·게임 공략 타임스탬프 메모`,
-    description:
-      locale === 'ko'
-        ? '유튜브 강의나 게임 공략 영상의 중요한 장면에 타임스탬프 메모를 남기세요. 클릭 한 번으로 해당 시점으로 즉시 이동하고, 컬렉션으로 주제별 영상을 묶어 관리할 수 있습니다. 로그인 없이 게스트로 바로 체험 가능.'
-        : 'Leave timestamp memos on key moments in YouTube lectures and game walkthroughs. Jump to any moment with one click, organize videos by topic with collections. Try it instantly as a guest.',
+    title,
+    description,
+    alternates: {
+      canonical: path,
+      languages: { ko: '/', en: '/en', 'x-default': '/' },
+    },
     openGraph: {
+      type: 'website',
+      siteName: SITE_NAME,
+      title,
+      description,
+      url: path,
+      images: inherited.openGraph?.images ?? [],
       locale: locale === 'ko' ? 'ko_KR' : 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: inherited.openGraph?.images ?? [],
     },
   };
 }
