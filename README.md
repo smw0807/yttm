@@ -317,17 +317,21 @@ yarn test:all      # 두 종류 모두 실행
 ### 실제 브라우저 회귀 테스트
 
 ```bash
-yarn test:e2e       # Chrome에서 PC(한국어)·모바일 크기(영어) 온보딩 검증
+yarn test:e2e       # Chrome에서 PC(한국어)·모바일 크기(영어) 회귀 검증
+yarn test:e2e:webkit # WebKit에서 PC·iPhone 크기 회귀 검증 (수동 실행)
 yarn test:e2e:live  # 외부 YouTube iframe의 실제 재생·메모 위치 이동 검증 (수동 실행)
 yarn dev:emulator  # 수동 점검용 격리 서버: http://localhost:3100/ko/login
 ```
 
 - Node.js·Java 요구 사항은 위 에뮬레이터 테스트와 같습니다. macOS에서는 설치된 Google Chrome을 사용합니다. CI/Linux는 `yarn playwright install --with-deps chromium`으로 브라우저를 설치합니다. `E2E_BROWSER_CHANNEL=chromium`으로 Playwright의 Chromium을 선택할 수도 있습니다.
+- WebKit은 최초 실행 전에 `yarn playwright install webkit`으로 설치합니다(Linux는 `--with-deps` 추가). `test:e2e:webkit`은 설치된 Playwright 버전의 WebKit과 iPhone 13 에뮬레이션을 사용하며 `E2E_BROWSER_CHANNEL`을 적용하지 않습니다. 실제 Safari 앱·iPhone·OS 클립보드 검증을 대체하지 않으며 기본 CI에는 추가하지 않았습니다.
+- 공유 링크 복사 테스트는 Clipboard API의 거부·미지원·성공 응답을 대체해 오류 안내, 링크 직접 선택, 재시도를 확인합니다. 사용자의 실제 클립보드 내용은 읽거나 덮어쓰지 않습니다.
 - 인증 `127.0.0.1:9098`, Firestore `127.0.0.1:8086`, 웹 `localhost:3100`과 고정 가상 프로젝트 `demo-yttm-e2e`만 사용합니다. 포트가 사용 중이면 기존 서버를 재사용하지 않고 중단합니다. 웹 포트만 충돌하면 `E2E_PORT=3101 yarn test:e2e`로 변경할 수 있으며, 인증·DB의 격리는 그대로 유지됩니다. 테스트 시작 시 이 가상 프로젝트의 에뮬레이터 데이터만 초기화합니다.
 - 임시 자격증명과 비어 있는 YouTube/광고 키를 자식 프로세스에 주입합니다. `.env.local`의 운영 Firebase 설정을 사용하지 않으며, 브라우저는 새 프로필로 실행합니다. `.next-e2e/`로 빌드 출력을 분리해 기존 `.next/`를 덮어쓰지 않습니다.
 - `NEXT_PUBLIC_FIREBASE_EMULATORS=1`은 개발 모드와 위 가상 프로젝트에서만 허용됩니다. 이 설정으로 생산 빌드를 실행하면 실패하도록 차단했습니다. 배포 환경에는 이 변수를 설정하지 마세요.
 - 기본 E2E는 실제 로그인 UI → Firebase Auth 에뮬레이터 → 앱 세션 쿠키, 영상·메모 저장, 새로고침, 안내 닫기/복원, 동의/미동의, 관리자 집계, 동의 철회, 로그아웃을 검사합니다. 메타데이터 API와 YouTube 플레이어만 테스트 대역을 사용하며 외부 네트워크를 차단합니다. 강제 클릭으로 실패를 우회하지 않습니다.
 - `test:e2e:live`는 메타데이터만 고정하고 YouTube iframe은 실제로 연결합니다. 광고·지역 제한·봇 차단·외부 장애에 따라 실패할 수 있어 CI에서는 제외합니다. 실제 Google OAuth 및 운영 Firebase 권한 검증을 대체하지 않습니다.
+- WebKit 보고서와 스크린샷·trace는 각각 `playwright-report/webkit`, `test-results/webkit`에 저장합니다. 기본 Chrome 및 live 실행 결과와 분리하며 같은 에뮬레이터 포트를 사용하므로 각 모드는 순서대로 실행합니다.
 - 보고서는 `playwright-report/standard`와 `playwright-report/live`, 스크린샷과 실패 추적 파일은 `test-results/standard`와 `test-results/live`에 분리해 남깁니다. `yarn playwright show-report playwright-report/standard`로 열 수 있으며 생성물은 Git에서 제외합니다. CI에서는 기본 E2E를 실행하며 실패 시 `e2e-failure-<run_id>-<run_attempt>` 아티팩트에 보고서·스크린샷·trace를 7일간 보관합니다. 격리 테스트 계정의 세션과 데이터가 포함될 수 있으므로 아티팩트를 외부에 공개하지 마세요.
 
 구현 기준: [Playwright 브라우저 설정](https://playwright.dev/docs/browsers), [Firebase 인증 에뮬레이터와 세션 쿠키](https://firebase.google.com/docs/emulator-suite/connect_auth).

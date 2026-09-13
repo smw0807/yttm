@@ -17,6 +17,7 @@ yarn --cwd extension build # Extension production build
 yarn test         # Unit tests (no Firebase credentials or YouTube network requests)
 yarn test:emulator # Real Firestore Rules and transaction tests; requires Java 21
 yarn test:all     # Both suites
+yarn test:e2e:webkit # Desktop/iPhone-sized WebKit checks against isolated emulators
 ```
 
 Vitest runs `tests/unit` by default. `firebase.test.json` starts Firestore at `127.0.0.1:8085` with the fixed demo project `demo-yttm-tests`. Emulator tests refuse other addresses and use no production credentials. Do not point tests at a real Firebase project. Unit tests mock external auth/network boundaries; emulator tests exercise actual Rules and concurrent rate-limit transactions. Cache tests verify fetch options, not Next's deployed cache behavior.

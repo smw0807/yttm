@@ -136,8 +136,17 @@ test('collection create, membership persistence, removal, and deletion preserve 
   await page.getByRole('button', { name: m.collections.addCollection, exact: true }).click();
   const dialog = page.getByRole('dialog');
   const name = 'E2E collection';
-  await dialog.getByPlaceholder(m.addCollectionDialog.namePlaceholder).fill(name);
-  await dialog.getByPlaceholder(m.addCollectionDialog.descPlaceholder).fill('E2E description');
+  const nameInput = dialog.getByPlaceholder(m.addCollectionDialog.namePlaceholder);
+  const descriptionInput = dialog.getByPlaceholder(m.addCollectionDialog.descPlaceholder);
+  // Explicit focus avoids racing the modal's touch-specific initial focus in WebKit.
+  await nameInput.click();
+  await expect(nameInput).toBeFocused();
+  await nameInput.fill(name);
+  await descriptionInput.click();
+  await expect(descriptionInput).toBeFocused();
+  await descriptionInput.fill('E2E description');
+  await expect(nameInput).toHaveValue(name);
+  await expect(descriptionInput).toHaveValue('E2E description');
   await dialog
     .getByRole('button', { name: m.addCollectionDialog.createButton, exact: true })
     .click();

@@ -53,6 +53,7 @@ const env = {
     }),
   ).toString('base64'),
   E2E_LIVE_YOUTUBE: process.argv.includes('--live-youtube') ? '1' : '0',
+  E2E_WEBKIT: process.argv.includes('--webkit') ? '1' : '0',
 };
 const command = process.argv.includes('--serve')
   ? `node node_modules/next/dist/bin/next dev --hostname localhost --port ${webPort}`
