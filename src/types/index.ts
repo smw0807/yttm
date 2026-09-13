@@ -1,4 +1,7 @@
-import { Timestamp } from 'firebase/firestore';
+import type { Timestamp } from 'firebase/firestore';
+import type { Video as SharedVideo, Memo as SharedMemo, WithId } from '../../shared/types';
+
+export type { YouTubeVideoInfo } from '../../shared/types';
 
 // SC → CC 경계에서 Timestamp 클래스는 직렬화 불가 → number(ms)도 허용
 export type CreatedAt = Timestamp | number;
@@ -10,23 +13,8 @@ export interface User {
   createdAt: CreatedAt;
 }
 
-export interface Video {
-  id?: string;
-  youtubeId: string;
-  title: string;
-  thumbnail: string;
-  durationSec: number;
-  userId: string;
-  shareToken: string | null;
-  createdAt: CreatedAt;
-}
-
-export interface Memo {
-  id?: string;
-  timestampSec: number;
-  content: string;
-  createdAt: CreatedAt;
-}
+export type Video = SharedVideo<CreatedAt>;
+export type Memo = SharedMemo<CreatedAt>;
 
 export interface Collection {
   id?: string;
@@ -37,14 +25,7 @@ export interface Collection {
   createdAt: CreatedAt;
 }
 
-export interface YouTubeVideoInfo {
-  youtubeId: string;
-  title: string;
-  thumbnail: string;
-  durationSec: number;
-}
-
 // Convenience types for Firestore documents that always have an id
-export type VideoWithId = Video & { id: string };
-export type MemoWithId = Memo & { id: string };
-export type CollectionWithId = Collection & { id: string };
+export type VideoWithId = WithId<Video>;
+export type MemoWithId = WithId<Memo>;
+export type CollectionWithId = WithId<Collection>;

@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { adminDb } from './admin';
-import type { Video, Memo, Collection } from '@/types';
+import type { Video, Memo, Collection, YouTubeVideoInfo } from '@/types';
 
 /** Firestore Admin Timestamp → number(ms) 변환 (SC→CC 직렬화)
  *  instanceof 대신 duck typing: toMillis 메서드 존재 여부로 판별 */
@@ -61,13 +61,7 @@ export async function getMemosAdmin(videoId: string) {
   return snap.docs.map((d) => serialize({ id: d.id, ...d.data() }) as Memo & { id: string });
 }
 
-export async function addVideoAdmin(video: {
-  youtubeId: string;
-  title: string;
-  thumbnail: string;
-  durationSec: number;
-  userId: string;
-}) {
+export async function addVideoAdmin(video: YouTubeVideoInfo & Pick<Video, 'userId'>) {
   const ref = await adminDb.collection('videos').add({
     ...video,
     shareToken: null,

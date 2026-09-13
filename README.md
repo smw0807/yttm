@@ -196,6 +196,23 @@ src/
 └── types/index.ts                 ← Video, Memo, Collection, User 타입 정의
 ```
 
+### 웹·확장프로그램 공통 모듈
+
+저장소 루트의 `shared/`를 두 앱이 소스로 직접 참조합니다. 별도 패키지 설치나 빌드 단계는 없습니다.
+
+- `shared/types/index.ts`: 영상 메타데이터, `Video<TCreatedAt>`, `Memo<TCreatedAt>`, `WithId<T>`.
+- `shared/utils/youtube.ts`: YouTube ID 추출·검증, 썸네일 선택, 재생시간 파싱·표시.
+- 기존 `src/types`, `src/lib/youtube`, `extension/src/types`, `extension/src/lib/youtube` import 경로는 유지합니다.
+
+공통 모듈은 Firebase·React·Next.js·Chrome API에 의존하지 않습니다. ESLint가 플랫폼 패키지 import와 주요 플랫폼 전역 접근을 제한합니다.
+웹은 `Timestamp | number`, 확장프로그램은 실시간 쓰기 대기 상태를 포함한 `Timestamp | number | null`을 각자 주입합니다.
+서로 형태가 다른 사용자 타입, 웹 전용 컬렉션, Firebase CRUD·인증, 확장프로그램 DOM 접근·메시지 프로토콜은 각 앱에 둡니다.
+Firebase SDK 버전은 웹과 확장프로그램에서 각각 유지하므로 공통 코드에 SDK를 직접 import하지 마세요.
+
+확장프로그램만 개발하더라도 `extension/`과 `shared/`의 상대 위치를 유지해야 합니다.
+공통 코드 변경 시 아래 품질 검사와 **두 앱의 빌드**를 모두 실행합니다. `tests/unit/shared-contracts.test.ts`는 기존 진입점 연결과 타입 호환성을,
+`tests/unit/extension-youtube.test.ts`는 확장프로그램 DOM 어댑터의 동작을 확인합니다.
+
 ## DB 스키마 (Firestore)
 
 ```

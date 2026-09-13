@@ -5,7 +5,7 @@ import {
   parseDuration,
   formatTimestamp,
   pickYouTubeThumbnail,
-} from '@/lib/youtube';
+} from '../../shared/utils/youtube';
 
 describe('YouTube video input and timeline', () => {
   it.each([

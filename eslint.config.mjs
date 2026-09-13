@@ -16,6 +16,27 @@ const eslintConfig = defineConfig([
       ),
     ),
   },
+  {
+    files: ['shared/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['*', '!./**', '!../**'],
+              message: 'Shared modules must not depend on platform packages.',
+            },
+            {
+              group: ['**/src/**'],
+              message: 'App-specific code must depend on shared modules, not the reverse.',
+            },
+          ],
+        },
+      ],
+      'no-restricted-globals': ['error', 'window', 'document', 'chrome', 'localStorage', 'process'],
+    },
+  },
   prettier, // Prettier와 충돌하는 ESLint 규칙 비활성화
   globalIgnores([
     '.next/**',
