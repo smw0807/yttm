@@ -16,6 +16,7 @@ import {
   getDocs,
   query,
   where,
+  writeBatch,
 } from 'firebase/firestore';
 import { projectId, requireEmulator } from './safety';
 
@@ -93,7 +94,58 @@ describe.each(['videos', 'collections'])('%s ownership', (name) => {
     );
     expect(own.empty).toBe(false);
     await assertFails(getDocs(collection(db, name)));
+    const foreignDb = env.authenticatedContext('intruder').firestore();
+    await assertFails(getDocs(query(collection(foreignDb, name), where('userId', '==', 'owner'))));
+    const emptyOwn = await assertSucceeds(
+      getDocs(query(collection(foreignDb, name), where('userId', '==', 'intruder'))),
+    );
+    expect(emptyOwn.empty).toBe(true);
   });
+  it('rejects an entire batch containing a foreign write', async () => {
+    const db = env.authenticatedContext('intruder').firestore();
+    const ownRef = doc(db, `${name}/batch-own`);
+    const batch = writeBatch(db);
+    batch.set(ownRef, { userId: 'intruder', title: 'Should not persist' });
+    batch.update(doc(db, path), { title: 'Foreign write' });
+    await assertFails(batch.commit());
+    await env.withSecurityRulesDisabled(async (context) => {
+      expect((await getDoc(doc(context.firestore(), `${name}/batch-own`))).exists()).toBe(false);
+      expect((await getDoc(doc(context.firestore(), path))).data()?.userId).toBe('owner');
+    });
+  });
+});
+
+describe.each(['google.com', 'anonymous'] as const)('%s memo isolation', (provider) => {
+  it.each(['private', 'shared'])('restricts %s memo lists and writes to the owner', async (id) => {
+    const claims = { firebase: { sign_in_provider: provider } };
+    const ownerDb = env.authenticatedContext('owner', claims).firestore();
+    const foreignDb = env.authenticatedContext('intruder', claims).firestore();
+    const path = `videos/${id}/memos`;
+    const own = await assertSucceeds(getDocs(collection(ownerDb, path)));
+    expect(own.docs.map((memo) => memo.id)).toEqual(['memo']);
+    await assertFails(getDocs(collection(foreignDb, path)));
+    await assertFails(getDocs(collection(env.unauthenticatedContext().firestore(), path)));
+    await assertFails(setDoc(doc(foreignDb, `${path}/new`), { content: 'Foreign memo' }));
+    await assertFails(updateDoc(doc(foreignDb, `${path}/memo`), { content: 'Foreign edit' }));
+    await assertFails(deleteDoc(doc(foreignDb, `${path}/memo`)));
+  });
+});
+
+it('denies access to surviving memos after the parent video is deleted', async () => {
+  const db = env.authenticatedContext('owner').firestore();
+  await assertSucceeds(deleteDoc(doc(db, 'videos/private')));
+  await assertFails(getDoc(doc(db, 'videos/private/memos/memo')));
+  await assertFails(getDocs(collection(db, 'videos/private/memos')));
+  await assertFails(updateDoc(doc(db, 'videos/private/memos/memo'), { content: 'Orphan edit' }));
+});
+
+it('denies another account profile reads, listing, updates and deletion', async () => {
+  const db = env.authenticatedContext('intruder').firestore();
+  const profile = doc(db, 'users/owner');
+  await assertFails(getDoc(profile));
+  await assertFails(getDocs(collection(db, 'users')));
+  await assertFails(updateDoc(profile, { displayName: 'Impersonated' }));
+  await assertFails(deleteDoc(profile));
 });
 
 it.each([
