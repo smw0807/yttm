@@ -101,8 +101,11 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
 NEXT_PUBLIC_FIREBASE_APP_ID=
 
-# Firebase Admin SDK (서비스 계정 JSON을 한 줄로 직렬화)
+# Firebase Admin SDK (서비스 계정 JSON 전체를 Base64로 인코딩한 한 줄 값)
 FIREBASE_ADMIN_SDK=
+
+# 관리자 Firebase UID 1개 (이메일 아님, 미설정 시 관리자 접근 거부)
+ADMIN_UID=
 
 # YouTube Data API v3 (서버에서만 사용)
 YOUTUBE_API_KEY=
@@ -110,12 +113,16 @@ YOUTUBE_API_KEY=
 # 서비스 배포 URL (SEO, sitemap, OG 태그에 사용)
 NEXT_PUBLIC_BASE_URL=https://your-domain.vercel.app
 
-# Google AdSense (선택 - 승인 후 입력)
-NEXT_PUBLIC_ADSENSE_CLIENT=
-NEXT_PUBLIC_ADSENSE_SLOT_DASHBOARD=
-NEXT_PUBLIC_ADSENSE_SLOT_COLLECTIONS=
-NEXT_PUBLIC_ADSENSE_SLOT_SHARE=
+# Naver Site Verification
+NEXT_PUBLIC_NAVER_SITE_VERIFICATION=
+
+# Kakao AdFit (선택 - 비워두면 광고 배너 미표시)
+NEXT_PUBLIC_ADFIT_UNIT=
 ```
+
+`FIREBASE_ADMIN_SDK`와 `YOUTUBE_API_KEY`는 서버 전용 비밀값입니다. Base64는 암호화가 아니므로 서비스 계정 JSON과 `.env.local`을 커밋하거나 채팅·로그에 출력하지 마세요. Vercel에서는 두 키를 Secret으로 관리하고, 공개 클라이언트 설정은 Config로 유지합니다. `ADMIN_UIDS`와 위에 없는 이전 AdSense 변수는 현재 웹 소스에서 사용하지 않습니다.
+
+운영 환경변수 점검 결과와 승인 후 적용할 항목은 [운영 검증 기록](docs/production-validation.md#환경변수-정리-점검--2026-09-13)을 참고하세요. 환경변수 변경과 웹 배포는 별도 단계입니다.
 
 ### 3. Firestore 보안 규칙 배포
 
@@ -163,7 +170,7 @@ src/
 │   └── robots.ts                  ← robots.txt 자동 생성
 ├── components/
 │   ├── admin/                     ← UserDetailRow
-│   ├── ads/                       ← AdBanner (Google AdSense)
+│   ├── ads/                       ← AdBanner (Kakao AdFit)
 │   ├── collections/               ← CollectionCard, AddCollectionDialog 등
 │   ├── dashboard/                 ← DashboardContent
 │   ├── landing/                   ← 랜딩 페이지 섹션 컴포넌트

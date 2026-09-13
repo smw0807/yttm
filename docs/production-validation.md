@@ -222,9 +222,32 @@ yarn firebase deploy --only firestore:rules --project yttm-38af5 --config fireba
 - 운영 데이터 쓰기·소유자 변경·배치 쓰기는 수행하지 않았다. 해당 경로의 검증 근거는 기존 에뮬레이터 테스트이며, 이번 운영 읽기 검증 결과와 구분한다. 전체 운영 검증 완료를 의미하지 않는다.
 - 결과 기록 후 로컬 검증 서버를 종료하고 4318 포트의 리스너가 없는 것을 확인했다. 계정 B의 검증 탭은 사용자가 닫으면 메모리 전용 로그인도 해제된다. 운영 웹의 로그인 상태는 변경하지 않는다.
 
+## 환경변수 정리 점검 — 2026-09-13
+
+사용자가 웹 배포를 다음으로 미뤄 이번 단계에서는 Vercel 등록 상태와 소스 사용처를 대조했다. **운영 환경변수 저장·삭제·키 교체·웹 배포는 수행하지 않았다.**
+
+| 변수                                  | 현재 Vercel 유형 / 범위   | 확인 및 후속 조치                                                             |
+| ------------------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
+| `ADMIN_UID`                           | Secret / Production       | 서버 세션의 Firebase UID 1개와 비교. 현재 설정 유지                           |
+| `FIREBASE_ADMIN_SDK`                  | Config / All Environments | 서버에서 Base64 디코딩 후 서비스 계정 JSON으로 사용. Secret 전환 승인 필요    |
+| `YOUTUBE_API_KEY`                     | Config / All Environments | YouTube API 서버 라우트에서 사용. Needs Attention 표시, Secret 전환 승인 필요 |
+| `ADMIN_UIDS`                          | Config / All Environments | 현재 `src`에서 미사용. 삭제 승인 필요                                         |
+| Firebase 공개 설정 6개                | Config / All Environments | `src/lib/firebase/config.ts`에서 사용. 현 상태 유지                           |
+| `NEXT_PUBLIC_BASE_URL`                | Config / All Environments | SEO·sitemap·robots에서 사용. 현 상태 유지                                     |
+| `NEXT_PUBLIC_NAVER_SITE_VERIFICATION` | Config / All Environments | 메타데이터에서 사용. 현 상태 유지                                             |
+| `NEXT_PUBLIC_ADFIT_UNIT`              | Config / Development      | 운영 범위 미등록. 운영 광고 활성화 여부 미결정, 임의 추가하지 않음            |
+
+- `YOUTUBE_API_KEY` 편집 화면에서 기존 값을 재입력하지 않고 Config/Secret 유형을 선택하는 UI를 확인했다. Secret을 임시 선택한 뒤 **Cancel**로 종료했으며 저장 성공을 검증한 것은 아니다. 값은 로그·문서에 기록하지 않았다.
+- 최신 [Vercel 변경 안내](https://vercel.com/changelog/environment-variables-now-use-config-and-secret-types)에 따르면 Secret은 저장 후 값을 다시 조회할 수 없다. 전환 전 소유자가 안전하게 관리하는 원본이 있는지 확인한다. Config 등록이나 Needs Attention 경고만으로 유출이 입증되는 것은 아니다.
+- 승인 시 제안 범위는 위 서버 비밀값 2개의 **기존 값과 적용 범위를 유지한 Secret 전환** 및 미사용 `ADMIN_UIDS` 삭제다. 삭제 전 이전 소스를 다시 빌드하는 Preview/롤백 절차에서 해당 변수를 필요로 하지 않는지 확인한다. Secret 전환을 자격증명 교체로 간주하지 않으며, 키 교체·환경별 자격증명 분리·팀 정책 변경은 별도 작업이다. 저장 시 범위 제한이나 키 재입력을 요구하면 중단하고 확인한다.
+- All Environments에 서버 비밀값이 등록돼 있으므로 환경별 자격증명 분리는 후속 보안 검토 대상이다. 이번 점검은 Preview/Development 권한이나 연결 프로젝트를 변경하지 않는다.
+- 현재 광고 호출부는 `unit`을 직접 지정하지 않고 환경변수를 사용한다. `NEXT_PUBLIC_ADFIT_UNIT`이 없는 빌드에서는 배너를 렌더링하지 않는다. 이번 관찰은 설정 목록과 소스 기준이며, 기존 운영 빌드의 광고 노출을 새로 검증한 결과는 아니다.
+- README의 이전 AdSense 설정을 실제 Kakao AdFit 설정으로 교체하고 `ADMIN_UID`, 네이버 검증 설정을 보완했다. Firebase 서비스 계정 형식을 Base64로 바로잡고 두 환경변수 예제를 일치시켰다.
+- [Vercel 문서](https://vercel.com/docs/environment-variables)에 따라 환경변수 변경은 기존 배포에 소급 적용되지 않는다. 다음 웹 배포 때 로그인, YouTube 조회, 관리자/비관리자 접근을 확인해야 한다.
+
 ## 남은 우선순위
 
-1. 환경변수 정리: 비밀값의 Secret 유형 전환 검토, 미사용 `ADMIN_UIDS` 정리, 운영 광고 설정 필요 여부 결정. 값 변경이 필요하면 별도 승인 후 적용한다.
+1. 환경변수 정리 적용 승인: 서버 비밀값 2개 Secret 전환과 미사용 `ADMIN_UIDS` 삭제. 점검·문서/예제 수정은 완료했고 운영 변경은 대기 중이다. 광고는 현 상태 유지, 활성화 여부는 별도 결정한다.
 2. 구버전 확장프로그램의 `/api/auth/extension-token` 사용 여부를 확인한 뒤 API 제거 또는 입력 검증·호출 제한 보강.
 3. 모바일 실기기·Safari와 공유 생성/폐기·컬렉션 편집 등 추가 시나리오 검사. 운영 쓰기 테스트가 필요하면 데이터 범위를 먼저 합의한다.
 
