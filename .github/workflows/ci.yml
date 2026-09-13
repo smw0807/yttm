@@ -32,5 +32,11 @@ jobs:
       - run: yarn lint
       - run: yarn format:check
       - run: yarn typecheck
+      - run: yarn test
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: yarn test:emulator
       - run: yarn build:ci
       - run: yarn --cwd extension build

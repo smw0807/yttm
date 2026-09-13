@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/.firebase/
+*-debug.log*
 
 # next.js
 /.next/

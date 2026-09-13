@@ -4,6 +4,8 @@ extension/dist/
 out/
 build/
 coverage/
+.firebase/
+*-debug.log*
 next-env.d.ts
 *.tsbuildinfo
 .env*

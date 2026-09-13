@@ -9,6 +9,10 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "next typegen && tsc --noEmit && yarn --cwd extension typecheck",
     "build:ci": "node scripts/build-ci.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:emulator": "firebase emulators:exec --only firestore --project demo-yttm-tests --config firebase.test.json --non-interactive \"vitest run --config vitest.emulator.config.mts\"",
+    "test:all": "yarn test && yarn test:emulator",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -31,6 +35,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -39,9 +44,12 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "eslint-config-prettier": "^10.1.8",
+    "firebase-tools": "15.30.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "8.3.0",
+    "vitest": "5.0.0"
   }
 }
