@@ -22,11 +22,39 @@ for (const consent of [false, true]) {
   test(`guest onboarding, persistence, and consent=${consent}`, async ({
     page,
     browser,
+    browserName,
   }, testInfo) => {
     const locale = testInfo.project.name === 'mobile' ? 'en' : 'ko';
     const m = messages(locale);
     const errors: string[] = [];
-    page.on('pageerror', (error) => errors.push(error.message));
+    let reloading = false;
+    page.on('pageerror', (error) => {
+      // WebKit reports cancelled emulator long-poll XHRs as access-control errors
+      // during a full reload. Keep this exception confined to that operation and
+      // those two local transports; all other page errors still fail the test.
+      if (
+        browserName === 'webkit' &&
+        reloading &&
+        /127\.0\.0\.1:8086\/google\.firestore\.v1\.Firestore\/(Listen|Write)\/channel\?.* due to access control checks\.$/.test(
+          error.message,
+        )
+      ) {
+        testInfo.annotations.push({
+          type: 'webkit-emulator-reload',
+          description: 'Local Firestore long-poll request cancelled during reload',
+        });
+        return;
+      }
+      errors.push(error.message);
+    });
+    async function reloadPage() {
+      reloading = true;
+      try {
+        await page.reload();
+      } finally {
+        reloading = false;
+      }
+    }
     let metricRequests = 0;
     page.on('request', (request) => {
       if (request.url().endsWith('/api/onboarding')) metricRequests++;
@@ -37,7 +65,7 @@ for (const consent of [false, true]) {
     ).toBe(true);
     await expect(page.getByText(m.onboarding.metricsDisabled, { exact: true })).toBeVisible();
     await page.getByRole('button', { name: m.onboarding.dismiss, exact: true }).click();
-    await page.reload();
+    await reloadPage();
     await page.getByRole('button', { name: m.onboarding.reopen, exact: true }).click();
     await expect(page.getByRole('heading', { name: m.onboarding.title })).toBeVisible();
     if (consent) {
@@ -59,7 +87,7 @@ for (const consent of [false, true]) {
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true);
-    await page.reload();
+    await reloadPage();
     await expect(page.getByText('E2E private memo', { exact: true })).toBeVisible();
     const memoDocs = await db.collection('videos').doc(videoId).collection('memos').get();
     expect(memoDocs.size).toBe(1);
@@ -91,6 +119,12 @@ for (const consent of [false, true]) {
         (await page.context().cookies()).some((cookie) => cookie.name === '__session'),
       )
       .toBe(false);
+    // Cookie deletion completes before Firebase sign-out and router.replace('/').
+    // Wait for that navigation before probing a protected route (notably in WebKit).
+    await expect(page).toHaveURL(
+      (url) =>
+        url.pathname === localizedPath(locale, '/') || (locale === 'en' && url.pathname === '/en'),
+    );
     await page.goto(localizedPath(locale, '/dashboard'));
     await expect(page).toHaveURL(new RegExp(`${localizedPath(locale, '/login')}$`));
     expect(errors).toEqual([]);

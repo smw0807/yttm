@@ -65,8 +65,9 @@ export function CollectionCard({ collection, videos, onClick, onDelete }: Props)
       {/* 삭제 버튼 */}
       <button
         onClick={handleDelete}
-        className="absolute top-2 right-2 rounded p-1 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:text-destructive"
+        className="absolute top-2 right-2 flex size-9 items-center justify-center rounded bg-background/90 text-muted-foreground transition-colors hover:text-destructive"
         title={t('confirmDeleteTitle')}
+        aria-label={t('confirmDeleteTitle')}
       >
         ✕
       </button>
