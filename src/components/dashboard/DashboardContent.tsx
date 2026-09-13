@@ -9,6 +9,8 @@ import { AdBanner } from '@/components/ads/AdBanner';
 import { DashboardCollectionsSection } from '@/components/dashboard/DashboardCollectionsSection';
 import { DashboardVideosSection } from '@/components/dashboard/DashboardVideosSection';
 import { useCollectionDialogs } from '@/hooks/useCollectionDialogs';
+import { OnboardingGuide } from '@/components/onboarding/OnboardingGuide';
+import { MetricsPreference } from '@/components/onboarding/MetricsPreference';
 import type { CollectionWithId, VideoWithId } from '@/types';
 
 interface Props {
@@ -28,6 +30,8 @@ export function DashboardContent({ initialVideos, initialCollections }: Props) {
         <h1 className="text-2xl font-bold">{t('title')}</h1>
         <Button onClick={collectionDialogs.openAdd}>{t('addVideo')}</Button>
       </div>
+
+      <OnboardingGuide onAddVideo={collectionDialogs.openAdd} videoId={initialVideos[0]?.id} />
 
       {(initialVideos.length > 0 || initialCollections.length > 0) && (
         <AdBanner className="mb-6 w-full overflow-hidden" />
@@ -59,6 +63,7 @@ export function DashboardContent({ initialVideos, initialCollections }: Props) {
         onClose={collectionDialogs.closeAdd}
         onAdded={collectionDialogs.refresh}
       />
+      <MetricsPreference />
 
       {collectionDialogs.selectedCollection && (
         <CollectionDetailDialog

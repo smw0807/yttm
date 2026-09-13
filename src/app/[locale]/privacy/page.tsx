@@ -9,7 +9,20 @@ export default function PrivacyPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-12 text-sm leading-relaxed text-gray-700">
       <h1 className="mb-2 text-2xl font-bold text-gray-900">개인정보처리방침</h1>
-      <p className="mb-8 text-xs text-gray-400">최종 수정일: 2026년 4월 17일</p>
+      <p className="mb-8 text-xs text-gray-400">최종 수정일: 2026년 9월 13일</p>
+
+      <section className="mb-8">
+        <h2 className="mb-3 text-base font-semibold text-gray-900">선택적 사용성 지표</h2>
+        <p>
+          대시보드에서 동의한 경우에만 웹의 영상 추가·메모 저장·장면 이동 기능 도달 여부를
+          Firebase에 저장합니다. 계정 UID를 해시한 식별자로 중복 집계하며, 지표에는 메모 내용·영상
+          식별자·제목·이메일을 저장하지 않습니다. 이벤트 검증에는 해당 영상·메모 식별자를 일시적으로
+          사용합니다. 지표는 수집 중단 시까지 보관하고 관리자에게 집계값으로 표시합니다. 대시보드의
+          ‘수집 중단 및 계정 지표 삭제’를 누르면 단계 기록이 삭제되고, 재동의 전 이벤트를 거부하기
+          위한 해시 식별자와 비동의 상태만 남습니다. 시작 안내 진행 상태와 이 브라우저의 수집 동의
+          설정은 계정별 브라우저 로컬 저장소에 보관됩니다.
+        </p>
+      </section>
 
       <section className="mb-8">
         <h2 className="mb-3 text-base font-semibold text-gray-900">1. 수집하는 정보</h2>
@@ -134,6 +147,15 @@ export default function PrivacyPage() {
       <hr className="mb-6 border-gray-200" />
 
       <h2 className="mb-3 text-base font-semibold text-gray-900">Privacy Policy (English)</h2>
+      <p className="mb-4">
+        Optional usage metrics require consent on the dashboard. We store feature milestones in
+        Firebase under a hashed account UID, without memo content, video IDs, titles, or email.
+        Video and memo IDs are used transiently to validate events. Metrics are retained until you
+        stop collection and are shown to administrators as aggregate counts. The dashboard deletion
+        button removes milestones; only the hashed identifier and disabled status remain to reject
+        late events until renewed consent. Guide progress and this browser&apos;s consent setting
+        are kept in per-account local storage.
+      </p>
       <p className="mb-4">
         {SITE_NAME} collects your Google account email, display name, and profile photo for
         authentication, and stores notes you create in Google Firebase. We do not sell your data to

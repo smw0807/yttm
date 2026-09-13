@@ -3,6 +3,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // _onboardingMetrics and _rateLimits are server-only (default deny).
+
     function isSignedIn() {
       return request.auth != null;
     }

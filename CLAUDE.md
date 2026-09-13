@@ -14,11 +14,14 @@ yarn format:check # Prettier check (CI)
 yarn typecheck    # Generate Next route types, type-check web and extension
 yarn build:ci     # Web build with disposable Firebase credentials (never deploy this output)
 yarn --cwd extension build # Extension production build
+yarn test         # Unit tests (no Firebase credentials or YouTube network requests)
+yarn test:emulator # Real Firestore Rules and transaction tests; requires Java 21
+yarn test:all     # Both suites
 ```
 
-No test framework is configured.
+Vitest runs `tests/unit` by default. `firebase.test.json` starts Firestore at `127.0.0.1:8085` with the fixed demo project `demo-yttm-tests`. Emulator tests refuse other addresses and use no production credentials. Do not point tests at a real Firebase project. Unit tests mock external auth/network boundaries; emulator tests exercise actual Rules and concurrent rate-limit transactions. Cache tests verify fetch options, not Next's deployed cache behavior.
 
-CI runs lint (zero warnings), formatting, both type checks, and both builds on PRs and pushes to main/master/develop. Install both lockfiles with Yarn 1.22.22 and `--frozen-lockfile`. CI uses Node 22 and requires no repository secrets. The web build still downloads Google Fonts. Extension lint keeps React/TypeScript rules but excludes Next-only rules; Prettier uses Tailwind v4 for web and v3 for extension.
+CI runs lint (zero warnings), formatting, both type checks, unit/emulator tests, and both builds on PRs and pushes to main/master/develop. Install both lockfiles with Yarn 1.22.22 and `--frozen-lockfile`. CI uses Node 22 (22.12+), Java 21, and requires no repository secrets. The web build still downloads Google Fonts. Extension lint keeps React/TypeScript rules but excludes Next-only rules; Prettier uses Tailwind v4 for web and v3 for extension.
 
 ## Architecture
 

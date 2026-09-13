@@ -1,4 +1,10 @@
 import type { Timestamp } from 'firebase/firestore';
+import type {
+  Video as SharedVideo,
+  Memo as SharedMemo,
+  WithId,
+  YouTubeVideoInfo,
+} from '../../../shared/types';
 
 export type CreatedAt = Timestamp | number | null;
 
@@ -9,33 +15,18 @@ export interface User {
   photoURL: string | null;
 }
 
-export interface Video {
-  id?: string;
-  youtubeId: string;
-  title: string;
-  thumbnail: string;
-  durationSec: number;
-  userId: string;
-  shareToken: string | null;
-  createdAt: CreatedAt;
-}
+export type Video = SharedVideo<CreatedAt>;
+export type Memo = SharedMemo<CreatedAt>;
 
-export interface Memo {
-  id?: string;
-  timestampSec: number;
-  content: string;
-  createdAt: CreatedAt;
-}
-
-export type VideoWithId = Video & { id: string };
-export type MemoWithId = Memo & { id: string };
+export type VideoWithId = WithId<Video>;
+export type MemoWithId = WithId<Memo>;
 
 // Extension message protocol
 export type ExtMessage =
   // Content Script → Background
   | {
       type: 'VIDEO_CHANGED';
-      payload: { youtubeId: string; title: string; thumbnail: string; durationSec: number };
+      payload: VideoInfo;
     }
   | { type: 'TIMESTAMP_CAPTURED'; payload: { timestampSec: number } }
   // Side Panel → Background
@@ -58,9 +49,4 @@ export type ExtMessage =
   // Side Panel → Content Script (직접)
   | { type: 'GET_CURRENT_TIME' };
 
-export interface VideoInfo {
-  youtubeId: string;
-  title: string;
-  thumbnail: string;
-  durationSec: number;
-}
+export type VideoInfo = YouTubeVideoInfo;

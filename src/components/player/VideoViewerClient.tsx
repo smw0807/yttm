@@ -11,6 +11,8 @@ import { addMemo, getMemos } from '@/lib/firebase/firestore';
 import { formatTimestamp } from '@/lib/youtube';
 import { Button } from '@/components/ui/button';
 import type { Video, Memo } from '@/types';
+import { OnboardingGuide } from '@/components/onboarding/OnboardingGuide';
+import { useOnboarding } from '@/components/onboarding/OnboardingProvider';
 
 interface Props {
   video: Video & { id: string };
@@ -20,10 +22,11 @@ interface Props {
 
 export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
   const t = useTranslations('viewer');
+  const { track } = useOnboarding();
   const [memos, setMemos] = useState(initialMemos);
   const [shareOpen, setShareOpen] = useState(false);
   const [shareToken, setShareToken] = useState(video.shareToken);
-  const { containerRef, getCurrentTime, seekTo } = useYouTubePlayer(video.youtubeId);
+  const { containerRef, ready, getCurrentTime, seekTo } = useYouTubePlayer(video.youtubeId);
 
   async function refreshMemos() {
     const updated = await getMemos(videoId);
@@ -31,12 +34,20 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
   }
 
   async function handleSaveMemo(timestampSec: number, content: string) {
-    await addMemo(videoId, { timestampSec, content });
+    const memoId = await addMemo(videoId, { timestampSec, content });
+    track({ event: 'memo_created', videoId, memoId });
     await refreshMemos();
   }
 
   async function handleDeleted() {
     await refreshMemos();
+  }
+
+  function handleSeek(seconds: number) {
+    if (!ready) return;
+    seekTo(seconds);
+    const memo = memos.find((item) => item.timestampSec === seconds);
+    if (memo) track({ event: 'timeline_used', videoId, memoId: memo.id });
   }
 
   return (
@@ -76,6 +87,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
 
         {/* ── 메모 (모바일: 하단 / 데스크탑: 우측 40%) ────── */}
         <div className="flex w-full flex-col gap-4 p-4 md:w-[40%] md:overflow-y-auto">
+          <OnboardingGuide videoId={videoId} hasMemos={memos.length > 0} />
           <MemoForm onSave={handleSaveMemo} getCurrentTime={getCurrentTime} />
           <div>
             <h2 className="mb-3 text-sm font-semibold text-muted-foreground">
@@ -84,7 +96,7 @@ export function VideoViewerClient({ video, videoId, initialMemos }: Props) {
             <MemoList
               videoId={videoId}
               memos={memos}
-              onSeek={seekTo}
+              onSeek={handleSeek}
               onDeleted={handleDeleted}
               onUpdated={refreshMemos}
             />
