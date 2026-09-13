@@ -143,6 +143,7 @@ src/
 ├── app/
 │   ├── [locale]/                  ← 로케일 prefix (ko / en)
 │   │   ├── layout.tsx             ← NextIntlClientProvider
+│   │   ├── opengraph-image.tsx     ← 로케일 메타데이터 범위의 OG 이미지 (1200×630)
 │   │   ├── page.tsx               ← 랜딩 페이지 (JSON-LD 포함)
 │   │   ├── not-found.tsx
 │   │   ├── login/
@@ -165,7 +166,6 @@ src/
 │   │   ├── videos/                ← 영상 추가 (서버 사이드)
 │   │   ├── share/                 ← shareToken 생성/폐기
 │   │   └── admin/users/           ← 관리자 사용자 목록
-│   ├── opengraph-image.tsx        ← OG 이미지 자동 생성 (1200×630)
 │   ├── sitemap.ts                 ← sitemap.xml 자동 생성
 │   └── robots.ts                  ← robots.txt 자동 생성
 ├── components/
