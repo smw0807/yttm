@@ -89,6 +89,46 @@ export function metricRef(uid: string) {
     .doc(createHash('sha256').update(`onboarding-v1:${uid}`).digest('hex'));
 }
 
+export async function emulatorGoogleLogin(page: Page, locale: 'ko' | 'en') {
+  // Only the local Auth emulator accepts these synthetic Google claims.
+  // This exercises server authorization, not real Google OAuth or its popup UI.
+  const response = await fetch(
+    'http://127.0.0.1:9098/identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=demo-not-a-real-api-key',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requestUri: baseURL,
+        postBody: new URLSearchParams({
+          providerId: 'google.com',
+          id_token: JSON.stringify({
+            sub: 'e2e-google-member',
+            email: 'member@example.test',
+            email_verified: true,
+            name: 'E2E Google Member',
+          }),
+        }).toString(),
+        returnSecureToken: true,
+      }),
+    },
+  );
+  expect(response.ok).toBe(true);
+  const { idToken } = await response.json();
+  expect(typeof idToken).toBe('string');
+  const session = await page.context().request.post(`${baseURL}/api/auth/session`, {
+    headers: { origin: baseURL },
+    data: { idToken },
+  });
+  expect(session.ok()).toBe(true);
+  const cookie = (await page.context().cookies()).find((item) => item.name === '__session');
+  expect(cookie?.httpOnly).toBe(true);
+  const decoded = await auth.verifySessionCookie(cookie!.value, true);
+  expect(decoded.firebase.sign_in_provider).toBe('google.com');
+  expect(decoded.uid).not.toBe('e2e-admin');
+  await page.goto(`/${locale}/dashboard`);
+  return decoded.uid;
+}
+
 export async function changeMetricsConsent(
   page: Page,
   locale: 'ko' | 'en',
