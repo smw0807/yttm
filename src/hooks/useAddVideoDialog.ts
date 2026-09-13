@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useFetcher } from '@/hooks/useFetcher';
 import type { YouTubeVideoInfo } from '@/types';
+import { useOnboarding } from '@/components/onboarding/OnboardingProvider';
 
 export type AddVideoTab = 'url' | 'search';
 export type AddVideoSearchResult = Pick<
@@ -20,6 +21,8 @@ async function apiAddVideo(video: AddVideoSearchResult) {
     const data = await res.json().catch(() => ({}));
     throw new Error(data.error ?? 'Failed to add video');
   }
+  const data: { id: string } = await res.json();
+  return data.id;
 }
 
 interface UseAddVideoDialogOptions {
@@ -35,6 +38,7 @@ export function useAddVideoDialog({
   onAdded,
   onClose,
 }: UseAddVideoDialogOptions) {
+  const { track } = useOnboarding();
   const [tab, setTab] = useState<AddVideoTab>('url');
   const [url, setUrl] = useState('');
   const [query, setQuery] = useState('');
@@ -74,7 +78,8 @@ export function useAddVideoDialog({
       const res = await fetch(`/api/youtube?url=${encodeURIComponent(url.trim())}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || defaultError);
-      await apiAddVideo(data);
+      const id = await apiAddVideo(data);
+      track({ event: 'video_added', videoId: id });
       setUrl('');
       onAdded();
       onClose();
@@ -97,7 +102,8 @@ export function useAddVideoDialog({
   async function handleAddResult(result: AddVideoSearchResult) {
     setAddingId(result.youtubeId);
     try {
-      await apiAddVideo(result);
+      const id = await apiAddVideo(result);
+      track({ event: 'video_added', videoId: id });
       onAdded();
       onClose();
     } catch {

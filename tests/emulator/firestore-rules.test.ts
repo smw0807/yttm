@@ -20,6 +20,17 @@ import {
 import { projectId, requireEmulator } from './safety';
 
 let env: RulesTestEnvironment;
+
+it.each(['owner', 'intruder', null])(
+  'denies direct onboarding metric access for %s',
+  async (uid) => {
+    const context = uid ? env.authenticatedContext(uid) : env.unauthenticatedContext();
+    const ref = doc(context.firestore(), '_onboardingMetrics/test');
+    await assertFails(getDoc(ref));
+    await assertFails(setDoc(ref, { enabled: true, step: 3 }));
+    await assertFails(deleteDoc(ref));
+  },
+);
 beforeAll(async () => {
   requireEmulator();
   env = await initializeTestEnvironment({

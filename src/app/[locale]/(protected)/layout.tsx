@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { getSessionUser } from '@/lib/firebase/admin';
 import { Header } from '@/components/Header';
+import { OnboardingProvider } from '@/components/onboarding/OnboardingProvider';
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -18,7 +19,11 @@ export default async function ProtectedLayout({ children }: { children: React.Re
   return (
     <div className="flex min-h-screen flex-col">
       <Header displayName={user.name ?? user.email ?? ''} isAnonymous={user.isAnonymous} />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1">
+        <OnboardingProvider key={user.uid} userId={user.uid}>
+          {children}
+        </OnboardingProvider>
+      </main>
     </div>
   );
 }

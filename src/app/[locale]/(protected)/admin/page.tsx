@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { getAdminStats } from '@/lib/firebase/admin-stats';
 import { getSessionUser, isAdmin } from '@/lib/firebase/admin';
 import { UsersTable } from '@/components/admin/UsersTable';
+import { OnboardingMetrics } from '@/components/admin/OnboardingMetrics';
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
@@ -43,6 +44,7 @@ export default async function AdminPage() {
         <StatCard label={t('totalCollections')} value={totalCollections} />
       </div>
 
+      <OnboardingMetrics />
       <UsersTable users={users} labels={tableLabels} />
     </div>
   );
