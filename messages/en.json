@@ -224,6 +224,7 @@
   },
   "shareDialog": {
     "title": "Share Link",
+    "updateError": "Could not update the share link. Please try again.",
     "copied": "Copied!",
     "copy": "Copy",
     "shareInfo": "Anyone with this link can view the timeline memos for this video.",

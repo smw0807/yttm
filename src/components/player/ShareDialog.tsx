@@ -17,32 +17,33 @@ interface Props {
 
 export function ShareDialog({ open, onClose, videoId, token, onTokenChange }: Props) {
   const t = useTranslations('shareDialog');
-  const { loading, execute } = useFetcher();
+  const { loading, error, execute } = useFetcher();
   const [copied, setCopied] = useState(false);
 
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const shareUrl = token ? `${origin}/share/${token}` : null;
 
-  async function handleCreate() {
+  async function updateShare(method: 'POST' | 'DELETE') {
     await execute(async () => {
-      const res = await fetch('/api/share', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ videoId }),
-      });
-      const { token: newToken } = await res.json();
-      onTokenChange(newToken);
-    });
-  }
-
-  async function handleRevoke() {
-    await execute(async () => {
-      await fetch('/api/share', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ videoId }),
-      });
-      onTokenChange(null);
+      try {
+        const res = await fetch('/api/share', {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ videoId }),
+        });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        if (method === 'POST') {
+          if (typeof data?.token !== 'string' || !data.token.trim()) throw new Error();
+          onTokenChange(data.token);
+        } else {
+          if (data?.success !== true) throw new Error();
+          onTokenChange(null);
+        }
+        setCopied(false);
+      } catch {
+        throw new Error(t('updateError'));
+      }
     });
   }
 
@@ -59,6 +60,11 @@ export function ShareDialog({ open, onClose, videoId, token, onTokenChange }: Pr
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
+        {error && (
+          <p role="alert" className="text-sm text-destructive">
+            {error}
+          </p>
+        )}
         {shareUrl ? (
           <div className="flex flex-col gap-3">
             <div className="flex gap-2">
@@ -68,14 +74,14 @@ export function ShareDialog({ open, onClose, videoId, token, onTokenChange }: Pr
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">{t('shareInfo')}</p>
-            <Button variant="destructive" onClick={handleRevoke} disabled={loading}>
+            <Button variant="destructive" onClick={() => updateShare('DELETE')} disabled={loading}>
               {t('revokeLink')}
             </Button>
           </div>
         ) : (
           <div className="flex flex-col gap-3">
             <p className="text-sm text-muted-foreground">{t('createInfo')}</p>
-            <Button onClick={handleCreate} disabled={loading}>
+            <Button onClick={() => updateShare('POST')} disabled={loading}>
               {t('createLink')}
             </Button>
           </div>
